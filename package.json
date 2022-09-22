@@ -7,7 +7,6 @@
     "start-dev": "nodemon ./bin/www"
   },
   "dependencies": {
-    "nodemon": "~2.0.20",
     "cookie-parser": "~1.4.4",
     "csv-parse": "^5.3.0",
     "debug": "~2.6.9",
@@ -15,7 +14,10 @@
     "express": "~4.16.1",
     "fs": "^0.0.1-security",
     "http-errors": "~1.6.3",
+    "json2csv": "^5.0.7",
     "morgan": "~1.9.1",
+    "node-fetch": "^3.2.10",
+    "nodemon": "~2.0.20",
     "three": "^0.144.0"
   }
 }

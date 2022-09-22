@@ -37,21 +37,55 @@ require([
           }
     });
     view.ui.remove("navigation-toggle");
-    var csv = [];
-    d3.csv('../data/fireballs.csv', (data) => {
-      csv.push(data);
+
+
+    function downloadCsv(csv) {
+      var hiddenElement = document.createElement('a');
+      hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+      hiddenElement.target = "_blank";
+
+      hiddenElement.download = "new_fireball.csv";
+      hiddenElement.click();
+    }
+
+    function callAjax(callback) {
+      $.ajax({
+        type: "GET",
+        url: 'https://ssd-api.jpl.nasa.gov/fireball.api',
+        dataType: "json",
+        async: false,
+        complete: function(result, status) {
+          var data = JSON.parse(result.responseText);
+          const header = Object.values(data.fields);
+          const values = Object.values(data.data);
+          const headerString = header.join(",");
+          const rowItems = values.map(row => {
+            return Object.values(row).join(",");
+          });
+          let x = [headerString, ...rowItems].join("\r\n");
+           callback(x);
+        }
+      });
+    };
+    callAjax(x => {
+      csv = x;
+      downloadCsv(csv);
     })
-  
-    console.log(csv);
-    const blob = new Blob([d3.csv('../data/fireballs.csv'), (data) => {return data}], {
-        type: 'plain/text'
+    const test = `lon,lat
+    165.9E, 19.5N`;
+    const blob = new Blob([csv], {
+        type: 'text/plain'
     })
+
     const url = URL.createObjectURL(blob);
     console.log(url);
-
+    
     const csvLayer = new CSVLayer({
         url: url,
+        longitudeField: 'lon',
+        latitudeField: 'lat',
     });
+
     map.add(csvLayer);
 
   });

@@ -1,4 +1,4 @@
-"Peak Brightness Date/Time (UT)","Latitude (deg.)","Longitude (deg.)","Altitude (km)","Velocity (km/s)","vx","vy","vz","Total Radiated Energy (J)","Calculated Total Impact Energy (kt)"
+"Peak Brightness Date/Time (UT)","Latitude","Longitude","Altitude (km)","Velocity (km/s)","vx","vy","vz","Total Radiated Energy (J)","Calculated Total Impact Energy (kt)"
 "2022-09-04 03:54:55","20.0N","165.9E","14.0","21.9","18.4","-11.4","-3.5","2.4e10","0.086"
 "2022-08-21 16:35:49","6.3S","51.5E","37","","","","","2.1e10","0.076"
 "2022-08-14 07:39:18","35.0S","78.4E","55.5","","","","","46.8e10","1.2"
