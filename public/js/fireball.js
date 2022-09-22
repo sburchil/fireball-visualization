@@ -7,7 +7,7 @@ let energyText = document.getElementById("energy");
 $(document).ready(function(){
     
     $.ajax({
-        url: '../json/fireballs.json',
+        url: '../data/fireballs.json',
         complete: function() {
             console.log('COMPLETE');
         },
