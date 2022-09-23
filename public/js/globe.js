@@ -60,6 +60,12 @@ require([
           const values = Object.values(data.data);
           const headerString = header.join(",");
           const rowItems = values.map(row => {
+            if(row[4] == "S"){
+              row[3] = -row[3];
+            }
+            if(row[6] == "W"){
+              row[5] = -row[5];
+            }
             return Object.values(row).join(",");
           });
           let x = [headerString, ...rowItems].join("\r\n");
@@ -69,9 +75,11 @@ require([
     };
     callAjax(x => {
       csv = x;
-      downloadCsv(csv);
     })
     
+    const test = `lat,lon
+    20.0N,-165.5E
+    `;
     const blob = new Blob([csv], {
         type: 'text/plain'
     })
@@ -82,6 +90,11 @@ require([
         url: url,
         longitudeField: 'lon',
         latitudeField: 'lat',
+        pupupEnabled: true,
+        popupTemplate: {
+            title: "Fireball",
+            content: "This is a {lat} and {lon} fireball"
+        }
     });
 
     map.add(csvLayer);
