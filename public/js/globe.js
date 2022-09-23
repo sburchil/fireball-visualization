@@ -40,12 +40,12 @@ require([
 
 
     function downloadCsv(csv) {
-      var hiddenElement = document.createElement('a');
-      hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-      hiddenElement.target = "_blank";
+      // var hiddenElement = document.createElement('a');
+      // hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+      // hiddenElement.target = "_blank";
 
-      hiddenElement.download = "new_fireball.csv";
-      hiddenElement.click();
+      // hiddenElement.download = "new_fireball.csv";
+      // hiddenElement.click();
     }
 
     function callAjax(callback) {
@@ -71,14 +71,12 @@ require([
       csv = x;
       downloadCsv(csv);
     })
-    const test = `lon,lat
-    165.9E, 19.5N`;
+    
     const blob = new Blob([csv], {
         type: 'text/plain'
     })
 
     const url = URL.createObjectURL(blob);
-    console.log(url);
     
     const csvLayer = new CSVLayer({
         url: url,
