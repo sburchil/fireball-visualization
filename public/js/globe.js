@@ -3,7 +3,8 @@ require([
     "esri/Map",
     "esri/views/SceneView",
     "esri/layers/CSVLayer",
-], function(esriConfig,Map, SceneView, CSVLayer) {
+    "esri/layers/support/LabelClass",
+], function(esriConfig,Map, SceneView, CSVLayer, LabelClass) {
   esriConfig.apiKey = "AAPKf83999834a67470c91f540a72a98c5b8B1qaM9X_z-C-rB5-fD6hdWeYz_I7C9jrolBCQjvwaS0Gkj-v8TrOCKmnrLyeQPDy";
     
     const map = new Map({
@@ -25,28 +26,18 @@ require([
             dockOptions: {
               position: "top-right",
               breakpoint: false,
-              buttonEnabled: false
+              buttonEnabled: true
             },
             collapseEnabled: false
           },
           constraints: {
-            altitude: {
-                min: 1000000,
-                max: 25000000
-            }
+            // altitude: {
+            //     min: 1000000,
+            //     max: 25000000
+            // }
           }
     });
     view.ui.remove("navigation-toggle");
-
-
-    function downloadCsv(csv) {
-      // var hiddenElement = document.createElement('a');
-      // hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-      // hiddenElement.target = "_blank";
-
-      // hiddenElement.download = "new_fireball.csv";
-      // hiddenElement.click();
-    }
 
     function callAjax(callback) {
       $.ajax({
@@ -75,28 +66,46 @@ require([
     };
     callAjax(x => {
       csv = x;
+      console.log("ran");
     })
     
-    const test = `lat,lon
-    20.0N,-165.5E
-    `;
     const blob = new Blob([csv], {
         type: 'text/plain'
     })
 
     const url = URL.createObjectURL(blob);
-    
+    const labelClass = new LabelClass({
+      symbol: {
+        type: "text",  // autocasts as new TextSymbol()
+        color: "white",
+        haloColor: "blue",
+        haloSize: 1,
+        font: {  // autocast as new Font()
+           family: "Ubuntu Mono",
+           size: 14,
+           weight: "bold"
+         }
+      },
+      labelPlacement: "above-right",
+      maxScale: 0,
+      minScale: 25000000,
+    })
+
     const csvLayer = new CSVLayer({
         url: url,
+        labelingInfo: [labelClass],
+        labelsVisible: true,
         longitudeField: 'lon',
         latitudeField: 'lat',
         pupupEnabled: true,
         popupTemplate: {
-            title: "Fireball",
-            content: "This is a {lat} and {lon} fireball"
-        }
+            title: "Fireball at {date}",
+            content: "<ul><li>This is a {lat} and {lon} fireball.</li></ul>",
+        },
     });
 
     map.add(csvLayer);
 
   });
+
+  
