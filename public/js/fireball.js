@@ -7,7 +7,7 @@ let energyText = document.getElementById("energy");
 $(document).ready(function(){
     
     $.ajax({
-        url: '../data/fireballs.json',
+        url: 'https://ssd-api.jpl.nasa.gov/fireball.api',
         complete: function() {
             console.log('COMPLETE');
         },
@@ -91,6 +91,7 @@ $(document).ready(function(){
         }
     });         
 });
+
 
 function geocodeLatLng(point){
     const settings = {

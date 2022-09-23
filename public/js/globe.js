@@ -66,7 +66,6 @@ require([
     };
     callAjax(x => {
       csv = x;
-      console.log("ran");
     })
     
     const blob = new Blob([csv], {
