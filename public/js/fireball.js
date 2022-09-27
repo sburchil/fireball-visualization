@@ -1,11 +1,11 @@
-const windowWidth = window.innerWidth;
+const windowWidth = document.getElementById("globeViz").offsetWidth;
 const windowHeight = window.innerHeight;
 
 let dateText = document.getElementById("date");
 let energyText = document.getElementById("energy");
 
 $(document).ready(function(){
-    
+    console.log(windowWidth);
     $.ajax({
         url: 'https://ssd-api.jpl.nasa.gov/fireball.api',
         complete: function() {
@@ -77,6 +77,8 @@ $(document).ready(function(){
             (document.getElementById('globeViz'))
                 .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
                 .backgroundImageUrl('https://staticdelivery.nexusmods.com/mods/448/images/63-0-1456805047.png')
+                // .width(windowWidth/2)
+                // .height(windowHeight - 50)
                 .pointsData(impactData)
                 .pointAltitude('size')
                 .onPointClick((point) => {
