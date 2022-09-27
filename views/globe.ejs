@@ -11,5 +11,21 @@
     <title><%= title %></title>
 </head>
 <h1 class="text-center" style="z-index:1;"><%= title %></h1>
-<body id="globeViz"></body>
+
+
+    <div class="row">
+        <div class="col-sm-1">
+            <form action="">
+                <div class="form-group">
+                    <label for="start">Start Date</label>
+                    <input type="date" class="form-control" id="start" name="start" value="2019-01-01">
+                </div>
+            </form>
+        </div>
+        <div id="globe-container" class="col">
+                <div id="globeViz"></div>
+        </div>
+    </div>
+
+
 </html>
