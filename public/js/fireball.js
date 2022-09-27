@@ -1,11 +1,13 @@
-const windowWidth = document.getElementById("globeViz").offsetWidth;
-const windowHeight = window.innerHeight;
+// const windowWidth = document.getElementById("globe-container").clientWidth;
+// const windowHeight = document.getElementById("globe-container").clientHeight;
+const windowWidth = $("#globeViz").width();
+const windowHeight = $("#globeViz").height();
 
 let dateText = document.getElementById("date");
 let energyText = document.getElementById("energy");
 
 $(document).ready(function(){
-    console.log(windowWidth);
+    console.log({windowWidth, windowHeight});
     $.ajax({
         url: 'https://ssd-api.jpl.nasa.gov/fireball.api',
         complete: function() {
@@ -74,24 +76,30 @@ $(document).ready(function(){
 
             //Create globe
             const globe = Globe()
-            (document.getElementById('globeViz'))
-                .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
-                .backgroundImageUrl('https://staticdelivery.nexusmods.com/mods/448/images/63-0-1456805047.png')
-                // .width(windowWidth/2)
-                // .height(windowHeight - 50)
-                .pointsData(impactData)
-                .pointAltitude('size')
-                .onPointClick((point) => {
-                    console.log(point);
-                    geocodeLatLng(point);
-                })
-                .pointColor('color')
-                .enablePointerInteraction(true);
-
+            .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+            .backgroundImageUrl('https://staticdelivery.nexusmods.com/mods/448/images/63-0-1456805047.png')
+            // .width(windowWidth/2)
+            // .height(windowHeight - 50)
+            .pointsData(impactData)
+            .pointAltitude('size')
+            .onPointClick((point) => {
+                console.log(point);
+                geocodeLatLng(point);
+            })
+            .pointColor('color')
+            .enablePointerInteraction(true)
+            (document.getElementById('globeViz'));
+            
             globe.controls().autoRotate = true;
             globe.controls().autoRotateSpeed = 0.1;
         }
-    });         
+    });     
+    
+    $("#fireball-params").submit(function (e) {
+        e.preventDefault();
+
+        fire_ajax_submit();
+    });
 });
 
 
