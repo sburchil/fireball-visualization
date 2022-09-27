@@ -121,3 +121,32 @@ function geocodeLatLng(point){
         console.log(response);
     });
 }
+
+function fire_ajax_submit() {
+    var search = {}
+    search["date"] = $("#date").val();
+    search["energy"] = $("#energy").val();
+    $("#submit").prop("disabled", true);
+
+    $.ajax({
+        url: "https://ssd-api.jpl.nasa.gov/fireball.api",
+        success: function (data) {
+            var json = "<h4>Ajax Response</h4><pre>"
+                + JSON.stringify(data, null, 4) + "</pre>";
+            $('#feedback').html(json);
+            console.log("SUCCESS : ", data);
+            $("#submit").prop("disabled", false);
+        },
+        error: function (e) {
+            var json = "<h4>Ajax Response</h4><pre>"
+                + e.responseText + "</pre>";
+            $('#feedback').html(json);
+            console.log("ERROR : ", e);
+            $("#submit").prop("disabled", false);
+        }
+    });
+}
+
+function format_params(){
+
+}
