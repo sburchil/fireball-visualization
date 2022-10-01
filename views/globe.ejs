@@ -10,18 +10,19 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <title><%= title %></title>
 </head>
-<h1 class="text-center" style="z-index:1;"><%= title %></h1>
 
+    <div class="accordian">
+        <div class="card">
+            <div class="card-header">
+                <a class="nav nav-link" data-toggle="collapse" data-target="#collapseEx" onclick="$('#collapseEx').collapse('show');">Form controls</a>
+            </div>
+            <div class="card-body">
+                <div class="collapse" id="collapseEx">
 
-    <div class="row">
-        <div class="col-sm-1">
-            <form action="">
-                <div class="form-group">
-                    <label for="start">Start Date</label>
-                    <input type="date" class="form-control" id="start" name="start" value="2019-01-01">
                 </div>
-            </form>
+            </div>
         </div>
+    </div>
         <div id="globe-container" class="col">
                 <div id="globeViz"></div>
         </div>
