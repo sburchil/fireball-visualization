@@ -7,7 +7,9 @@ const sizes = {
 
 let dateText = document.getElementById("date");
 let energyText = document.getElementById("energy");
-const globe = Globe({animateln: true});
+let impactData = [];
+
+let globe = Globe({animateln: true});
 
 $(document).ready(function(){
     $.ajax({
@@ -18,7 +20,6 @@ $(document).ready(function(){
         success: function(data) {
             console.log(data);
             let requestedData = data.data;
-            let impactData = [];
             for (let n = 0; n < requestedData.length; n++) {
                 //Get Date & Time
                 let date = requestedData[n][0].split(" ")[0];
@@ -86,29 +87,12 @@ $(document).ready(function(){
                 impactData.push(entry);
             }
 
-            //Create globe
-            globe.globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
-            .backgroundImageUrl('https://staticdelivery.nexusmods.com/mods/448/images/63-0-1456805047.png')
-            .width(sizes.width)
-            .height(sizes.height)
-            .pointsData(impactData)
-            .pointAltitude('size')
-            .onPointClick((point) => {
+            initGlobe();
+            globe.onPointClick(point => {
                 console.log(point);
-                globe.controls().autoRotate = false;
-                let altitude = 2.0;
-                globe.pointsData([point]);
-                globe.pointOfView({lat: point.lat, lng: point.lng, altitude: altitude}, 3000); //Delay
-                globe.controls().autoRotate = true;
-                //geocodeLatLng(point);
-            })
-            .pointColor('color')
-            .enablePointerInteraction(true)
-            .pointOfView({lat: 0, lng: 0, altitude: 3.5})
-            (document.getElementById('globeViz'));
-            
-            globe.controls().autoRotate = true;
-            globe.controls().autoRotateSpeed = 0.1;
+                destroyGlobe();
+            });
+
         }
     });     
     
@@ -119,11 +103,61 @@ $(document).ready(function(){
     });
 });
 
+
+$('#reset').click(function(){
+    globe.pointsData(impactData);
+    globe.controls().autoRotate = true;
+})
+
 window.addEventListener('resize', () =>
 {
     globe.width(window.innerWidth).height(window.innerHeight);
 
 });
+
+function initGlobe(){
+    //Create globe
+    globe.globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+    .backgroundImageUrl('https://staticdelivery.nexusmods.com/mods/448/images/63-0-1456805047.png')
+    .width(sizes.width)
+    .height(sizes.height)
+    .pointsData(impactData)
+    .pointAltitude('size')
+    //.onPointClick((point) => {
+        //console.log(point);
+        // globe.controls().autoRotate = false;
+        // globe.pointOfView({lat: point.lat, lng: point.lng, altitude: altitude}, 3000);
+        //geocodeLatLng(point);
+    //})
+    .pointColor('color')
+    .enablePointerInteraction(true)
+    .pointOfView({lat: 0, lng: 0, altitude: 3.5})
+    (document.getElementById('globeViz'));
+    
+    globe.controls().autoRotate = true;
+    globe.controls().autoRotateSpeed = 0.1;
+}
+
+function destroyGlobe(){
+    globe
+    .pointsData(null)
+    .pointAltitude(null)
+    .pointColor(null);
+    labeledGlobe();
+}
+
+function labeledGlobe(){
+    console.log("here");
+    globe.globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+    .backgroundImageUrl('https://staticdelivery.nexusmods.com/mods/448/images/63-0-1456805047.png')
+    .labelsData(impactData)
+    .labelText('energy')
+    .labelSize('size')
+    .labelColor('color')
+    .labelDotRadius('size')
+    .labelResolution(2)
+    (document.getElementById('globeViz'));
+}
 
 function geocodeLatLng(point){
     const settings = {
@@ -167,8 +201,4 @@ function fire_ajax_submit() {
             $("#submit").prop("disabled", false);
         }
     });
-}
-
-function format_params(){
-
 }
