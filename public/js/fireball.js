@@ -13,6 +13,7 @@ let globe = Globe({animateln: true});
 
 $(document).ready(function(){
     $.ajax({
+        method: 'GET',
         url: 'https://ssd-api.jpl.nasa.gov/fireball.api',
         complete: function() {
             console.log('COMPLETE');
