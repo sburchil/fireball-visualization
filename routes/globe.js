@@ -23,8 +23,4 @@ router.get('/newglobe/submit', async function(req, res, next) {
     res.render('newglobe');
 })
 
-router.get('/testglobe', function(req, res, next){
-    res.render('testglobe', { title: 'Test Globe' });
-});
-
 module.exports = router;
