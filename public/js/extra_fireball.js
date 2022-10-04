@@ -139,12 +139,6 @@ function initGlobe(){
     .height(sizes.height)
     .pointsData(impactData)
     .pointAltitude('size')
-    //.onPointClick((point) => {
-        //console.log(point);
-        // globe.controls().autoRotate = false;
-        // globe.pointOfView({lat: point.lat, lng: point.lng, altitude: altitude}, 3000);
-        //geocodeLatLng(point);
-    //})
     .pointColor('color')
     .enablePointerInteraction(true)
     .pointOfView({lat: 0, lng: 0, altitude: 3.5})
@@ -172,20 +166,6 @@ function destroyGlobe(choice){
     }
 }
 
-
-function geocodeLatLng(point){
-    const settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": "https://geocodeapi.p.rapidapi.com/GetNearestCities?latitude="+point.lat+"&longitude="+point.lng+"8&range=0",
-        "method": "GET",
-        "headers": {
-            "X-RapidAPI-Key": "6248a4fe70msh57539f13a4b0882p16a6afjsna26e1ac78437",
-            "X-RapidAPI-Host": "geocodeapi.p.rapidapi.com"
-        }
-    };
-    
-}
 
 function fire_ajax_submit() {
     var search = {}
