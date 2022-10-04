@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/62934f2f-332c-49c7-ab7b-9041f128c43f/AppServices/subscriptions/62934f2f-332c-49c7-ab7b-9041f128c43f/resourceGroups/fireball-visualizer-Capstone/providers/Microsoft.Web/sites/fireball-visualizer",
+    "appService.deploySubpath": "."
+}

@@ -1,27 +1,37 @@
-const windowWidth = window.innerWidth;
-const windowHeight = window.innerHeight;
+// const windowWidth = document.getElementById("globe-container").clientWidth;
+// const windowHeight = document.getElementById("globe-container").clientHeight;
+const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight
+}
 
 let dateText = document.getElementById("date");
 let energyText = document.getElementById("energy");
+let impactData = [];
+
+let globe = Globe({animateln: true});
 
 $(document).ready(function(){
-    
     $.ajax({
+        method: 'GET',
         url: 'https://ssd-api.jpl.nasa.gov/fireball.api',
         complete: function() {
             console.log('COMPLETE');
         },
         success: function(data) {
+            console.log(data);
             let requestedData = data.data;
-            let impactData = [];
             for (let n = 0; n < requestedData.length; n++) {
                 //Get Date & Time
                 let date = requestedData[n][0].split(" ")[0];
                 let time = requestedData[n][0].split(" ")[1];
+
                 //Get Energy
                 let energy = requestedData[n][1];
 
+                //Get Impact Energy
                 let impact_energy = requestedData[n][2];
+
                 //Get Latitude
                 let lat = requestedData[n][3];
                 let latdir = requestedData[n][4];
@@ -32,7 +42,11 @@ $(document).ready(function(){
                 let lngdir = requestedData[n][6];
                 if (lngdir == 'W') lng *= -1;
 
+                //Get Altitude
+                let alt = requestedData[n][7];
 
+                //Get velocity
+                let vel = requestedData[n][8];
                 //Set color and size
                 let color = '';
                 let size = Math.log(1.05 + (energy / 500));
@@ -65,33 +79,86 @@ $(document).ready(function(){
                     lat: lat,
                     lng: lng,
                     size: size,
-                    color: color
+                    color: color,
+                    alt: alt,
+                    vel: vel
                 };
 
                 //Push entry
                 impactData.push(entry);
             }
 
-            //Create globe
-            const globe = Globe()
-            (document.getElementById('globeViz'))
-                .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
-                .backgroundImageUrl('https://staticdelivery.nexusmods.com/mods/448/images/63-0-1456805047.png')
-                .pointsData(impactData)
-                .pointAltitude('size')
-                .onPointClick((point) => {
-                    console.log(point);
-                    geocodeLatLng(point);
-                })
-                .pointColor('color')
-                .enablePointerInteraction(true);
+            initGlobe();
+            globe.onPointClick(point => {
+                console.log(point);
+                destroyGlobe();
+            });
 
-            globe.controls().autoRotate = true;
-            globe.controls().autoRotateSpeed = 0.1;
         }
-    });         
+    });     
+    
+    $("#fireball-params").submit(function (e) {
+        e.preventDefault();
+
+        fire_ajax_submit();
+    });
 });
 
+
+$('#reset').click(function(){
+    globe.pointsData(impactData);
+    globe.controls().autoRotate = true;
+})
+
+window.addEventListener('resize', () =>
+{
+    globe.width(window.innerWidth).height(window.innerHeight);
+
+});
+
+function initGlobe(){
+    //Create globe
+    globe.globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+    .backgroundImageUrl('https://staticdelivery.nexusmods.com/mods/448/images/63-0-1456805047.png')
+    .width(sizes.width)
+    .height(sizes.height)
+    .pointsData(impactData)
+    .pointAltitude('size')
+    //.onPointClick((point) => {
+        //console.log(point);
+        // globe.controls().autoRotate = false;
+        // globe.pointOfView({lat: point.lat, lng: point.lng, altitude: altitude}, 3000);
+        //geocodeLatLng(point);
+    //})
+    .pointColor('color')
+    .enablePointerInteraction(true)
+    .pointOfView({lat: 0, lng: 0, altitude: 3.5})
+    (document.getElementById('globeViz'));
+    
+    globe.controls().autoRotate = true;
+    globe.controls().autoRotateSpeed = 0.1;
+}
+
+function destroyGlobe(){
+    globe
+    .pointsData(null)
+    .pointAltitude(null)
+    .pointColor(null);
+    labeledGlobe();
+}
+
+function labeledGlobe(){
+    console.log("here");
+    globe.globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+    .backgroundImageUrl('https://staticdelivery.nexusmods.com/mods/448/images/63-0-1456805047.png')
+    .labelsData(impactData)
+    .labelText('energy')
+    .labelSize('size')
+    .labelColor('color')
+    .labelDotRadius('size')
+    .labelResolution(2)
+    (document.getElementById('globeViz'));
+}
 
 function geocodeLatLng(point){
     const settings = {
@@ -109,5 +176,30 @@ function geocodeLatLng(point){
         alert("The nearest city is " + response[0].City + ", " + response[0].Country + "\nThis impact happened on " + point.date + " at " + point.time
         + "\nIt had an energy of " + point.energy + " kilotons of TNT and an impact energy of " + point.impact_energy + " kilotons of TNT");
         console.log(response);
+    });
+}
+
+function fire_ajax_submit() {
+    var search = {}
+    search["date"] = $("#date").val();
+    search["energy"] = $("#energy").val();
+    $("#submit").prop("disabled", true);
+
+    $.ajax({
+        url: "https://ssd-api.jpl.nasa.gov/fireball.api",
+        success: function (data) {
+            var json = "<h4>Ajax Response</h4><pre>"
+                + JSON.stringify(data, null, 4) + "</pre>";
+            $('#feedback').html(json);
+            console.log("SUCCESS : ", data);
+            $("#submit").prop("disabled", false);
+        },
+        error: function (e) {
+            var json = "<h4>Ajax Response</h4><pre>"
+                + e.responseText + "</pre>";
+            $('#feedback').html(json);
+            console.log("ERROR : ", e);
+            $("#submit").prop("disabled", false);
+        }
     });
 }
