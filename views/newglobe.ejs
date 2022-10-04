@@ -17,9 +17,6 @@
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title">Options</h5>
-                      <button type="button" class="btn btn-dark" id="modalClose">
-                        <span aria-hidden="true">X</span>
-                      </button>
                     </div>
                     <div class="modal-body">
                       <form action="" method="get">
@@ -61,9 +58,6 @@
             });
         
             $('#modalCollapse').on('click', function () {
-                $('#menuModal').modal('toggle');
-            });
-            $('#modalClose').on('click', function () {
                 $('#menuModal').modal('toggle');
             });
         });
