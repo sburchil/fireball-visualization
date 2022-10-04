@@ -1,0 +1,53 @@
+html,
+body {
+    margin: 0px;
+}
+
+.wrapper{
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+
+#menu {
+    position: absolute;
+    left: 10px;
+    top: 15px;
+    width: 300px;
+    height: 200px;
+    z-index: 2;
+}
+
+#modalCollapse {
+    width: 130px;
+    height: 50px;
+}
+
+#menuModal {
+    position: absolute;
+    left: 22px;
+    top: 45px;
+    width: 500px;
+    height: 400px;
+}
+/* 
+#sidepanel{
+    margin-left: -250px;
+    min-width: 250px;
+    max-width: 250px;
+    min-height: 50vh;
+}
+
+#sidepanel.active {
+    margin-left: 200px;
+    z-index: 2;
+}
+
+@media (max-width: 768px) {
+    #sidepanel {
+        margin-left: 250px;
+    }
+    #sidepanel.active {
+        margin-left: 0;
+    }
+} */

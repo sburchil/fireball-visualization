@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel='stylesheet' href='/css/style.css' />
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/sidebar.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.2.0/dist/darkly/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="//unpkg.com/globe.gl"></script>
@@ -9,11 +10,64 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 </head>
 <body>
-    <div id="globeViz" class="col"></div>
-
-    <input type="hidden" name="responseJson" id="responseJson" value="<%=responseJson%>"/>
+    <div class="wrapper">   
+        <div class="content">
+            <div class="modal fade" tabindex="-1" role="dialog" id="menuModal">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Options</h5>
+                      <button type="button" class="btn btn-dark" id="modalClose">
+                        <span aria-hidden="true">X</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form action="" method="get">
+                            <div class="form-group">
+                                <label for="start">Start Date</label>
+                                <input type="date" class="form-control" id="start" name="start" value="">
+                                <label for="end">End Date</label>
+                                <input type="date" class="form-control" id="end" name="end" value="">
+                                <hr class="hr"/>
+                            </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" id="reset">Reset Data Points</button>
+                      <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <!-- <nav class="navbar navbar-expand-lg" id="sidebar"> -->
+                <div class="container-fluid" id="menu">
+                    <button class="btn btn-dark" type="button" id="modalCollapse" >
+                        <span>&#9776; Menu</span>
+                    </button>
+                </div>
+            <!-- </nav> -->
+            <div id="globeViz" class="col"></div>
+        </div>
+    </div>
+        
     <script src="/js/extra_fireball.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#menuModal').modal({
+                backdrop: false,
+                keyboard: false,
+                focus: false
+            });
+        
+            $('#modalCollapse').on('click', function () {
+                $('#menuModal').modal('toggle');
+            });
+            $('#modalClose').on('click', function () {
+                $('#menuModal').modal('toggle');
+            });
+        });
+    </script>
+    <input type="hidden" name="responseJson" id="responseJson" value="<%=responseJson%>"/>
 </body>
 </html>

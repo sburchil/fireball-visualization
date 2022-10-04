@@ -12,11 +12,16 @@ router.get('/newglobe', async function(req, res, next) {
     const json = await fetch('https://ssd-api.jpl.nasa.gov/fireball.api', {method: 'GET', headers: {'Content-Type': 'application/json'}});
     const data = await json.json();
     const jsonData = JSON.stringify(data);
-    console.log(JSON.stringify(data));
     
     res.render('newglobe', { title: 'Extra example globe', responseJson: jsonData });
 
 });
+
+router.get('/newglobe/submit', async function(req, res, next) {
+    console.log(req.query);
+
+    res.render('newglobe');
+})
 
 router.get('/testglobe', function(req, res, next){
     res.render('testglobe', { title: 'Test Globe' });

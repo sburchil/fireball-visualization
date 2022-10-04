@@ -86,7 +86,7 @@ $(document).ready(function(){
             initGlobe();
             globe.onPointClick(point => {
                 console.log(point);
-                destroyGlobe();
+                destroyGlobe("points");
                 newGlobe();
             });
             globe.onLabelClick(label => {
@@ -103,15 +103,22 @@ $(document).ready(function(){
 
 
 
-$('#reset').click(function(){
-    globe.pointsData(impactData);
+$('#reset').on('click', function(){
+    destroyGlobe("labels");
+    globe
+    .pointsData(impactData)
+    .width(sizes.width)
+    .height(sizes.height)
+    .pointsData(impactData)
+    .pointAltitude('size')
+    .pointColor('color');
     globe.controls().autoRotate = true;
+    globe.controls().autoRotateSpeed = 0.1;
 })
 
 window.addEventListener('resize', () =>
 {
     globe.width(window.innerWidth).height(window.innerHeight);
-
 });
 
 function newGlobe(){
@@ -147,12 +154,24 @@ function initGlobe(){
     globe.controls().autoRotateSpeed = 0.1;
 }
 
-function destroyGlobe(){
-    globe
-    .pointsData(null)
-    .pointAltitude(null)
-    .pointColor(null);
+function destroyGlobe(choice){
+
+    if(choice == "points"){
+        globe
+        .pointsData(null)
+        .pointAltitude(null)
+        .pointColor(null);
+    } else if (choice == "labels"){
+        globe
+        .labelsData(null)
+        .labelText(null)
+        .labelSize(null)
+        .labelColor(null)
+        .labelDotRadius(null)
+        .labelResolution(null);
+    }
 }
+
 
 function geocodeLatLng(point){
     const settings = {
