@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'fireball2'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_182F2A9EFD75427B93018113AEBA4F96 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7ECFEE5213AB4FF3A21A7061847806DD }}
           package: .
