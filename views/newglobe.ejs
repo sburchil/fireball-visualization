@@ -1,5 +1,6 @@
 <%- include('partials/header.ejs') %>
-    <div class="wrapper">   
+<script src="//unpkg.com/globe.gl"></script>
+  <div class="wrapper">   
         <div class="content">
             <div class="modal fade" tabindex="-1" role="dialog" id="menuModal">
                 <div class="modal-dialog" role="document">
@@ -50,4 +51,6 @@
         });
     </script>
     <input type="hidden" name="responseJson" id="responseJson" value="<%=responseJson%>"/>
+
+    <script src="/js/extra_fireball.js"></script>
 <%- include('partials/footer.ejs') %>
