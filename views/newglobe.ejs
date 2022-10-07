@@ -1,56 +1,84 @@
 <%- include('partials/header.ejs') %>
-<script src="//unpkg.com/globe.gl"></script>
-  <div class="wrapper">   
-        <div class="content">
-            <div class="modal fade" tabindex="-1" role="dialog" id="menuModal">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title">Options</h5>
-                    </div>
-                    <div class="modal-body">
-                      <form action="" method="get">
-                            <div class="form-group">
-                                <label for="start">Start Date</label>
-                                <input type="date" class="form-control" id="start" name="start" value="">
-                                <label for="end">End Date</label>
-                                <input type="date" class="form-control" id="end" name="end" value="">
-                                <hr class="hr"/>
-                            </div>
-                      </form>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" id="reset">Reset Data Points</button>
-                      <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                  </div>
+  <script src="//unpkg.com/globe.gl"></script>
+  <div class="wrapper">
+    <div class="content">
+      <div class="modal fade" tabindex="-1" role="dialog" id="menuModal">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Options</h5>
+            </div>
+            <form action="" method="GET" id="paramForm">
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="date-min">Start Date</label>
+                  <input type="date" class="form-control" id="date-min" name="date-min" min="1988-04-15" max="2022-09-15" value="" />
+                  <label for="date-max">End Date</label>
+                  <input type="date" class="form-control" id="date-max" name="date-max" min="1988-04-15" max="2022-09-15" value="" />
+                  <hr class="hr" />
+                </div>
+                <div class="form-group">
+                  <label for="energy-min">Min Energy</label>
+                  <input type="number" class="form-control" id="energy-min" name="energy-min" min="2" max="37500" value=""/>
+                  <label for="energy-max">Max Energy</label>
+                  <input type="number" class="form-control" id="energy-max" name="energy-max" min="2" max="37500" value=""/>
+                  <hr class="hr" />
+                </div>
+                <div class="form-group">
+                  <label for="impact-e-min">Min Impact Energy</label>
+                  <input type="number" class="form-control" id="impact-e-min" name="impact-e-min" min="0" max="440" value=""/>
+                  <label for="impact-e-max">Max Impact Energy</label>
+                  <input type="number" class="form-control" id="impact-e-max" name="impact-e-max" min="0" max="440" value=""/>
+                  <hr class="hr" />
+                </div>
+                <div class="form-group">
+                  <label for="limit">Limit</label>
+                  <input type="number" class="form-control" id="limit" name="limit" min="1" max="993" value=""/>
                 </div>
               </div>
-            <!-- <nav class="navbar navbar-expand-lg" id="sidebar"> -->
-                <div class="container-fluid" id="menu">
-                    <button class="btn btn-dark" type="button" id="modalCollapse" >
-                        <span>&#9776; Menu</span>
-                    </button>
-                </div>
-            <!-- </nav> -->
-            <div id="globeViz" class="col"></div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="reset">
+                  Reset Data Points
+                </button>
+                <button class="btn btn-primary" type="submit" id="submit">
+                  Save changes
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
+      </div>
+      <!-- <nav class="navbar navbar-expand-lg" id="sidebar"> -->
+      <div class="container-fluid" id="menu">
+        <button class="btn btn-dark" type="button" id="modalCollapse">
+          <span>&#9776; Menu</span>
+        </button>
+      </div>
+      <!-- </nav> -->
+      <div id="globeViz" class="col"></div>
     </div>
-        
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#menuModal').modal({
-                backdrop: false,
-                keyboard: false,
-                focus: false
-            });
-        
-            $('#modalCollapse').on('click', function () {
-                $('#menuModal').modal('toggle');
-            });
-        });
-    </script>
-    <input type="hidden" name="responseJson" id="responseJson" value="<%=responseJson%>"/>
+  </div>
 
-    <script src="/js/extra_fireball.js"></script>
-<%- include('partials/footer.ejs') %>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $("#menuModal").modal({
+        backdrop: false,
+        keyboard: false,
+        focus: false,
+      });
+
+      $('#paramForm').submit((e) => {
+        e.preventDefault();
+        return search();
+      });
+
+
+      $("#modalCollapse").on("click", function () {
+        $("#menuModal").modal("toggle");
+      });
+    });
+  </script>
+  <input type="hidden" name="responseJson" id="responseJson" value="<%=responseJson%>" />
+
+  <script src="/js/extra_fireball.js"></script>
+  <%- include('partials/footer.ejs') %>
