@@ -118,7 +118,7 @@ function labelGlobe(requestedData){
     globe
     .labelsData(requestedData)
     .labelLabel((el) => {
-        return "Date: " + el.date + ",<br> Time of peak brightness: " + el.time;
+        return "<strong>Date: " + el.date + ",<br> Time of peak brightness: " + el.time + "</strong>";
     })
     .labelText('energy')
     .labelSize('size')
