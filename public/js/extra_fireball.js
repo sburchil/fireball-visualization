@@ -201,7 +201,6 @@ function search() {
         crossDomain: true,
         url: "https://ssd-api.jpl.nasa.gov/fireball.api",
         data: searchParams.toString(),
-        dataType: 'json',
         contentType: "text/plain",
         success: function (data) {
             if(data){
