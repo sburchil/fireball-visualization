@@ -4,26 +4,15 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const cors = require('cors');
 
 var app = express();
 var port = normalizePort(process.env.PORT || '3000');
 
 var server = http.createServer(app);
 
-app.use(cors({origin: ['http://localhost:3000', 'https://fireball.azurewebsites.net', 'https://fireball2.azurewebsites.net']}));
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var globeRouter = require('./routes/globe');
-
-
-app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  next();
-});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

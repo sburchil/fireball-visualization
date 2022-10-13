@@ -1,41 +1,43 @@
-// const windowWidth = document.getElementById("globe-container").clientWidth;
-// const windowHeight = document.getElementById("globe-container").clientHeight;
-const sizes = {
-    width: window.innerWidth,
-    height: window.innerHeight
-}
-
 let dateText = document.getElementById("date");
 let energyText = document.getElementById("energy");
-const initData = setRequestedData(JSON.parse(document.getElementById("responseJson").value));
+let impactData;
 let globe = Globe({animateln: true});
 
 $(document).ready(function(){
-        initGlobe(initData);
+        $.ajax({
+            url: "/globe/init",
+            type: "GET",
+            dataType: "json",
+            success: function(response){
+                impactData = setRequestedData(JSON.parse(response));
+                return initGlobe(impactData);
+            },
+            error: function(error){
+                console.log(error);
+            }
+        })
     });
-
-$("#fireball-params").submit(function (e) {
-    e.preventDefault();
-
-    fire_ajax_submit();
-});
 
 $('#reset').on('click', function(){
     destroyGlobe("labels");
     globe.pointOfView({altitude: 3}, 2000);
-    pointGlobe(initData);
-})
+    pointGlobe(impactData);
+    $('.alert').hide();
+});
+$('#clear').on('click', () => {
+    document.querySelectorAll('input').forEach((el) => el.value = '');
+});
+
 
 globe.onPointClick(point => {
-    console.log(point);
     destroyGlobe("points");
     labelGlobe([point]);    
     globe.controls().autoRotate = false;
     globe.pointOfView({lat: point.lat, lng: point.lng, altitude: 1}, 2000);
 });
-globe.onLabelHover(label => {
-    console.log(label);
-});
+// globe.onLabelHover(label => {
+//     console.log(label);
+// });
 
 window.addEventListener('resize', () =>
 {
@@ -130,8 +132,8 @@ function labelGlobe(requestedData){
 function pointGlobe(requestedData){
     globe
     .pointsData(requestedData)
-    .width(sizes.width)
-    .height(sizes.height)
+    globe.width(window.innerWidth)
+    .height(window.innerHeight)
     .pointsData(requestedData)
     .pointAltitude('size')
     .pointColor('color');
@@ -143,8 +145,8 @@ function initGlobe(impactData){
     //Create globe
     globe.globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
     .backgroundImageUrl('https://staticdelivery.nexusmods.com/mods/448/images/63-0-1456805047.png')
-    .width(sizes.width)
-    .height(sizes.height)
+    globe.width(window.innerWidth)
+    .height(window.innerHeight)
     .pointsData(impactData)
     .pointAltitude('size')
     .pointColor('color')
@@ -189,59 +191,34 @@ function search() {
 
     for(var key in search){
         if(typeof search[key] !== 'undefined' && search[key] !== ''){
-            console.log(search[key]);
             searchParams.append(key, search[key]);
-            console.log(searchParams.toString());
         }
     }
-    $("#btn-search").prop("disabled", true);
 
     $.ajax({
         type: "GET",
-        // url: "https://ssd-api.jpl.nasa.gov/fireball.api",
-        url: '/globe/fireball',
+        url: '/globe/request',
         data: searchParams.toString(),
         success: function (data) {
-            if(data){
-                console.log("there is data");
+            const jsonData = JSON.parse(data);
+            if(jsonData.count > 0){
                 destroyGlobe("labels");
-                const requestedData = setRequestedData(data);
+                const requestedData = setRequestedData(jsonData);
                 pointGlobe(requestedData);
+
+                document.getElementById('success-message').innerHTML = jsonData.count + " Results Returned.";
+                $('.alert-success').show();
+                $('.alert-danger').hide();
             } else {
-                console.log("no data");
+                document.getElementById('danger-message').innerHTML = "No data was returned, try changing your search parameters.";
+                $('.alert-danger').show();
+                $('.alert-success').hide();
             }
 
-        },
-        error: function (e) {
-            console.log("ERROR: ", e);
-
         }
+    }).fail(function (jqXHR, textStatus, errorThrown) {
+        console.log("fail");
     });
+    ;
 
-}
-
-
-function fire_ajax_submit() {
-    var search = {}
-    search["date"] = $("#date").val();
-    search["energy"] = $("#energy").val();
-    $("#submit").prop("disabled", true);
-
-    $.ajax({
-        url: "https://ssd-api.jpl.nasa.gov/fireball.api",
-        success: function (data) {
-            var json = "<h4>Ajax Response</h4><pre>"
-                + JSON.stringify(data, null, 4) + "</pre>";
-            $('#feedback').html(json);
-            console.log("SUCCESS : ", data);
-            $("#submit").prop("disabled", false);
-        },
-        error: function (e) {
-            var json = "<h4>Ajax Response</h4><pre>"
-                + e.responseText + "</pre>";
-            $('#feedback').html(json);
-            console.log("ERROR : ", e);
-            $("#submit").prop("disabled", false);
-        }
-    });
 }
