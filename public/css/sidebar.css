@@ -4,6 +4,7 @@ body {
     overflow: hidden;
 }
 
+
 .wrapper{
     display: flex;
     width: 100%;
@@ -30,6 +31,13 @@ body {
     top: 110px;
     width: 500px;
     /* height: 400px; */
+}
+
+#alerts {
+    position: absolute;
+    z-index: 1;
+    right: 5px;
+    opacity: 0.8;
 }
 /* 
 #sidepanel{

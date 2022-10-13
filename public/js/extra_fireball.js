@@ -11,7 +11,7 @@ const initData = setRequestedData(JSON.parse(document.getElementById("responseJs
 let globe = Globe({animateln: true});
 
 $(document).ready(function(){
-            initGlobe(initData);
+        initGlobe(initData);
     });
 
 $("#fireball-params").submit(function (e) {
@@ -198,10 +198,9 @@ function search() {
 
     $.ajax({
         type: "GET",
-        crossDomain: true,
-        url: "https://ssd-api.jpl.nasa.gov/fireball.api",
+        // url: "https://ssd-api.jpl.nasa.gov/fireball.api",
+        url: '/globe/fireball',
         data: searchParams.toString(),
-        contentType: "text/plain",
         success: function (data) {
             if(data){
                 console.log("there is data");
