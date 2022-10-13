@@ -191,9 +191,7 @@ function search() {
 
     for(var key in search){
         if(typeof search[key] !== 'undefined' && search[key] !== ''){
-            // console.log(search[key]);
             searchParams.append(key, search[key]);
-            console.log(searchParams.toString());
         }
     }
 
