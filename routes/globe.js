@@ -1,6 +1,5 @@
 var express = require('express');
 var fetch = require('node-fetch');
-var https = require('https');
 var router = express.Router();
 
 let url = "https://ssd-api.jpl.nasa.gov/fireball.api";
