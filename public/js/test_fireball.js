@@ -1,10 +1,3 @@
-// const windowWidth = document.getElementById("globe-container").clientWidth;
-// const windowHeight = document.getElementById("globe-container").clientHeight;
-const sizes = {
-    width: window.innerWidth,
-    height: window.innerHeight
-}
-
 let dateText = document.getElementById("date");
 let energyText = document.getElementById("energy");
 let impactData;
@@ -139,8 +132,8 @@ function labelGlobe(requestedData){
 function pointGlobe(requestedData){
     globe
     .pointsData(requestedData)
-    .width(sizes.width)
-    .height(sizes.height)
+    globe.width(window.innerWidth)
+    .height(window.innerHeight)
     .pointsData(requestedData)
     .pointAltitude('size')
     .pointColor('color');
@@ -152,8 +145,8 @@ function initGlobe(impactData){
     //Create globe
     globe.globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
     .backgroundImageUrl('https://staticdelivery.nexusmods.com/mods/448/images/63-0-1456805047.png')
-    .width(sizes.width)
-    .height(sizes.height)
+    globe.width(window.innerWidth)
+    .height(window.innerHeight)
     .pointsData(impactData)
     .pointAltitude('size')
     .pointColor('color')
