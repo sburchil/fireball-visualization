@@ -1,62 +1,57 @@
 html,
 body {
-    margin: 0px;
-    overflow: hidden;
+  margin: 0px;
+  overflow: hidden;
 }
 
-
-.wrapper{
-    display: flex;
-    width: 100%;
-    align-items: stretch;
+.wrapper {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
 }
 
 #menu {
-    position: absolute;
-    left: 10px;
-    top: 80px;
-    width: 300px;
-    height: 200px;
-    z-index: 2;
+  position: absolute;
+  left: 10px;
+  top: 80px;
+  width: 300px;
+  height: 200px;
+  z-index: 2;
 }
 
 #modalCollapse {
-    width: 130px;
-    height: 50px;
+  width: 130px;
+  height: 50px;
 }
 
 #menuModal {
-    position: absolute;
-    left: 22px;
-    top: 110px;
-    width: 500px;
-    /* height: 400px; */
+  position: absolute;
+  left: 22px;
+  top: 110px;
+  width: 500px;
+  /* height: 400px; */
 }
 
 #alerts {
+  position: absolute;
+  z-index: 1;
+  right: 5px;
+  opacity: 0.8;
+}
+#limit-label {
     position: absolute;
-    z-index: 1;
-    right: 5px;
-    opacity: 0.8;
+    top: 550px;
+    left: 440px;
+  width: 35px;
+    height: 30px;
+  font-size: 11pt;
+  text-align: center;
+  color: white;
+  background-color: inherit;
+  border: 0.2px solid gray;
 }
-/* 
-#sidepanel{
-    margin-left: -250px;
-    min-width: 250px;
-    max-width: 250px;
-    min-height: 50vh;
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
-
-#sidepanel.active {
-    margin-left: 200px;
-    z-index: 2;
-}
-
-@media (max-width: 768px) {
-    #sidepanel {
-        margin-left: 250px;
-    }
-    #sidepanel.active {
-        margin-left: 0;
-    }
-} */
