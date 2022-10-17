@@ -11,7 +11,6 @@ var port = normalizePort(process.env.PORT || '3000');
 var server = http.createServer(app);
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 var globeRouter = require('./routes/globe');
 
 // view engine setup
@@ -26,7 +25,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/globe', globeRouter);
 
 // catch 404 and forward to error handler
