@@ -35,46 +35,12 @@ $("#clear").on("click", () => {
     $("#limit-label").val(parseInt($("#limit").val()));
 });
 
-
-// $("#paramForm :input").on("input", function (e) {
-//     e.preventDefault();
-//     const alerts = document.querySelectorAll(".alert");
-//     let upperLimit = maxCount;
-//     let lowerLimit = 0;
-//     if (e.target.id == "limit") {
-//         if (e.target.value > upperLimit || e.target.value < lowerLimit) {
-//             $("#limit-help").attr("class", "text-danger");
-//             $("#limit-help").text(
-//                 "Please enter a value between " + lowerLimit + " and " + upperLimit
-//             );
-//             return removeAlert();
-//         } else {
-//             $("#limit").on("input", (e) => {
-//                 $("#limit-label").html(e.target.value);
-//             });
-//             $("#limit-help").text("");
-//         }
-//     }
-
-    // var id = "#" + e.target.id;
-    // removeAlert();
-    // $(id).prop('disabled', true);
-    // sleep(200).then(() => {
-    //     $(id).prop('disabled', false);
-    //     $(id).focus();
-    // });
-
-// });
-
 globe.onPointClick((point) => {
     destroyGlobe("points");
     labelGlobe([point]);
     globe.controls().autoRotate = false;
     globe.pointOfView({ lat: point.lat, lng: point.lng, altitude: 1 }, 2000);
 });
-// globe.onLabelHover(label => {
-//     console.log(label);
-// });
 
 window.addEventListener("resize", () => {
     globe.width(window.innerWidth).height(window.innerHeight);
@@ -157,18 +123,38 @@ function labelGlobe(requestedData) {
         .labelsData(requestedData)
         .labelLabel((el) => {
             return (
-                "<strong>Date: " +
-                el.date +
-                ",<br> Time of peak brightness: " +
-                el.time +
-                "</strong>"
+                "<strong> Click for Data on specific point </strong>"
             );
         })
-        .labelText("energy")
+        .labelText("date")
         .labelSize("size")
         .labelColor("color")
         .labelDotRadius("size")
         .labelResolution(2);
+        globe.onLabelClick((label) => {
+            $('#dataModal').modal('show');
+
+            var date = label.date;
+            var time = label.time;
+            var impact_energy = label.impact_energy;
+            var energy = label.energy;
+            var lat = label.lat;
+            var lng = label.lng;
+            var alt = label.alt;
+            var vel = label.vel;
+
+            var dateText = "<ul style='list-style: none;'><li>Date: " + date + "</li>";
+            var timeText = "<li>Time: " + time + "</li>";
+            var impact_energyText = "<li>Impact Energy: " + impact_energy + "</li>";
+            var energyText = "<li>Energy: " + energy + "</li>";
+            var latText = "<li>Latitude: " + lat + "</li>";
+            var lngText = "<li>Longitude: " + lng + "</li>";
+            var altText = "<li>Altitude: " + alt + "</li>";
+            var velText = "<li>Velocity: " + vel + "</li></ul>";
+        
+            html = dateText + timeText + impact_energyText + energyText + latText + lngText + altText + velText;
+            $('#dataModal').find('.modal-body').html(html);
+        })
 }
 
 function pointGlobe(requestedData) {
