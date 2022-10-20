@@ -11,7 +11,9 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/request', async (req, res, next) => {
-    const json = await fetch(url + "?limit=10", settings)
+    let params = new URLSearchParams(req.query);
+    params.append('sort', 'impact-e');
+    const json = await fetch(url+"?"+params, settings)
     .then(res => res.json());
     const jsonData = JSON.stringify(json);
     res.json(jsonData);

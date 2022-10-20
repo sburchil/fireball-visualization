@@ -1,5 +1,6 @@
 let dateText = document.getElementById("date");
 let energyText = document.getElementById("energy");
+let alerts = $("#alerts");
 let impactData;
 let globe = Globe({ animateln: true });
 let maxCount;
@@ -165,66 +166,16 @@ function search() {
                     showAlert({
                         class: "success",
                         message: jsonData.count + " results returned.",
-                    });
+                    }, alerts);
                 });
             } else {
                 showAlert({
                     class: "danger",
                     message: "No results returned. Try different search parameters.",
-                });
+                }, alerts);
             }
         },
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("fail");
     });
 }
-function showAlert(obj) {
-    var script = `
-    <script>
-        console.log("test");
-    </script>
-    `;
-    var html;
-    if (obj.class == "success") {
-        html =
-            '<div class="alert alert-success alert-dismissible fade in show" role="alert">' +
-            '   <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"><use xlink:href="#check-circle-fill"/></svg>' +
-            "   <label>" +
-            obj.message +
-            "</label>" +
-            '       <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close">' +
-            "       </button>";
-        ("   </div>");
-    } else if (obj.class == "danger") {
-        html =
-            '<div class="alert alert-danger alert-dismissible fade in show" role="alert">' +
-            '   <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"><use xlink:href="#exclamation-triangle-fill"/></svg>' +
-            "   <label>" +
-            obj.message +
-            "</label>" +
-            '       <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close">' +
-            "       </button>";
-        ("   </div>");
-    }
-
-    $("#alerts").append(html);
-}
-
-const sleep = (milliseconds) => {
-    return new Promise((resolve) => setTimeout(resolve, milliseconds));
-};
-
-const removeAlert = () => {
-    var alertNode = document.querySelectorAll(".alert");
-    if(alertNode.length > 0){
-        alertNode.forEach(node => {
-            try {
-                var alert = bootstrap.Alert.getOrCreateInstance(node);
-                alert.close();
-            } catch (error) {
-                console.log(error);
-            }
-
-        })
-    }
-};

@@ -1,11 +1,28 @@
 <%- include('partials/header.ejs') %>
 <script src="https://cdn.plot.ly/plotly-2.14.0.min.js"></script>
 </head>
+<%- include('partials/svg.ejs') %>
 
+<div id="graph-alerts">
+
+</div>
 <div id="graphs" style="margin-right: 100px;">
     <div id="graph1">
 
     </div>
+    <form action="" method="GET" id="paramForm" class="row g-3 mx-3">
+        <label for="date-min">Start Date</label>
+        <div class="col-3">
+            <input type="date" class="form-control" id="date-min" name="date-min" min="1988-04-15" max="2022-09-15" value="1999-04-15" />
+        </div>
+        <label for="date-max">End Date</label>
+        <div class="col-3">
+            <input type="date" class="form-control" id="date-max" name="date-max" min="1988-04-15" max="2022-09-15" value="2000-04-15" /><small id="date-help"></small>
+        </div>
+        <div class="col-3 align-bottom">
+            <button class="btn btn-primary" type="submit" id="submit">Submit</button>
+        </div>
+    </form>
 </div>
 
 <script src="/js/graph.js"></script>
