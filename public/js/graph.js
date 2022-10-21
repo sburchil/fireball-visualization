@@ -150,7 +150,7 @@ function createGraph() {
 
     }
     var data = [trace1];
-    // Plotly.extendTraces("graph1", data, 0);
+
     mainGraph.then((e) => {
         var range = [];
         if (e.data.length > 0) {
@@ -197,31 +197,6 @@ function createGraph() {
                 width: window.innerWidth - 30,
                 height: window.innerHeight / 1.5
             });
-        });
-
-        graphDiv.on('plotly_click', (pt) => {
-            var pts = [];
-            for (var i = 0; i < pt.points.length; i++) {
-                pts.push(pt.points[i].x);
-                pts.push(pt.points[i].y.toPrecision(4)) 
-            }
-            var new_data = [];
-            console.log(pts);
-            jsonData.filter((data) => {
-                // console.log(pts[0]);
-                // console.log(data.date);
-                console.log((data.date === pts[0]))
-                if((data.date === pts[0])){
-                    console.log('did it')
-                    new_data.push(data);
-                }
-
-                //filter new_data for impacta-energy
-                
-            })
-            console.log(new_data);
-            // console.log('Closest point clicked', pts);
-
         });
     });
 
