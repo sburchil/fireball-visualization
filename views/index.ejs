@@ -1,4 +1,5 @@
 <%- include('partials/header.ejs') %>
+<script src="https://cdn.jsdelivr.net/npm/vec3@0.1.7/index.min.js"></script>
 <style>
 
 canvas {
@@ -12,13 +13,12 @@ canvas {
 
 <div class="d-flex justify-content-center">
       <h1><%= title%> - <%= message%></h1>
-    </div>
-    <div>
+</div>
     <div class="text-center">
       <a type="button" class="btn btn-dark mr-1" href="/globe/fireball">Go to Data Globe</a>
       <a type="button" class="btn btn-dark ml-1" href="/graphs">Go to Graphs</a>
     </div>
 
     <canvas id="canvas"></canvas>
-    <script src="/js/spaceBackground"></script>
+    <script src="/js/spaceBackground.js"></script>
 <%- include('partials/footer.ejs') %>

@@ -25,7 +25,9 @@ function getColor() {
 }
 
 var star = function() {
-    var v = vec3.fromValues(rnd(0 - halfw,halfw),rnd(0 - halfh,halfh), rnd(1, warpZ));
+    var v = new Vec3(rnd(0 - halfw,halfw),rnd(0 - halfh,halfh), rnd(1, warpZ));
+    console.log(v);
+    // var v = vec3.fromValues(rnd(0 - halfw,halfw),rnd(0 - halfh,halfh), rnd(1, warpZ));
     
     
     this.x = v[0];
@@ -35,9 +37,9 @@ var star = function() {
     
     
     this.reset = function() {
-        v = vec3.fromValues(rnd(0 - halfw,halfw),rnd(0 - halfh,halfh), rnd(1, warpZ));
+        v = new Vec3(rnd(0 - halfw,halfw),rnd(0 - halfh,halfh), rnd(1, warpZ));
 
-        this.x = v[0];
+        this.x = v[0]; 
         this.y = v[1];
         this.color = getColor();
         vel = this.calcVel();
@@ -45,14 +47,15 @@ var star = function() {
     
     this.calcVel = function() {
         
-        return vec3.fromValues(0, 0, 0 - speed);
+        return new Vec3(0, 0, 0 - speed);
     };
     
     var vel = this.calcVel();
     
     this.draw = function() {
         vel = this.calcVel();
-        v = vec3.add(vec3.create(), v, vel);
+        v = new Vec3(new Vec3(v, vel));
+        // v = vec3.add(vec3.create(), v, vel);
         var x = v[0] / v[2];
         var y = v[1] / v[2];
         var x2 = v[0] / (v[2] + speed * 0.50);
