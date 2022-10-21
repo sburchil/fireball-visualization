@@ -1,5 +1,6 @@
 let dateText = document.getElementById("date");
 let energyText = document.getElementById("energy");
+let alerts = $("#alerts");
 let impactData;
 let globe = Globe({ animateln: true });
 let maxCount;
@@ -35,140 +36,54 @@ $("#clear").on("click", () => {
     $("#limit-label").val(parseInt($("#limit").val()));
 });
 
-
-// $("#paramForm :input").on("input", function (e) {
-//     e.preventDefault();
-//     const alerts = document.querySelectorAll(".alert");
-//     let upperLimit = maxCount;
-//     let lowerLimit = 0;
-//     if (e.target.id == "limit") {
-//         if (e.target.value > upperLimit || e.target.value < lowerLimit) {
-//             $("#limit-help").attr("class", "text-danger");
-//             $("#limit-help").text(
-//                 "Please enter a value between " + lowerLimit + " and " + upperLimit
-//             );
-//             return removeAlert();
-//         } else {
-//             $("#limit").on("input", (e) => {
-//                 $("#limit-label").html(e.target.value);
-//             });
-//             $("#limit-help").text("");
-//         }
-//     }
-
-    // var id = "#" + e.target.id;
-    // removeAlert();
-    // $(id).prop('disabled', true);
-    // sleep(200).then(() => {
-    //     $(id).prop('disabled', false);
-    //     $(id).focus();
-    // });
-
-// });
-
 globe.onPointClick((point) => {
     destroyGlobe("points");
     labelGlobe([point]);
     globe.controls().autoRotate = false;
     globe.pointOfView({ lat: point.lat, lng: point.lng, altitude: 1 }, 2000);
 });
-// globe.onLabelHover(label => {
-//     console.log(label);
-// });
 
 window.addEventListener("resize", () => {
     globe.width(window.innerWidth).height(window.innerHeight);
 });
-
-function setRequestedData(jsonData) {
-    let impactData = [];
-    let requestedData = jsonData.data;
-    for (let n = 0; n < requestedData.length; n++) {
-        //Get Date & Time
-        let date = requestedData[n][0].split(" ")[0];
-        let time = requestedData[n][0].split(" ")[1];
-
-        //Get Energy
-        let energy = requestedData[n][1];
-
-        //Get Impact Energy
-        let impact_energy = requestedData[n][2];
-
-        //Get Latitude
-        let lat = requestedData[n][3];
-        let latdir = requestedData[n][4];
-        if (latdir == "S") lat *= -1;
-
-        //Get Longitude
-        let lng = requestedData[n][5];
-        let lngdir = requestedData[n][6];
-        if (lngdir == "W") lng *= -1;
-
-        //Get Altitude
-        let alt = requestedData[n][7];
-
-        //Get velocity
-        let vel = requestedData[n][8];
-        //Set color and size
-        let color = "";
-        let size = Math.log(1.05 + energy / 500);
-        if (energy > 300) {
-            color = "#ff0000";
-        } else if (energy > 150) {
-            color = "#ff751a";
-        } else if (energy > 75) {
-            color = "#ffd11a";
-        } else if (energy > 37.5) {
-            color = "#ffff4d";
-        } else if (energy > 18.25) {
-            color = "#ffffb3";
-        } else if (energy > 9.125) {
-            color = "#ffffff";
-        } else if (energy > 4.5625) {
-            color = "#b3e6ff";
-        } else if (energy > 2.28125) {
-            color = "#3399ff";
-        } else {
-            color = "#1111ff";
-        }
-
-        //Create entry
-        let entry = {
-            date: date,
-            time: time,
-            impact_energy: impact_energy,
-            energy: energy,
-            lat: lat,
-            lng: lng,
-            size: size,
-            color: color,
-            alt: alt,
-            vel: vel,
-        };
-
-        //Push entry
-        impactData.push(entry);
-    }
-    return impactData;
-}
 
 function labelGlobe(requestedData) {
     globe
         .labelsData(requestedData)
         .labelLabel((el) => {
             return (
-                "<strong>Date: " +
-                el.date +
-                ",<br> Time of peak brightness: " +
-                el.time +
-                "</strong>"
+                "<strong> Click for Data on specific point </strong>"
             );
         })
-        .labelText("energy")
+        .labelText("date")
         .labelSize("size")
         .labelColor("color")
         .labelDotRadius("size")
         .labelResolution(2);
+        globe.onLabelClick((label) => {
+            $('#dataModal').modal('show');
+
+            var date = label.date;
+            var time = label.time;
+            var impact_energy = label.impact_energy;
+            var energy = label.energy;
+            var lat = label.lat;
+            var lng = label.lng;
+            var alt = label.alt;
+            var vel = label.vel;
+
+            var dateText = "<ul style='list-style: none;'><li>Date: " + date + "</li>";
+            var timeText = "<li>Time at peak brightness: " + time + "</li>";
+            var impact_energyText = "<li>Estimated Impact Energy: " + impact_energy + " (kt)</li>";
+            var energyText = "<li>Energy: " + energy + " x 10<sup>10</sup joules></li>";
+            var latText = "<li>Latitude: " + lat + "</li>";
+            var lngText = "<li>Longitude: " + lng + "</li>";
+            var altText = "<li>Altitude: " + alt + "</li>";
+            var velText = "<li>Velocity: " + vel + "</li></ul>";
+        
+            html = dateText + timeText + impact_energyText + energyText + latText + lngText + altText + velText;
+            $('#dataModal').find('.modal-body').html(html);
+        })
 }
 
 function pointGlobe(requestedData) {
@@ -251,66 +166,16 @@ function search() {
                     showAlert({
                         class: "success",
                         message: jsonData.count + " results returned.",
-                    });
+                    }, alerts);
                 });
             } else {
                 showAlert({
                     class: "danger",
                     message: "No results returned. Try different search parameters.",
-                });
+                }, alerts);
             }
         },
     }).fail(function (jqXHR, textStatus, errorThrown) {
         console.log("fail");
     });
 }
-function showAlert(obj) {
-    var script = `
-    <script>
-        console.log("test");
-    </script>
-    `;
-    var html;
-    if (obj.class == "success") {
-        html =
-            '<div class="alert alert-success alert-dismissible fade in show" role="alert">' +
-            '   <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"><use xlink:href="#check-circle-fill"/></svg>' +
-            "   <label>" +
-            obj.message +
-            "</label>" +
-            '       <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close">' +
-            "       </button>";
-        ("   </div>");
-    } else if (obj.class == "danger") {
-        html =
-            '<div class="alert alert-danger alert-dismissible fade in show" role="alert">' +
-            '   <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"><use xlink:href="#exclamation-triangle-fill"/></svg>' +
-            "   <label>" +
-            obj.message +
-            "</label>" +
-            '       <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close">' +
-            "       </button>";
-        ("   </div>");
-    }
-
-    $("#alerts").append(html);
-}
-
-const sleep = (milliseconds) => {
-    return new Promise((resolve) => setTimeout(resolve, milliseconds));
-};
-
-const removeAlert = () => {
-    var alertNode = document.querySelectorAll(".alert");
-    if(alertNode.length > 0){
-        alertNode.forEach(node => {
-            try {
-                var alert = bootstrap.Alert.getOrCreateInstance(node);
-                alert.close();
-            } catch (error) {
-                console.log(error);
-            }
-
-        })
-    }
-};

@@ -54,10 +54,10 @@ $('#paramForm').on('change', (e) => {
     search();
     var id = "#" + e.target.id;
     removeAlert();
-    $(id).prop('disabled', true);
-    sleep(200).then(() => {
-        $(id).prop('disabled', false);
-    });
+    // $(id).prop('disabled', true);
+    // sleep(200).then(() => {
+    //     $(id).prop('disabled', false);
+    // });
 })
 
 $("#limit").on("input", (e) => {
