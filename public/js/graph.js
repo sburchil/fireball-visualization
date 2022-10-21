@@ -5,21 +5,44 @@ var graph_alerts = $("#graph-alerts");
 var mainGraph = initGraph();
 $(document).ready(function () {
 
-    var date_min = $('#date-min').val();
-    var date_max = $('#date-max').val();
-    callAjax({"date-min": date_min,"date-max": date_max});
+    var date_min1 = $('#date-min').val();
+    var date_max1 = $('#date-max').val();
+    callAjax({"date-min": date_min1,"date-max": date_max1});
 
     $("#paramForm").on("submit", (e) => {
         e.preventDefault();
+
+        $('#date-min').removeClass('is-invalid');
+        $('#date-max').removeClass('is-invalid');
+        $('#date-help').text('');
+
+        var date_min = new Date(e.target[0].value);
+        var date_max = new Date(e.target[1].value);
+        if((date_min > date_max)){
+            $('#date-min').addClass('is-invalid');
+            $("#date-help").attr("class", "text-danger");
+            $('#date-help').text("Start date must be before end date.");
+            return removeAlert();
+        } else if ((date_min.toString() === date_max.toString())){
+            $('#date-min').addClass('is-invalid');
+            $('#date-max').addClass('is-invalid');
+            $("#date-help").attr("class", "text-danger");
+            $('#date-help').text("Dates cannot be the same.");
+            return removeAlert();
+        } else if((date_min > new Date()) || (date_max > new Date())){
+            $("#date-help").attr("class", "text-success");
+            $('#date-help').text("Dates are invalid. They cannot be in the future.");
+            return removeAlert();
+        }
         var formData = new FormData(e.target);
         var data = {};
         for (var pair of formData.entries()) {
             data[pair[0]] = pair[1];
         }
-        console.log(data);
         removeAlert();
         callAjax(data);
     })
+
 });
 
 function callAjax(data){
@@ -143,7 +166,6 @@ function createGraph(){
                 range.push($("#date-min").val());
                 range.push($("#date-max").val());
             }
-            console.log(range);
             Plotly.animate(graphDiv, {
                 data: data,
                 traces: [0],
@@ -167,10 +189,8 @@ function createGraph(){
             })
             
         } else {
-            console.log("adding");
             Plotly.addTraces(graphDiv, data);
         }
-        console.log(mainGraph);
         window.addEventListener("resize", () => {
             Plotly.relayout(e, {
                 width: window.innerWidth - 30,

@@ -73,9 +73,9 @@ function labelGlobe(requestedData) {
             var vel = label.vel;
 
             var dateText = "<ul style='list-style: none;'><li>Date: " + date + "</li>";
-            var timeText = "<li>Time: " + time + "</li>";
-            var impact_energyText = "<li>Impact Energy: " + impact_energy + "</li>";
-            var energyText = "<li>Energy: " + energy + "</li>";
+            var timeText = "<li>Time at peak brightness: " + time + "</li>";
+            var impact_energyText = "<li>Estimated Impact Energy: " + impact_energy + " (kt)</li>";
+            var energyText = "<li>Energy: " + energy + " x 10<sup>10</sup joules></li>";
             var latText = "<li>Latitude: " + lat + "</li>";
             var lngText = "<li>Longitude: " + lng + "</li>";
             var altText = "<li>Altitude: " + alt + "</li>";

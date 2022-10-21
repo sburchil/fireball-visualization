@@ -70,6 +70,12 @@ function setRequestedData(jsonData) {
     return impactData;
 }
 function showAlert(obj, parent) {
+    var script = `
+    <script>
+    sleep(3000).then(() => {
+        removeAlert();
+    })
+    </script>`
     var html;
     if (obj.class == "success") {
         html =
@@ -93,7 +99,7 @@ function showAlert(obj, parent) {
         ("   </div>");
     }
 
-    parent.append(html);
+    parent.append(html+script);
 }
 const sleep = (milliseconds) => {
     return new Promise((resolve) => setTimeout(resolve, milliseconds));
