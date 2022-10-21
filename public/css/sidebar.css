@@ -1,13 +1,24 @@
-html,
+/* html,
 body {
   margin: 0px;
   overflow: hidden;
+} */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
 
 .wrapper {
   display: flex;
   width: 100%;
   align-items: stretch;
+}
+
+.wrapper-index {
+  z-index: 2;
 }
 
 #menu {

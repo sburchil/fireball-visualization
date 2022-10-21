@@ -10,9 +10,9 @@ var port = normalizePort(process.env.PORT || '3000');
 
 var server = http.createServer(app);
 
-var indexRouter = require('./routes/index');
-var globeRouter = require('./routes/globe');
-var graphRouter = require('./routes/graphs');
+var indexRouter = require('./routes/index.js');
+var globeRouter = require('./routes/globe.js');
+var graphRouter = require('./routes/graphs.js');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
