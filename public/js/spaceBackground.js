@@ -1,5 +1,5 @@
 
-const numStars = 500;
+const numStars = 300;
 let stars = [];
 let size = {
     x: window.innerWidth,
@@ -9,7 +9,8 @@ let size = {
 function setup() {
   var canvas = createCanvas(size.x, size.y);
   stroke(255);
-  strokeWeight(2);
+  strokeWeight(1);
+  canvas.id('spaceBackground');
   canvas.parent('index-wrapper');
   for(let i = 0; i < numStars; i ++) {
     stars.push(new Star(random(width), random(height)));
@@ -19,7 +20,7 @@ function setup() {
 function draw() {
   background(0, 50);
   
-  const acc = 0.01;
+  const acc = 0.005;
   
   stars = stars.filter(star => {
     star.draw();
@@ -72,6 +73,7 @@ function windowResized() {
     size.x = window.innerWidth;
     size.y = window.innerHeight;
     resizeCanvas(size.x, size.y);
+
 }
 // function windowResized() {
 //     resizeCanvas(window.innerWidth, window.innerHeight);
