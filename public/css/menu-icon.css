@@ -1,0 +1,64 @@
+#menu-toggle>* {
+    width: 70px;
+    cursor: pointer;
+}
+
+#toggle-icon {
+    position: relative;
+    margin-left: auto;
+    margin-right: -30px;
+}
+
+#canvas-form{
+    border: none;
+
+    position: fixed;
+    float: right;
+    top: 10px;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 3;
+  }
+  
+  #canvas-form > div {
+    margin: 10px;
+  }
+
+.bar1,
+.bar2,
+.bar3 {
+    background-color: #ffffff99;
+    width: 30px;
+    height: 3px;
+    transition: 0.5s;
+    margin: 7px 0;
+}
+
+.rotate-icon .bar1 {
+    /* -webkit-transform: rotate(42deg) translate(4px, 2px); */
+    transform: rotate(30deg) translate(1px, 0px);
+}
+
+.rotate-icon .bar2 {
+    opacity: 0;
+}
+
+.rotate-icon .bar3 {
+    /* -webkit-transform: rotate(-42deg) translate(4px, 6px); */
+    transform: rotate(326deg) translate(1px, -1px);
+}
+
+.menu-text {
+    position: relative;
+    margin-left: auto;
+    margin-right: 20px;
+    text-align: right;
+    top: 2px;
+    color: #ffffff99;
+    transition: 0.5s;
+}
+
+.menu-text .slide {
+    transform: translate(10px, 10px);
+}

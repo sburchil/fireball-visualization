@@ -21,26 +21,11 @@ body {
   z-index: 2;
 }
 
-#menu {
-  position: absolute;
-  left: 10px;
-  top: 80px;
-  width: 300px;
-  height: 200px;
-  z-index: 2;
-}
-
-#modalCollapse {
-  width: 130px;
-  height: 50px;
-}
-
-#menuModal {
-  position: absolute;
-  left: 22px;
-  top: 110px;
+#offcanvasMenu {
+  top: 70px;
   width: 500px;
-  /* height: 400px; */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 3;
 }
 
 #alerts {
@@ -58,9 +43,10 @@ body {
   opacity: 0.8;
 }
 #limit-label {
-    position: absolute;
+    /* position: absolute;
     top: 550px;
-    left: 440px;
+    left: 440px; */
+    float: right;
   width: 35px;
     height: 30px;
   font-size: 11pt;

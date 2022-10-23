@@ -1,13 +1,16 @@
-*{
+/* *{
 overflow: hidden;
-}
+} */
 
-html,
+/* html,
 body
 {
     height: 100vh;
     font-family: 'Poppins';
-} */
+} */ 
+html {
+  overflow: hidden;
+}
 
 .webgl
 {

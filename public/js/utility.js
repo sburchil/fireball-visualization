@@ -129,3 +129,4 @@ const removeAlert = () => {
 function goToPoint(lat, lng){
     globe.pointOfView({lat: lat, lng: lng, altitude: 1}, 2000);
 }
+
