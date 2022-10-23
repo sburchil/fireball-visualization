@@ -5,16 +5,16 @@ let impactData;
 let globe = Globe({ animateln: true, waitForGlobeReady: true });
 let maxCount;
 
-    window.onkeypress = (e) => {
-        if(e.key == "s"){
-            if(globe.controls().autoRotateSpeed == 0) {
-                globe.controls().autoRotateSpeed = 0.2;
-            } else {
-                globe.controls().autoRotateSpeed = 0;
+window.onkeypress = (e) => {
+    if (e.key == "s") {
+        if (globe.controls().autoRotateSpeed == 0) {
+            globe.controls().autoRotateSpeed = 0.2;
+        } else {
+            globe.controls().autoRotateSpeed = 0;
 
-            }
         }
     }
+}
 
 
 $(document).ready((d) => {
@@ -37,16 +37,16 @@ $(document).ready((d) => {
     });
 
     $('#offcanvasMenu').offcanvas({
-      scroll: true,
-      backdrop: false
+        scroll: true,
+        backdrop: false
     });
     $('#menu-toggle').click(function () {
         $('#offcanvasMenu').offcanvas('toggle');
-         document.getElementById("toggle-icon").classList.toggle("rotate-icon");
+        document.getElementById("toggle-icon").classList.toggle("rotate-icon");
     });
     $('#offcanvasMenu').on('hide.bs.offcanvas', function () {
         $('#menu-text').animate({
-           left: "-=10px"
+            left: "-=10px"
         }, 200)
     });
     $('#offcanvasMenu').on('show.bs.offcanvas', function () {
@@ -56,13 +56,13 @@ $(document).ready((d) => {
     });
 
     $("#dataModal").modal({
-      backdrop: false,
-      keyboard: false,
-      focus: false,
+        backdrop: false,
+        keyboard: false,
+        focus: false,
     });
 
     $('#dataClose').on('click', function () {
-      $('#dataModal').modal('hide');
+        $('#dataModal').modal('hide');
     });
 });
 
@@ -166,7 +166,7 @@ function pointGlobe(requestedData) {
 
 var createMoon = () => {
     var mData = [...Array(1).keys()].map(() => ({
-        lat: 10.7,
+        lat: 2.0,
         lng: 4.5,
         alt: 2.5,
         radius: 30.0,
@@ -196,13 +196,20 @@ var createMoon = () => {
         });
 
 
+    var reverse = false;
     (function moveSpheres() {
-        mData.forEach(d => {
-            d.lng += 0.02;
-
-            d.rotation.y += 0.001;
-
-        });
+        if (((Math.floor(mData[0].lat) >= 10) && (Math.floor(mData[0].lng % 90) == 0))) reverse = true;
+        if (((Math.floor(mData[0].lat) <= -10) && (Math.floor(mData[0].lng % 90) == 0))) reverse = false;
+        mData[0].lng += 0.03;
+        // console.log(Math.floor(d.lng % 90));
+        if (reverse) {
+            mData[0].lat = mData[0].lat - 0.001;
+            mData[0].lat -= 0.003;
+        } else {
+            mData[0].lat = mData[0].lat + 0.001;
+            mData[0].lat += 0.003;
+        }
+        mData[0].rotation.y += 0.004;
         globe.customLayerData(globe.customLayerData());
         requestAnimationFrame(moveSpheres);
     })();
@@ -256,7 +263,7 @@ function createFireball(data) {
     }
 
     globe.customThreeObjectUpdate((obj, d) => {
-            Object.assign(obj.position, globe.getCoords(d.lat, d.lng, d.alt));
+        Object.assign(obj.position, globe.getCoords(d.lat, d.lng, d.alt));
     });
 
     var speed = 0;
@@ -273,16 +280,16 @@ function createFireball(data) {
 
     (function moveFireball() {
         new_data.forEach(d => {
-            if(d.alt < 0){
+            if (d.alt < 0) {
                 d.alt = 0;
-            }else {
+            } else {
                 d.alt -= speed * d.vel;
             }
         });
         globe.customLayerData(globe.customLayerData());
         requestAnimationFrame(moveFireball);
     })();
-           
+
 
 }
 
@@ -305,8 +312,8 @@ function initGlobe(impactData) {
         .pointColor("color")
         .enablePointerInteraction(true);
 
-    globe.controls().autoRotate = true;
-    globe.controls().autoRotateSpeed = 0.2;
+    // globe.controls().autoRotate = true;
+    // globe.controls().autoRotateSpeed = 0.2;
     globe.pointOfView({ alt: 10.0 }, 1000);
     sleep(1000).then(() => {
         createMoon();
