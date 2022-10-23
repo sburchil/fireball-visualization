@@ -23,7 +23,7 @@ body {
 
 #offcanvasMenu {
   top: 70px;
-  width: 500px;
+  width: 550px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   z-index: 3;
 }
