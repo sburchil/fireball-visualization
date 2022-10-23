@@ -1,7 +1,7 @@
 var impact_e = [];
 var date = [];
 var graphDiv = document.getElementById("graph1");
-var graph_alerts = $("#graph-alerts");
+var graph_alerts = $("#alerts");
 var mainGraph = initGraph();
 var jsonData;
 $(document).ready(function () {
@@ -218,9 +218,4 @@ function createGraph() {
         });
 
     });
-
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> eb97eb5ce404dcd2b2d291467deef5b27b985e2f

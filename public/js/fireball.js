@@ -5,18 +5,6 @@ let impactData;
 let globe = Globe({ animateln: true, waitForGlobeReady: true });
 let maxCount;
 
-    window.onkeypress = (e) => {
-        if(e.key == "s"){
-            if(globe.controls().autoRotateSpeed == 0) {
-                globe.controls().autoRotateSpeed = 0.2;
-            } else {
-                globe.controls().autoRotateSpeed = 0;
-
-            }
-        }
-    }
-
-
 $(document).ready((d) => {
     $.ajax({
         url: "/globe/init",
@@ -26,6 +14,7 @@ $(document).ready((d) => {
             var jsonData = JSON.parse(response);
             maxCount = parseInt(jsonData.count);
             $("#limit").attr("max", maxCount);
+            $("#limit").val(Math.round(maxCount / 2)+1);
             $("#limit").attr("min", 1);
             $("#limit-label").val(parseInt($("#limit").val()));
             impactData = setRequestedData(jsonData);
@@ -69,9 +58,7 @@ $(document).ready((d) => {
 $("#reset").on("click", function () {
     destroyGlobe("labels");
     destroyGlobe("custom");
-    // globe.pointOfView({ lat: 0, lng: 0, altitude: 3 }, 2000);
-    // pointGlobe(impactData);
-    htmlGlobe(impactData);
+    pointGlobe(impactData);
     $("#alerts").html("");
 });
 $("#clear").on("click", () => {
@@ -81,37 +68,14 @@ $("#clear").on("click", () => {
 
 globe.onPointClick((point) => {
     destroyGlobe("points");
-    createFireball([point]);
     labelGlobe([point]);
     globe.controls().autoRotate = false;
     globe.pointOfView({ lat: point.lat, lng: point.lng, altitude: 1 }, 2000);
 });
 
-$(window).resize((e) => {
+$(window).resize(() => {
     globe.width(window.innerWidth).height(window.innerHeight);
 });
-
-function htmlGlobe(requestedData) {
-    const markerSvg = `<svg viewBox="-4 0 36 36">
-    <path fill="currentColor" d="M14,0 C21.732,0 28,5.641 28,12.6 C28,23.963 14,36 14,36 C14,36 0,24.064 0,12.6 C0,5.641 6.268,0 14,0 Z"></path>
-    <circle fill="black" cx="14" cy="14" r="7"></circle>
-  </svg>`;
-    globe
-        .htmlElementsData(requestedData)
-        .htmlElement((d) => {
-            const el = document.createElement('div');
-            el.innerHTML = markerSvg;
-            el.style.color = d.color;
-            el.style.width = `${d.size + 10.2}px`;
-
-            el.style['pointer-events'] = 'auto';
-            el.style.cursor = 'pointer';
-            el.onclick = () => goToPoint(d.lat, d.lng);
-            return el;
-        })
-        .htmlTransitionDuration(1000);
-    globe.pointOfView({ lat: 0, lng: 0, altitude: 5 }, 2000);
-}
 
 function labelGlobe(requestedData) {
     globe
@@ -164,129 +128,6 @@ function pointGlobe(requestedData) {
     globe.controls().autoRotateSpeed = 0.1;
 }
 
-var createMoon = () => {
-    var mData = [...Array(1).keys()].map(() => ({
-        lat: 10.7,
-        lng: 4.5,
-        alt: 2.5,
-        radius: 30.0,
-        rotation: {
-            x: 0,
-            y: 0,
-            z: 0,
-        }
-    }));
-
-    globe.customLayerData(mData)
-        .customThreeObject((d) => {
-            var geometry = new THREE.DodecahedronGeometry(d.radius, 2);
-            var material = new THREE.MeshBasicMaterial({ color: 'darkgray' });
-            material.map = new THREE.TextureLoader().load('/images/moon.jpg');
-            material.bumpmap = new THREE.TextureLoader().load('/images/asteroid_bumpmap.jpg');
-            material.bumpScale = 0.1;
-            var mesh = new THREE.Mesh(
-                geometry,
-                material
-            )
-            return mesh;
-        })
-        .customThreeObjectUpdate((obj, d) => {
-            Object.assign(obj.rotation, { x: d.rotation.x, y: d.rotation.y, z: d.rotation.z });
-            Object.assign(obj.position, globe.getCoords(d.lat, d.lng, 3));
-        });
-
-
-    (function moveSpheres() {
-        mData.forEach(d => {
-            d.lng += 0.02;
-
-            d.rotation.y += 0.001;
-
-        });
-        globe.customLayerData(globe.customLayerData());
-        requestAnimationFrame(moveSpheres);
-    })();
-
-}
-
-function createFireball(data) {
-    var new_data = [...Array(1).keys()].map(() => ({
-        lat: data[0].lat,
-        lng: data[0].lng,
-        size: data[0].size,
-        alt: 0.5,
-        vel: data[0].vel,
-        vel_cmp: {
-            x: data[0].vel_cmp.x,
-            y: data[0].vel_cmp.y,
-            z: data[0].vel_cmp.z
-        },
-        slope: (data[0].vel_cmp.y - data[0].lat) / (data[0].vel_cmp.x - data[0].lng)
-    }));
-    globe
-        .customLayerData(new_data);
-
-    if (new_data[0].vel === "" || new_data[0].vel === "undefined" || new_data[0].vel === null) {
-        globe.customThreeObject((d) => {
-            var geometry = new THREE.DodecahedronGeometry(d.size, 1);
-            var material = new THREE.MeshBasicMaterial({ color: 'darkgray' });
-            material.map = new THREE.TextureLoader().load('/images/asteroid.jpg');
-            material.bumpmap = new THREE.TextureLoader().load('/images/asteroid_bumpmap.jpg');
-            material.bumpScale = 0.1;
-            var mesh = new THREE.Mesh(
-                geometry,
-                material
-            )
-            return mesh;
-        }
-        );
-    } else {
-        globe.customThreeObject((d) => {
-            var geometry = new THREE.DodecahedronGeometry(d.size, 1);
-            var material = new THREE.MeshBasicMaterial({ color: 'darkgray' });
-            material.map = new THREE.TextureLoader().load('/images/asteroid.jpg');
-            material.bumpmap = new THREE.TextureLoader().load('/images/asteroid_bumpmap.jpg');
-            material.bumpScale = 0.1;
-            var mesh = new THREE.Mesh(
-                geometry,
-                material
-            )
-            return mesh;
-        });
-    }
-
-    globe.customThreeObjectUpdate((obj, d) => {
-            Object.assign(obj.position, globe.getCoords(d.lat, d.lng, d.alt));
-    });
-
-    var speed = 0;
-    window.onkeydown = (e) => {
-        if (e.keyCode === 32) {
-            speed = 0
-        } else if (e.keyCode === 39) {
-            speed += 0.00001;
-        } else if (e.keyCode === 37) {
-            speed -= 0.00001;
-        }
-    }
-    // removeAlert();
-
-    (function moveFireball() {
-        new_data.forEach(d => {
-            if(d.alt < 0){
-                d.alt = 0;
-            }else {
-                d.alt -= speed * d.vel;
-            }
-        });
-        globe.customLayerData(globe.customLayerData());
-        requestAnimationFrame(moveFireball);
-    })();
-           
-
-}
-
-
 function initGlobe(impactData) {
     //Create globe
     globe
@@ -308,10 +149,6 @@ function initGlobe(impactData) {
     globe.controls().autoRotate = true;
     globe.controls().autoRotateSpeed = 0.2;
     globe.pointOfView({ alt: 10.0 }, 1000);
-    sleep(1000).then(() => {
-        createMoon();
-    });
-
 
 
 }
@@ -360,12 +197,10 @@ function search() {
                 destroyGlobe("labels");
                 const requestedData = setRequestedData(jsonData);
                 pointGlobe(requestedData);
-                sleep(100).then(() => {
                     showAlert({
                         class: "success",
                         message: jsonData.count + " results returned.",
                     }, alerts);
-                });
             } else {
                 showAlert({
                     class: "danger",
