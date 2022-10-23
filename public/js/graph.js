@@ -150,7 +150,7 @@ function createGraph() {
 
     }
     var data = [trace1];
-    // Plotly.extendTraces("graph1", data, 0);
+
     mainGraph.then((e) => {
         var range = [];
         if (e.data.length > 0) {
@@ -219,4 +219,8 @@ function createGraph() {
 
     });
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> eb97eb5ce404dcd2b2d291467deef5b27b985e2f
