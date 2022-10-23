@@ -1,14 +1,15 @@
-*
-{
-    margin: 0;
-    padding: 0;
-}
+/* *{
+overflow: hidden;
+} */
 
-html,
+/* html,
 body
 {
     height: 100vh;
     font-family: 'Poppins';
+} */ 
+html {
+  overflow: hidden;
 }
 
 .webgl
@@ -29,6 +30,14 @@ footer {
     left: 0;
   }
 
+  #alerts {
+    position: absolute;
+    z-index: 1;
+    left: 10px;
+    top: 80px;
+    opacity: 0.8;
+  }
+
   
   #graphs {
     /* display: flex;
@@ -43,3 +52,9 @@ justify-content: center; */
     height: 500px; */
   }
 
+  #spaceBackground {
+    position:absolute;
+    top:0;
+    left:0;
+    z-index: -1;
+}

@@ -11,7 +11,7 @@ router.get('/fireball', async (req, res, next) => {
 });
 
 router.get('/init', async (req, res, next) => {
-    const json = await fetch(url, settings)
+    const json = await fetch(url+"?vel-comp=true", settings)
     .then(res => res.json());
     const jsonData = JSON.stringify(json);
     res.json(jsonData);

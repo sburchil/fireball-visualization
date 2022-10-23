@@ -1,7 +1,7 @@
 var impact_e = [];
 var date = [];
 var graphDiv = document.getElementById("graph1");
-var graph_alerts = $("#graph-alerts");
+var graph_alerts = $("#alerts");
 var mainGraph = initGraph();
 var jsonData;
 $(document).ready(function () {
@@ -198,6 +198,24 @@ function createGraph() {
                 height: window.innerHeight / 1.5
             });
         });
-    });
+        graphDiv.on('plotly_click', function (data) {
+            var pts = [];
+            for (var i = 0; i < data.points.length; i++) {
+                pts.push(data.points[i].x)
+                pts.push(data.points[i].y);
+            }
+            var newData = jsonData.filter((el) => {
+                if (el.date === pts[0]){
+                    return el;
+                }
+            }).filter((el)=> {
+                if(parseFloat(el.impact_energy) === parseFloat(pts[1])){
+                    return el;
+                }
+            })
+            console.log(newData);
 
+        });
+
+    });
 }

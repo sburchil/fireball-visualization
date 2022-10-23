@@ -27,9 +27,14 @@ function setRequestedData(jsonData) {
 
         //Get velocity
         let vel = requestedData[n][8];
+        let vel_cmp = {
+            x: parseFloat(requestedData[n][9]),
+            y: parseFloat(requestedData[n][10]),
+            z: parseFloat(requestedData[n][11]),
+        }
         //Set color and size
         let color = "";
-        let size = Math.log(1.05 + energy / 500);
+        let size = Math.log(1.05 + energy / 200);
         if (energy > 300) {
             color = "#ff0000";
         } else if (energy > 150) {
@@ -54,14 +59,15 @@ function setRequestedData(jsonData) {
         let entry = {
             date: date,
             time: time,
-            impact_energy: impact_energy,
-            energy: energy,
-            lat: lat,
-            lng: lng,
-            size: size,
+            impact_energy: parseFloat(impact_energy),
+            energy: parseFloat(energy),
+            lat: parseFloat(lat),
+            lng: parseFloat(lng),
+            size: parseFloat(size),
             color: color,
-            alt: alt,
-            vel: vel,
+            alt: parseFloat(alt),
+            vel: parseFloat(vel),
+            vel_cmp: vel_cmp,
         };
 
         //Push entry
@@ -119,3 +125,8 @@ const removeAlert = () => {
         })
     }
 };
+
+function goToPoint(lat, lng){
+    globe.pointOfView({lat: lat, lng: lng, altitude: 1}, 2000);
+}
+
