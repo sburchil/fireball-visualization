@@ -16,6 +16,7 @@ window.onkeypress = (e) => {
     }
 }
 
+
 $(document).ready((d) => {
     $.ajax({
         url: "/globe/init",
@@ -25,6 +26,7 @@ $(document).ready((d) => {
             var jsonData = JSON.parse(response);
             maxCount = parseInt(jsonData.count);
             $("#limit").attr("max", maxCount);
+            $("#limit").val(Math.round(maxCount / 2)+1);
             $("#limit").attr("min", 1);
             $("#limit-label").val(parseInt($("#limit").val()));
             impactData = setRequestedData(jsonData);
@@ -66,6 +68,7 @@ $(document).ready((d) => {
 });
 
 $("#reset").on("click", function () {
+
     //reset all points
     clearRingData();
     clearHtmlLayer()
@@ -81,6 +84,12 @@ $("#reset").on("click", function () {
         message: "Globe reset",
     }, alerts);
 
+
+    destroyGlobe("labels");
+    destroyGlobe("custom");
+    pointGlobe(impactData);
+    $("#alerts").html("");
+
 });
 $("#clear").on("click", () => {
     document.querySelectorAll("input").forEach((el) => (el.value = ""));
@@ -92,9 +101,14 @@ $(window).resize((e) => {
 });
 
 globe.onPointClick((point) => {
+
     clearPoints();
     // labelGlobe([point]);
     createFireball([point]);
+
+
+    destroyGlobe("points");
+    labelGlobe([point]);
 
     globe.controls().autoRotate = false;
     globe.pointOfView({ lat: point.lat, lng: point.lng, altitude: 1 }, 2000);
@@ -179,6 +193,18 @@ function createImpactLayer(requestedData) {
         .ringColor(() => colorInterpolator)
         .ringMaxRadius(d => {
             return d.size * 3;
+
+$(window).resize(() => {
+    globe.width(window.innerWidth).height(window.innerHeight);
+});
+
+function labelGlobe(requestedData) {
+    globe
+        .labelsData(requestedData)
+        .labelLabel((el) => {
+            return (
+                "<strong> Click for Data on specific point </strong>"
+            );
         })
         .ringPropagationSpeed(3)
         .ringRepeatPeriod(700);
@@ -345,6 +371,29 @@ function createFireball(data) {
                 new_data.alt -= speed * new_data.vel;
             }
 
+function initGlobe(impactData) {
+    //Create globe
+    globe
+        (document.getElementById("globeViz"))
+        .globeImageUrl("//unpkg.com/three-globe/example/img/earth-night.jpg")
+        .backgroundImageUrl(
+            "//unpkg.com/three-globe/example/img/night-sky.png"
+        )
+        .showAtmosphere(true)
+        .atmosphereColor("lightskyblue");
+    globe
+        .width(window.innerWidth)
+        .height(window.innerHeight)
+        .pointsData(impactData)
+        .pointAltitude("size")
+        .pointColor("color")
+        .enablePointerInteraction(true);
+
+    globe.controls().autoRotate = true;
+    globe.controls().autoRotateSpeed = 0.2;
+    globe.pointOfView({ alt: 10.0 }, 1000);
+
+
             globe.customLayerData(globe.customLayerData());
             if(!stop){
                 requestAnimationFrame(moveFireball);
@@ -382,12 +431,10 @@ function search() {
                 clearLabelData();
                 const requestedData = setRequestedData(jsonData);
                 pointGlobe(requestedData);
-                sleep(100).then(() => {
                     showAlert({
                         class: "success",
                         message: jsonData.count + " results returned.",
                     }, alerts);
-                });
             } else {
                 showAlert({
                     class: "danger",

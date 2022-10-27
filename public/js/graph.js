@@ -1,7 +1,7 @@
 var impact_e = [];
 var date = [];
 var graphDiv = document.getElementById("graph1");
-var graph_alerts = $("#graph-alerts");
+var graph_alerts = $("#alerts");
 var mainGraph = initGraph();
 var jsonData;
 $(document).ready(function () {
@@ -150,7 +150,7 @@ function createGraph() {
 
     }
     var data = [trace1];
-    // Plotly.extendTraces("graph1", data, 0);
+
     mainGraph.then((e) => {
         var range = [];
         if (e.data.length > 0) {
@@ -218,5 +218,4 @@ function createGraph() {
         });
 
     });
-
 }

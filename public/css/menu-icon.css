@@ -37,7 +37,7 @@
 
 .rotate-icon .bar1 {
     /* -webkit-transform: rotate(42deg) translate(4px, 2px); */
-    transform: rotate(30deg) translate(1px, 0px);
+    transform: rotate(30deg) translate(1px, 2px);
 }
 
 .rotate-icon .bar2 {
@@ -46,7 +46,7 @@
 
 .rotate-icon .bar3 {
     /* -webkit-transform: rotate(-42deg) translate(4px, 6px); */
-    transform: rotate(326deg) translate(1px, -1px);
+    transform: rotate(326deg) translate(1px, -2px);
 }
 
 .menu-text {
