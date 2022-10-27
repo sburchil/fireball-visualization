@@ -30,14 +30,6 @@ footer {
     left: 0;
   }
 
-  
-  #graphs {
-    /* display: flex;
-align-items: center;
-justify-content: center; */
-
-  }
-
   #graphs > div {
     margin: 10px;
     /* width: 1000px;

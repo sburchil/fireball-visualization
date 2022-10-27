@@ -312,14 +312,12 @@ function initGlobe(impactData) {
         .pointColor("color")
         .enablePointerInteraction(true);
 
-    // globe.controls().autoRotate = true;
-    // globe.controls().autoRotateSpeed = 0.2;
+    globe.controls().autoRotate = true;
+    globe.controls().autoRotateSpeed = 0.2;
     globe.pointOfView({ alt: 10.0 }, 1000);
     sleep(1000).then(() => {
         createMoon();
     });
-
-
 
 }
 

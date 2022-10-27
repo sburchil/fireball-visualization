@@ -1,5 +1,5 @@
 
-const numStars = 300;
+const numStars = 400;
 let stars = [];
 let size = {
     x: window.innerWidth,
@@ -20,7 +20,7 @@ function setup() {
 function draw() {
   background(0, 50);
   
-  const acc = 0.005;
+  const acc = 0.009;
   
   stars = stars.filter(star => {
     star.draw();

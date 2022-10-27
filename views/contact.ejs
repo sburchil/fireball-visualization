@@ -1,18 +1,93 @@
 <%- include('partials/header.ejs')%>
 <div class="container-md">
-
-    <div class="header">
-        <h1>Contact</h1>
-    </div>
-        <div style="width: 400px; height: 400px; float: left;">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item"><a href="#symon">Symon Burchill</a></li>
-                <li class="list-group-item"><a href="#brad">Brad King</a></li>
-                <li class="list-group-item"><a href="#dixon">Dixon O'Hair</a></li>
-                <li class="list-group-item"><a href="#joseph">Joseph Burger</a></li>
-                <li class="list-group-item"><a href="#kyla">Kyla Moore</a></li>
-              </ul>
-        </div>
-</div>
     
+    <div class="header">
+        <h1>Who?</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="tab-panel">
+                
+                <div class="list-group list-group-flush" id="contact-list" role="tablist">
+                    <a class="list-group-item list-group-item-action active" href="#symon" role="tab">Symon Burchill</a>
+                    <a class="list-group-item list-group-item-action" href="#brad"  role="tab">Brad King</a>
+                    <a class="list-group-item list-group-item-action" href="#dixon" role="tab">Dixon O'Hair</a>
+                    <a class="list-group-item list-group-item-action" href="#joseph" role="tab">Joseph Burger</a>
+                    <a class="list-group-item list-group-item-action" href="#kyla"  role="tab">Kyla Moore</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="tab-content" id="contact-content">
+                <div class="tab-pane fade show active" id="symon" role="tabpanel">
+                    <ul style="list-style: none;">
+                        <strong>Name - </strong> 
+                        <li style="margin-left: 2rem;">Symon Burchill</li>
+                        <br>
+                        <strong>Description of Role - </strong>
+                        <li style="margin-left: 2rem;">Lead Font-End and Back-End Developer</li>
+                        <br>
+                        <strong>Email - </strong>
+                        <li style="margin-left: 2rem;">sburchil@uncc.edu</li>
+                        <br>
+                    </ul>
+                </div>
+                <div class="tab-pane fade" id="brad" role="tabpanel">
+                    <ul style="list-style: none;">
+                        <strong>Name - </strong> 
+                        <li style="margin-left: 2rem;">Brad King</li>
+                        <br>
+                        <strong>Description of Role - </strong>
+                        <li style="margin-left: 2rem;"></li>
+                        <br>
+                        <strong>Email - </strong>
+                        <li style="margin-left: 2rem;"></li>
+                        <br>
+                    </ul>
+                </div>
+                <div class="tab-pane fade" id="dixon" role="tabpanel">
+                    <ul style="list-style: none;">
+                        <strong>Name - </strong> 
+                        <li style="margin-left: 2rem;">Dixon O'Hair</li>
+                        <br>
+                        <strong>Description of Role - </strong>
+                        <li style="margin-left: 2rem;"></li>
+                        <br>
+                        <strong>Email - </strong>
+                        <li style="margin-left: 2rem;"></li>
+                        <br>
+                    </ul>
+                </div>
+                <div class="tab-pane fade" id="joseph" role="tabpanel">
+                    <ul style="list-style: none;">
+                        <strong>Name - </strong> 
+                        <li style="margin-left: 2rem;">Joseph Burger</li>
+                        <br>
+                        <strong>Description of Role - </strong>
+                        <li style="margin-left: 2rem;"></li>
+                        <br>
+                        <strong>Email - </strong>
+                        <li style="margin-left: 2rem;"></li>
+                        <br>
+                    </ul>
+                </div>
+                <div class="tab-pane fade" id="kyla" role="tabpanel">
+                    <ul style="list-style: none;">
+                        <strong>Name - </strong> 
+                        <li style="margin-left: 2rem;">Kyla Moore</li>
+                        <br>
+                        <strong>Description of Role - </strong>
+                        <li style="margin-left: 2rem;"></li>
+                        <br>
+                        <strong>Email - </strong>
+                        <li style="margin-left: 2rem;"></li>
+                        <br>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <%- include('partials/footer.ejs')%>
+<script src="/js/contact.js"></script>
