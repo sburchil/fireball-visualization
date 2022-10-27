@@ -16,7 +16,6 @@ window.onkeypress = (e) => {
     }
 }
 
-
 $(document).ready((d) => {
     $.ajax({
         url: "/globe/init",
@@ -67,61 +66,111 @@ $(document).ready((d) => {
 });
 
 $("#reset").on("click", function () {
-    destroyGlobe("labels");
-    destroyGlobe("custom");
-    // globe.pointOfView({ lat: 0, lng: 0, altitude: 3 }, 2000);
-    // pointGlobe(impactData);
-    htmlGlobe(impactData);
-    $("#alerts").html("");
+    //reset all points
+    clearRingData();
+    clearLabelData();
+    clearCustomLayer();
+    clearPoints();
+
+    revertPoints(impactData);
+    createMoon();
+    globe.pointOfView({ lat: 0, lng: 0, altitude: 5 }, 2000);
+    globe.controls().autoRotate = true;
+    showAlert({
+        class: "success",
+        message: "Globe reset",
+    }, alerts);
+
 });
 $("#clear").on("click", () => {
     document.querySelectorAll("input").forEach((el) => (el.value = ""));
     $("#limit-label").val(parseInt($("#limit").val()));
 });
 
-globe.onPointClick((point) => {
-    destroyGlobe("points");
-    createFireball([point]);
-    labelGlobe([point]);
-    globe.controls().autoRotate = false;
-    globe.pointOfView({ lat: point.lat, lng: point.lng, altitude: 1 }, 2000);
-});
-
 $(window).resize((e) => {
     globe.width(window.innerWidth).height(window.innerHeight);
 });
 
-function htmlGlobe(requestedData) {
-    const markerSvg = `<svg viewBox="-4 0 36 36">
-    <path fill="currentColor" d="M14,0 C21.732,0 28,5.641 28,12.6 C28,23.963 14,36 14,36 C14,36 0,24.064 0,12.6 C0,5.641 6.268,0 14,0 Z"></path>
-    <circle fill="black" cx="14" cy="14" r="7"></circle>
-  </svg>`;
-    globe
-        .htmlElementsData(requestedData)
-        .htmlElement((d) => {
-            const el = document.createElement('div');
-            el.innerHTML = markerSvg;
-            el.style.color = d.color;
-            el.style.width = `${d.size + 10.2}px`;
+globe.onPointClick((point) => {
+    clearPoints();
+    labelGlobe([point]);
+    createFireball([point]);
 
-            el.style['pointer-events'] = 'auto';
-            el.style.cursor = 'pointer';
-            el.onclick = () => goToPoint(d.lat, d.lng);
-            return el;
+    globe.controls().autoRotate = false;
+    globe.pointOfView({ lat: point.lat, lng: point.lng, altitude: 1 }, 2000);
+});
+
+function initGlobe(impactData) {
+    //Create globe
+    globe
+        (document.getElementById("globeViz"))
+        .globeImageUrl("//unpkg.com/three-globe/example/img/earth-night.jpg")
+        .backgroundImageUrl(
+            "//unpkg.com/three-globe/example/img/night-sky.png"
+        )
+        .showAtmosphere(true)
+        .atmosphereColor("lightskyblue");
+    globe
+        .width(window.innerWidth)
+        .height(window.innerHeight)
+        .enablePointerInteraction(true);
+
+    globe.controls().autoRotate = true;
+    globe.controls().autoRotateSpeed = 0.2;
+    pointGlobe(impactData);
+    createMoon();
+    globe.pointOfView({ altitude: 5 });
+
+}
+
+// function htmlGlobe(requestedData) {
+//     const markerSvg = `<svg viewBox="-4 0 36 36">
+//     <path fill="currentColor" d="M14,0 C21.732,0 28,5.641 28,12.6 C28,23.963 14,36 14,36 C14,36 0,24.064 0,12.6 C0,5.641 6.268,0 14,0 Z"></path>
+//     <circle fill="black" cx="14" cy="14" r="7"></circle>
+//   </svg>`;
+//     globe
+//         .htmlElementsData(requestedData)
+//         .htmlElement((d) => {
+//             const el = document.createElement('div');
+//             el.innerHTML = markerSvg;
+//             el.style.color = d.color;
+//             el.style.width = `${d.size + 10.2}px`;
+
+//             el.style['pointer-events'] = 'auto';
+//             el.style.cursor = 'pointer';
+//             el.onclick = () => goToPoint(d.lat, d.lng);
+//             return el;
+//         })
+//         .htmlTransitionDuration(1000);
+//     globe.pointOfView({ lat: 0, lng: 0, altitude: 5 }, 2000);
+// }
+function createImpactLayer(requestedData) {
+    clearLabelData();
+    clearCustomLayer();
+    console.log(requestedData[0]);
+    var color = hexToRgb(requestedData[0].color);
+    const colorInterpolator = t => `rgba(${color.r},${color.g},${color.b},${Math.sqrt(1 - t)})`;
+
+    globe.ringsData([requestedData[0]])
+        .ringColor(() => colorInterpolator)
+        .ringMaxRadius(d => {
+            return d.size;
         })
-        .htmlTransitionDuration(1000);
-    globe.pointOfView({ lat: 0, lng: 0, altitude: 5 }, 2000);
+        .ringPropagationSpeed(3)
+        .ringRepeatPeriod(700);
 }
 
 function labelGlobe(requestedData) {
     globe
-        .labelsData(requestedData)
+        .labelsData([requestedData[0]])
         .labelLabel((el) => {
             return (
                 "<strong> Click for Data on specific point </strong>"
             );
         })
-        .labelText("date")
+        .labelText(d => {
+            return "Lat: " + d.lat + ", Lng: " + d.lng;
+        })
         .labelSize("size")
         .labelColor("color")
         .labelDotRadius("size")
@@ -153,10 +202,7 @@ function labelGlobe(requestedData) {
 }
 
 function pointGlobe(requestedData) {
-    globe.pointsData(requestedData);
     globe
-        .width(window.innerWidth)
-        .height(window.innerHeight)
         .pointsData(requestedData)
         .pointAltitude("size")
         .pointColor("color");
@@ -166,10 +212,10 @@ function pointGlobe(requestedData) {
 
 var createMoon = () => {
     var mData = [...Array(1).keys()].map(() => ({
-        lat: 2.0,
-        lng: 4.5,
-        alt: 2.5,
-        radius: 30.0,
+        lat: 6.0,
+        lng: 80.5,
+        alt: 3,
+        radius: 20.0,
         rotation: {
             x: 0,
             y: 0,
@@ -192,7 +238,7 @@ var createMoon = () => {
         })
         .customThreeObjectUpdate((obj, d) => {
             Object.assign(obj.rotation, { x: d.rotation.x, y: d.rotation.y, z: d.rotation.z });
-            Object.assign(obj.position, globe.getCoords(d.lat, d.lng, 3));
+            Object.assign(obj.position, globe.getCoords(d.lat, d.lng, d.alt));
         });
 
 
@@ -217,10 +263,14 @@ var createMoon = () => {
 }
 
 function createFireball(data) {
-    var new_data = [...Array(1).keys()].map(() => ({
+    var new_data = {
+        date: data[0].date,
+        time: data[0].time,
         lat: data[0].lat,
         lng: data[0].lng,
         size: data[0].size,
+        energy: data[0].energy,
+        impact_energy: data[0].impact_energy,
         alt: 0.5,
         vel: data[0].vel,
         vel_cmp: {
@@ -228,12 +278,12 @@ function createFireball(data) {
             y: data[0].vel_cmp.y,
             z: data[0].vel_cmp.z
         },
-        slope: (data[0].vel_cmp.y - data[0].lat) / (data[0].vel_cmp.x - data[0].lng)
-    }));
+        color: data[0].color,
+    };
     globe
-        .customLayerData(new_data);
+        .customLayerData([new_data]);
 
-    if (new_data[0].vel === "" || new_data[0].vel === "undefined" || new_data[0].vel === null) {
+    if (new_data.vel === "" || new_data.vel === "undefined" || new_data.vel === null) {
         globe.customThreeObject((d) => {
             var geometry = new THREE.DodecahedronGeometry(d.size, 1);
             var material = new THREE.MeshBasicMaterial({ color: 'darkgray' });
@@ -276,66 +326,23 @@ function createFireball(data) {
             speed -= 0.00001;
         }
     }
-    // removeAlert();
-
-    (function moveFireball() {
-        new_data.forEach(d => {
-            if (d.alt < 0) {
-                d.alt = 0;
+    var stop = false;
+        (function moveFireball() {
+            if (new_data.alt < 0) {
+                stop = true;
+                createImpactLayer([new_data]);
             } else {
-                d.alt -= speed * d.vel;
+                new_data.alt -= speed * new_data.vel;
             }
-        });
-        globe.customLayerData(globe.customLayerData());
-        requestAnimationFrame(moveFireball);
-    })();
 
-
-}
-
-
-function initGlobe(impactData) {
-    //Create globe
-    globe
-        (document.getElementById("globeViz"))
-        .globeImageUrl("//unpkg.com/three-globe/example/img/earth-night.jpg")
-        .backgroundImageUrl(
-            "//unpkg.com/three-globe/example/img/night-sky.png"
-        )
-        .showAtmosphere(true)
-        .atmosphereColor("lightskyblue");
-    globe
-        .width(window.innerWidth)
-        .height(window.innerHeight)
-        .pointsData(impactData)
-        .pointAltitude("size")
-        .pointColor("color")
-        .enablePointerInteraction(true);
-
-    globe.controls().autoRotate = true;
-    globe.controls().autoRotateSpeed = 0.2;
-    globe.pointOfView({ alt: 10.0 }, 1000);
-    sleep(1000).then(() => {
-        createMoon();
-    });
-
-}
-
-function destroyGlobe(choice) {
-    if (choice == "points") {
-        globe.pointsData(null).pointAltitude(null).pointColor(null);
-    } else if (choice == "labels") {
-        globe
-            .labelsData(null)
-            .labelText(null)
-            .labelSize(null)
-            .labelColor(null)
-            .labelDotRadius(null)
-            .labelResolution(null);
-    } else if (choice == "custom") {
-        globe.customLayerData(null);
+            globe.customLayerData(globe.customLayerData());
+            if(!stop){
+                requestAnimationFrame(moveFireball);
+            } else{
+                return;
+            }
+        })();
     }
-}
 
 function search() {
     var search = {};
@@ -362,7 +369,7 @@ function search() {
         success: function (data) {
             const jsonData = JSON.parse(data);
             if (jsonData.count > 0) {
-                destroyGlobe("labels");
+                clearLabelData();
                 const requestedData = setRequestedData(jsonData);
                 pointGlobe(requestedData);
                 sleep(100).then(() => {
