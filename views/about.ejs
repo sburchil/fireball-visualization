@@ -1,28 +1,52 @@
 <%- include('partials/header.ejs')%>
-
-    <div class="d-flex justify-content-center">
-        <div>
-            <h1 style="text-align: center;"><%= title%></h1>
-                <div style="text-align: center;font-family:'Times New Roman', Times, serif; font-size:20px;">
-                    We are <strong><i>Don’t Look Up(DLU)</i></strong> a group of students from University of North Carolina at Charlotte creating this
-                    app to inform and show people about Fireballs.
-                    <br>
-                    <i>
-                        “Fireballs and bolides are astronomical terms for exceptionally bright meteors that are spectacular enough
-                        to to be seen over a very wide area.”
-                    </i> - CNEOS (Center for Near Earth Object Studies)
-                    <br>
-    
-                    <strong>Sources:</strong>
-                    <div>      
-                        <ul style="list-style: none;">
-                            <li>https://cneos.jpl.nasa.gov/ </li>
-                        </ul>
-                    </div>
-    
-            </div>
-
-        </div>
+</head>
+  <div>
+    <h1 style="text-align: center"><%= title%></h1>
+    <div class="p-2">
+        <hr class="hr">
     </div>
+    <div
+    class="p-3"
+    >
+      <!-- style="
+        text-align: left;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 20px;
+      "
+    > -->
+      <p>
+          Since 1988 there have been hundreds of fireballs detected breaking up
+          through the atmosphere. Nasa has a public data record of these fireballs
+          that records their impact location and energy inflicted. The largest
+          impact happened in Russia during the year 2013 when an astounding 440kt
+          was recorded.
+      </p>
+    <p>
+        Over 90% of the fireballs don't make it past 10kt. Most of
+          the fireball impacts recorded have ended up in the ocean, while others
+          occasionally collide with the land. What are meteors and fireballs?
+          Meteors are considered to be visible meteoroids that have entered the
+          Earth’s atmosphere, crashing down at a high velocity. Fireballs and
+          bolides, on the other hand, are determined to be bright meteors that are
+          eye-catching enough to be seen throughout a large area.
+          <small><a class="" target="_blank" href="https://cneos.jpl.nasa.gov/fireballs/intro.html"><i>See more information here</i></a></small>
+    </p> 
+      
+      <p>
+          Our app
+          uses data from the JPL Fireballs API to create visualizations of impacts
+          by their energies, location, date of impact, and more. Note that only the
+          brightest fireballs are featured in the data. The application also
+          features detailed search parameters that can be used to filter through the
+          data and discover patterns. This app is intended a more dynamic form of
+          the current JPL Fireballs map. This app was created by a group called
+      </p>
+      <p>
+          Don’t Look Up(DLU), a group of students from the University of North
+          Carolina at Charlotte who developed this app to inform and show people
+          about Fireballs. The data set our app is based on can be found <a target="_blank" href="https://cneos.jpl.nasa.gov/fireballs/">here</a>.
+      </p>
+    </div>
+  </div>
 
-    <%- include('partials/footer.ejs')%>
+<%- include('partials/footer.ejs')%>

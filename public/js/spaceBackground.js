@@ -20,7 +20,7 @@ function setup() {
 function draw() {
   background(0, 50);
   
-  const acc = 0.005;
+  const acc = 0.01;
   
   stars = stars.filter(star => {
     star.draw();
