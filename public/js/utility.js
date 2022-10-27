@@ -155,6 +155,9 @@ function hexToRgb(hex) {
   function clearRingData(){
     globe.ringsData([]);
   }
+  function clearHtmlLayer(){
+    globe.htmlElementsData([]);
+  }
 
   // reverting point data
     function revertPoints(impactData) {

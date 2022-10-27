@@ -68,7 +68,7 @@ $(document).ready((d) => {
 $("#reset").on("click", function () {
     //reset all points
     clearRingData();
-    clearLabelData();
+    clearHtmlLayer()
     clearCustomLayer();
     clearPoints();
 
@@ -93,7 +93,7 @@ $(window).resize((e) => {
 
 globe.onPointClick((point) => {
     clearPoints();
-    labelGlobe([point]);
+    // labelGlobe([point]);
     createFireball([point]);
 
     globe.controls().autoRotate = false;
@@ -123,29 +123,53 @@ function initGlobe(impactData) {
 
 }
 
-// function htmlGlobe(requestedData) {
-//     const markerSvg = `<svg viewBox="-4 0 36 36">
-//     <path fill="currentColor" d="M14,0 C21.732,0 28,5.641 28,12.6 C28,23.963 14,36 14,36 C14,36 0,24.064 0,12.6 C0,5.641 6.268,0 14,0 Z"></path>
-//     <circle fill="black" cx="14" cy="14" r="7"></circle>
-//   </svg>`;
-//     globe
-//         .htmlElementsData(requestedData)
-//         .htmlElement((d) => {
-//             const el = document.createElement('div');
-//             el.innerHTML = markerSvg;
-//             el.style.color = d.color;
-//             el.style.width = `${d.size + 10.2}px`;
+function htmlGlobe(requestedData) {
+    const markerSvg = `<svg viewBox="-4 0 36 36">
+    <path fill="currentColor" d="M14,0 C21.732,0 28,5.641 28,12.6 C28,23.963 14,36 14,36 C14,36 0,24.064 0,12.6 C0,5.641 6.268,0 14,0 Z"></path>
+    <circle fill="black" cx="14" cy="14" r="7"></circle>
+  </svg>`;
+    globe
+        .htmlElementsData(requestedData)
+        .htmlLat(d => d.lat+0.5)
+        .htmlElement((d) => {
+            const el = document.createElement('div');
+            el.innerHTML = markerSvg;
+            el.style.color = d.color;
+            el.style.width = `${d.size +30}px`;
 
-//             el.style['pointer-events'] = 'auto';
-//             el.style.cursor = 'pointer';
-//             el.onclick = () => goToPoint(d.lat, d.lng);
-//             return el;
-//         })
-//         .htmlTransitionDuration(1000);
-//     globe.pointOfView({ lat: 0, lng: 0, altitude: 5 }, 2000);
-// }
+            el.style['pointer-events'] = 'auto';
+            el.style.cursor = 'pointer';
+            el.onclick = () => {
+                $('#dataModal').modal('show');
+
+                var date = d.date;
+                var time = d.time;
+                var impact_energy = d.impact_energy;
+                var energy = d.energy;
+                var lat = d.lat;
+                var lng = d.lng;
+                var alt = d.alt;
+                var vel = d.vel;
+        
+                var dateText = "<ul style='list-style: none;'><li>Date: " + date + "</li>";
+                var timeText = "<li>Time at peak brightness: " + time + "</li>";
+                var impact_energyText = "<li>Estimated Impact Energy: " + impact_energy + " (kt)</li>";
+                var energyText = "<li>Energy: " + energy + " x 10<sup>10</sup joules></li>";
+                var latText = "<li>Latitude: " + lat + "</li>";
+                var lngText = "<li>Longitude: " + lng + "</li>";
+                var altText = "<li>Altitude: " + alt + "</li>";
+                var velText = "<li>Velocity: " + vel + "</li></ul>";
+        
+                html = dateText + timeText + impact_energyText + energyText + latText + lngText + altText + velText;
+                $('#dataModal').find('.modal-body').html(html);
+            };
+            return el;
+        })
+        .htmlTransitionDuration(1000);
+    // globe.pointOfView({ lat: 0, lng: 0, altitude: 5 }, 2000);
+}
 function createImpactLayer(requestedData) {
-    clearLabelData();
+    // clearLabelData();
     clearCustomLayer();
     console.log(requestedData[0]);
     var color = hexToRgb(requestedData[0].color);
@@ -154,52 +178,52 @@ function createImpactLayer(requestedData) {
     globe.ringsData([requestedData[0]])
         .ringColor(() => colorInterpolator)
         .ringMaxRadius(d => {
-            return d.size;
+            return d.size * 3;
         })
         .ringPropagationSpeed(3)
         .ringRepeatPeriod(700);
 }
 
-function labelGlobe(requestedData) {
-    globe
-        .labelsData([requestedData[0]])
-        .labelLabel((el) => {
-            return (
-                "<strong> Click for Data on specific point </strong>"
-            );
-        })
-        .labelText(d => {
-            return "Lat: " + d.lat + ", Lng: " + d.lng;
-        })
-        .labelSize("size")
-        .labelColor("color")
-        .labelDotRadius("size")
-        .labelResolution(2);
-    globe.onLabelClick((label) => {
-        $('#dataModal').modal('show');
+// function labelGlobe(requestedData) {
+//     globe
+//         .labelsData([requestedData[0]])
+//         .labelLabel((el) => {
+//             return (
+//                 "<strong> Click for Data on specific point </strong>"
+//             );
+//         })
+//         .labelText(d => {
+//             return "Lat: " + d.lat + ", Lng: " + d.lng;
+//         })
+//         .labelSize("size")
+//         .labelColor("color")
+//         .labelDotRadius("size")
+//         .labelResolution(2);
+//     globe.onLabelClick((label) => {
+//         $('#dataModal').modal('show');
 
-        var date = label.date;
-        var time = label.time;
-        var impact_energy = label.impact_energy;
-        var energy = label.energy;
-        var lat = label.lat;
-        var lng = label.lng;
-        var alt = label.alt;
-        var vel = label.vel;
+//         var date = label.date;
+//         var time = label.time;
+//         var impact_energy = label.impact_energy;
+//         var energy = label.energy;
+//         var lat = label.lat;
+//         var lng = label.lng;
+//         var alt = label.alt;
+//         var vel = label.vel;
 
-        var dateText = "<ul style='list-style: none;'><li>Date: " + date + "</li>";
-        var timeText = "<li>Time at peak brightness: " + time + "</li>";
-        var impact_energyText = "<li>Estimated Impact Energy: " + impact_energy + " (kt)</li>";
-        var energyText = "<li>Energy: " + energy + " x 10<sup>10</sup joules></li>";
-        var latText = "<li>Latitude: " + lat + "</li>";
-        var lngText = "<li>Longitude: " + lng + "</li>";
-        var altText = "<li>Altitude: " + alt + "</li>";
-        var velText = "<li>Velocity: " + vel + "</li></ul>";
+//         var dateText = "<ul style='list-style: none;'><li>Date: " + date + "</li>";
+//         var timeText = "<li>Time at peak brightness: " + time + "</li>";
+//         var impact_energyText = "<li>Estimated Impact Energy: " + impact_energy + " (kt)</li>";
+//         var energyText = "<li>Energy: " + energy + " x 10<sup>10</sup joules></li>";
+//         var latText = "<li>Latitude: " + lat + "</li>";
+//         var lngText = "<li>Longitude: " + lng + "</li>";
+//         var altText = "<li>Altitude: " + alt + "</li>";
+//         var velText = "<li>Velocity: " + vel + "</li></ul>";
 
-        html = dateText + timeText + impact_energyText + energyText + latText + lngText + altText + velText;
-        $('#dataModal').find('.modal-body').html(html);
-    })
-}
+//         html = dateText + timeText + impact_energyText + energyText + latText + lngText + altText + velText;
+//         $('#dataModal').find('.modal-body').html(html);
+//     })
+// }
 
 function pointGlobe(requestedData) {
     globe
@@ -283,7 +307,6 @@ function createFireball(data) {
     globe
         .customLayerData([new_data]);
 
-    if (new_data.vel === "" || new_data.vel === "undefined" || new_data.vel === null) {
         globe.customThreeObject((d) => {
             var geometry = new THREE.DodecahedronGeometry(d.size, 1);
             var material = new THREE.MeshBasicMaterial({ color: 'darkgray' });
@@ -297,20 +320,6 @@ function createFireball(data) {
             return mesh;
         }
         );
-    } else {
-        globe.customThreeObject((d) => {
-            var geometry = new THREE.DodecahedronGeometry(d.size, 1);
-            var material = new THREE.MeshBasicMaterial({ color: 'darkgray' });
-            material.map = new THREE.TextureLoader().load('/images/asteroid.jpg');
-            material.bumpmap = new THREE.TextureLoader().load('/images/asteroid_bumpmap.jpg');
-            material.bumpScale = 0.1;
-            var mesh = new THREE.Mesh(
-                geometry,
-                material
-            )
-            return mesh;
-        });
-    }
 
     globe.customThreeObjectUpdate((obj, d) => {
         Object.assign(obj.position, globe.getCoords(d.lat, d.lng, d.alt));
@@ -330,6 +339,7 @@ function createFireball(data) {
         (function moveFireball() {
             if (new_data.alt < 0) {
                 stop = true;
+                htmlGlobe([data[0]]);
                 createImpactLayer([new_data]);
             } else {
                 new_data.alt -= speed * new_data.vel;
