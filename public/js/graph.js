@@ -95,7 +95,7 @@ function initGraph() {
             size: 14,
             color: 'white'
         },
-        width: window.innerWidth - 30,
+        width: window.innerWidth - 500,
         height: window.innerHeight / 1.5,
         margin: {
             pad: 20
@@ -210,7 +210,9 @@ function createGraph() {
                 }
             }).filter((el)=> {
                 if(parseFloat(el.impact_energy) === parseFloat(pts[1])){
-                    return el;
+                    console.log(el);
+                    const returnString = `Date: ${el.date} <br> Impact Energy: ${el.impact_energy} kt <br> Latitude: ${el.lat} <br> Longitude: ${el.lng} <br> Velocity: ${el.vel} km/s <br>`;
+                    $('.graph-data').html(returnString);
                 }
             })
             console.log(newData);

@@ -1,30 +1,72 @@
 <%- include('partials/header.ejs') %>
-<script src="https://cdn.plot.ly/plotly-2.14.0.min.js"></script>
-</head>
-<%- include('partials/svg.ejs') %>
+    <script src="https://cdn.plot.ly/plotly-2.14.0.min.js"></script>
+    </head>
+    <%- include('partials/svg.ejs') %>
 
-<div id="alerts">
+        <div id="alerts">
 
-</div>
-<div id="graphs" style="margin-right: 100px;">
-    <div id="graph1">
-
-    </div>
-    <form action="" method="GET" id="paramForm" class="row">
-        <label for="date-min">Start Date</label>
-        <div class="col-4">
-            <input type="date" class="form-control" id="date-min" name="date-min" min="1988-04-15" max="2022-09-15" value="1999-04-15" />
         </div>
-        <label for="date-max">End Date</label>
-        <div class="col-4">
-            <input type="date" class="form-control" id="date-max" name="date-max" min="1988-04-15" max="2022-09-15" value="2000-04-15" /><small class="form-text text-muted" id="date-help"></small>
-        </div>
-        <div class="col-3">
-            <button class="btn btn-primary" type="submit" id="submit">Submit</button>
-        </div>
-    </form>
-</div>
+        <div class="p-4" id="graphs" style="">
+            <div id="graph1">
 
-<script src="/js/graph.js"></script>
-<script src="/js/utility.js"></script>
-<%- include('partials/footer.ejs') %>
+            </div>
+            <!-- <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+                        aria-selected="true">Home</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile"
+                        aria-selected="false">Profile</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact"
+                        aria-selected="false">Contact</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <div id="graph1">
+
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">...
+                </div>
+                <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...
+                </div>
+            </div> -->
+            <div class="row">
+                <div class="col-5">
+                    <form action="" method="GET" id="paramForm" class="row p-3">
+                        <label for="date-min">Start Date</label>
+                        <div class="col-4">
+                            <input type="date" style="width: 500px;" class="form-control" id="date-min" name="date-min" min="1988-04-15"
+                                max="2022-09-15" value="2006-04-15" />
+                        </div>
+                        
+                        <label for="date-max">End Date</label>
+                        <div class="col-4">
+                            <input type="date" style="width: 500px;" class="form-control" id="date-max" name="date-max" min="1988-04-15"
+                                max="2022-09-15" value="2008-04-15" /><small class="form-text text-muted"
+                                id="date-help"></small>
+                        </div>
+                        <div class="col-1">
+                            <button class="btn btn-primary" style="position: absolute; left: 600px;" type="submit" id="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-5">
+                    <div class="col-5">
+                        <h3>Data</h3>
+                            <div class="graph-data"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="/js/graph.js"></script>
+        <script src="/js/utility.js"></script>
+        <%- include('partials/footer.ejs') %>

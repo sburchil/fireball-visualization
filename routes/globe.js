@@ -11,7 +11,7 @@ router.get('/fireball', async (req, res, next) => {
 });
 
 router.get('/init', async (req, res, next) => {
-    const json = await fetch(url+"?vel-comp=true", settings)
+    const json = await fetch(url+"?vel-comp=true&req-loc=true", settings)
     .then(res => res.json());
     const jsonData = JSON.stringify(json);
     res.json(jsonData);
@@ -20,7 +20,7 @@ router.get('/init', async (req, res, next) => {
 
 router.get('/request', async (req, res, next) => {
     const searchParams = new URLSearchParams(req.query);
-    const json = await fetch(url + '?' + searchParams.toString(), settings)
+    const json = await fetch(url + '?req-loc=true&' + searchParams.toString(), settings)
     .then(res => res.json());
     const jsonData = JSON.stringify(json);
     res.json(jsonData);

@@ -67,9 +67,9 @@ $(document).ready((d) => {
 
 $("#reset").on("click", function () {
     //reset all points
+    clearCustomLayer();
     clearRingData();
     clearHtmlLayer()
-    clearCustomLayer();
     clearPoints();
 
     revertPoints(impactData);
@@ -287,6 +287,8 @@ var createMoon = () => {
 }
 
 function createFireball(data) {
+
+    console.log(data[0].vel);
     var new_data = {
         date: data[0].date,
         time: data[0].time,
@@ -341,7 +343,7 @@ function createFireball(data) {
                 stop = true;
                 htmlGlobe([data[0]]);
                 createImpactLayer([new_data]);
-            } else {
+            } else if(new_data != null){
                 new_data.alt -= speed * new_data.vel;
             }
 

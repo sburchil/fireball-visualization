@@ -105,7 +105,7 @@ function showAlert(obj, parent) {
         ("   </div>");
     }
 
-    parent.append(html+script);
+    parent.append(html + script);
 }
 const sleep = (milliseconds) => {
     return new Promise((resolve) => setTimeout(resolve, milliseconds));
@@ -113,7 +113,7 @@ const sleep = (milliseconds) => {
 
 const removeAlert = () => {
     var alertNode = document.querySelectorAll(".alert");
-    if(alertNode.length > 0){
+    if (alertNode.length > 0) {
         alertNode.forEach(node => {
             try {
                 var alert = bootstrap.Alert.getOrCreateInstance(node);
@@ -126,8 +126,8 @@ const removeAlert = () => {
     }
 };
 
-function goToPoint(lat, lng){
-    globe.pointOfView({lat: lat, lng: lng, altitude: 1}, 2000);
+function goToPoint(lat, lng) {
+    globe.pointOfView({ lat: lat, lng: lng, altitude: 1 }, 2000);
 }
 
 function hexToRgb(hex) {
@@ -137,29 +137,33 @@ function hexToRgb(hex) {
         g: parseInt(result[2], 16),
         b: parseInt(result[3], 16)
     } : null;
-    
-  }
-// clearing globe layers
-  function clearArcs() {
-    globe.arcsData([]);
-  }
-  function clearPoints() {
-    globe.pointsData([]);
-  }
-  function clearCustomLayer() {
-    globe.customLayerData([]);
-  }
-  function clearLabelData() {
-    globe.labelsData([]);
-  }
-  function clearRingData(){
-    globe.ringsData([]);
-  }
-  function clearHtmlLayer(){
-    globe.htmlElementsData([]);
-  }
 
-  // reverting point data
-    function revertPoints(impactData) {
+}
+// clearing globe layers
+function clearArcs() {
+    globe.arcsData([]);
+}
+function clearPoints() {
+    globe.pointsData([]);
+}
+function clearCustomLayer() {
+    globe.customLayerData([]);
+}
+function clearLabelData() {
+    globe.labelsData([]);
+}
+function clearRingData() {
+    globe.ringsData([]);
+}
+function clearHtmlLayer() {
+    globe.htmlElementsData([]);
+}
+
+// reverting point data
+function revertPoints(impactData) {
     globe.pointsData(impactData);
-  }
+}
+
+const colorInterpolator = (t) => {
+    return `rgba(${color.r},${color.g},${color.b},${Math.sqrt(1 - t)})`
+};
