@@ -1,10 +1,32 @@
 var impact_e = [];
 var date = [];
-var graphDiv = document.getElementById("graph1");
-var graph_alerts = $("#alerts");
+var graphDiv = document.getElementById("scatter-div");
+var graph_alerts = $("#graph-alerts");
 var mainGraph = initGraph();
 var jsonData;
 $(document).ready(function () {
+
+    $('#offcanvasMenu').offcanvas({
+        scroll: true,
+        backdrop: false
+    });
+    $('#menu-toggle').click(function () {
+        $('#offcanvasMenu').offcanvas('toggle');
+        document.getElementById("toggle-icon").classList.toggle("rotate-icon");
+    });
+    $('#offcanvasMenu').on('hidden.bs.offcanvas', function () {
+        $('#graph-alerts').css('right', '10px');
+        $('#menu-text').animate({
+            left: "-=10px"
+        }, 100)
+    });
+    $('#offcanvasMenu').on('show.bs.offcanvas', function () {
+        $('#menu-text').animate({
+            left: "+=10px"
+        }, 100)
+        let canvas_width = $('#offcanvasMenu').width();
+        $('#graph-alerts').css('right', (canvas_width+10)+'px');
+    });
 
     var date_min1 = $('#date-min').val();
     var date_max1 = $('#date-max').val();
@@ -35,15 +57,12 @@ $(document).ready(function () {
             $('#date-help').text("Dates are invalid. They cannot be in the future.");
             return removeAlert();
         }
-        var formData = new FormData(e.target);
-        var data = {};
-        for (var pair of formData.entries()) {
-            data[pair[0]] = pair[1];
+        var data = {
+            'date-min': date_min.toISOString().split('T')[0],
+            'date-max': date_max.toISOString().split('T')[0]
         }
-        removeAlert();
         callAjax(data);
     })
-
 });
 
 function callAjax(data) {
@@ -80,6 +99,7 @@ function callAjax(data) {
         }
     })
 }
+
 function initGraph() {
     var layout = {
         title: {
@@ -95,7 +115,7 @@ function initGraph() {
             size: 14,
             color: 'white'
         },
-        width: window.innerWidth - 500,
+        width: window.innerWidth - 50,
         height: window.innerHeight / 1.5,
         margin: {
             pad: 20
@@ -133,7 +153,6 @@ function initGraph() {
     return Plotly.newPlot(graphDiv, [], layout);
 }
 
-
 function createGraph() {
     var trace1 = {
         x: date,
@@ -149,6 +168,7 @@ function createGraph() {
         },
 
     }
+
     var data = [trace1];
 
     mainGraph.then((e) => {
@@ -193,6 +213,12 @@ function createGraph() {
             Plotly.addTraces(graphDiv, data);
         }
         window.addEventListener("resize", () => {
+            var containerWidth = $('#scatter-graph').innerWidth();
+            var containerHeight = $('#scatter-graph').innerHeight();
+
+            console.log($('#scatter-graph'));
+            console.log(containerWidth, containerHeight);
+
             Plotly.relayout(e, {
                 width: window.innerWidth - 30,
                 height: window.innerHeight / 1.5
@@ -210,12 +236,10 @@ function createGraph() {
                 }
             }).filter((el)=> {
                 if(parseFloat(el.impact_energy) === parseFloat(pts[1])){
-                    console.log(el);
                     const returnString = `Date: ${el.date} <br> Impact Energy: ${el.impact_energy} kt <br> Latitude: ${el.lat} <br> Longitude: ${el.lng} <br> Velocity: ${el.vel} km/s <br>`;
                     $('.graph-data').html(returnString);
                 }
             })
-            console.log(newData);
 
         });
 

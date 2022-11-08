@@ -34,7 +34,6 @@ $(document).ready((d) => {
             console.log(error);
         },
     });
-
     $('#offcanvasMenu').offcanvas({
         scroll: true,
         backdrop: false
@@ -53,7 +52,6 @@ $(document).ready((d) => {
             left: "+=10px"
         }, 200)
     });
-
     $("#dataModal").modal({
         backdrop: false,
         keyboard: false,

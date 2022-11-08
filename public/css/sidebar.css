@@ -24,21 +24,6 @@
   z-index: 3;
 }
 
-#alerts {
-  position: absolute;
-  z-index: 1;
-  left: 10px;
-  top: 80px;
-  opacity: 0.8;
-}
-#graph-alerts {
-  position: absolute;
-  z-index: 1;
-  left: 10px;
-  top: 80px;
-  opacity: 0.8;
-}
-
 #limit-label {
     /* position: absolute;
     top: 550px;
