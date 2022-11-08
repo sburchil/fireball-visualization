@@ -19,5 +19,4 @@ router.get('/request', async (req, res, next) => {
     res.json(jsonData);
 });
 
-
 module.exports = router;
