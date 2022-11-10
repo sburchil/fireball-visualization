@@ -1,8 +1,8 @@
 var impact_e = [];
 var date = [];
-var graphDiv = document.getElementById("scatter-div");
+var scatter_div = document.getElementById("scatter-div");
+var scatter_graph = initGraph();
 var graph_alerts = $("#graph-alerts");
-var mainGraph = initGraph();
 var jsonData;
 $(document).ready(function () {
 
@@ -80,7 +80,7 @@ function callAjax(data) {
                     impact_e.push(parseFloat(el.impact_energy));
                     date.push(el.date);
                 });
-                createGraph();
+                createScatterPlot();
                 sleep(100).then(() => {
                     showAlert({
                         class: "success",
@@ -100,6 +100,7 @@ function callAjax(data) {
     })
 }
 
+//initializing graph
 function initGraph() {
     var layout = {
         title: {
@@ -150,10 +151,12 @@ function initGraph() {
         paper_bgcolor: 'rgba(0,0,0,0)',
         plot_bgcolor: 'rgba(0,0,0,0)',
     };
-    return Plotly.newPlot(graphDiv, [], layout);
+    return Plotly.newPlot(scatter_div, [], layout);
 }
 
-function createGraph() {
+//creating scatter plot
+function createScatterPlot() {
+
     var trace1 = {
         x: date,
         y: impact_e,
@@ -171,7 +174,8 @@ function createGraph() {
 
     var data = [trace1];
 
-    mainGraph.then((e) => {
+
+    scatter_graph.then((e) => {
         var range = [];
         if (e.data.length > 0) {
             var startDate = new Date($("#date-min").val());
@@ -187,7 +191,7 @@ function createGraph() {
                 range.push($("#date-min").val());
                 range.push($("#date-max").val());
             }
-            Plotly.animate(graphDiv, {
+            Plotly.animate(scatter_div, {
                 data: data,
                 traces: [0],
                 layout: {
@@ -208,9 +212,8 @@ function createGraph() {
                     duration: 500,
                 }
             })
-
         } else {
-            Plotly.addTraces(graphDiv, data);
+            Plotly.addTraces(scatter_div, data);
         }
         window.addEventListener("resize", () => {
             var containerWidth = $('#scatter-graph').innerWidth();
@@ -224,7 +227,7 @@ function createGraph() {
                 height: window.innerHeight / 1.5
             });
         });
-        graphDiv.on('plotly_click', function (data) {
+        scatter_div.on('plotly_click', function (data) {
             var pts = [];
             for (var i = 0; i < data.points.length; i++) {
                 pts.push(data.points[i].x)

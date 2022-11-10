@@ -102,10 +102,8 @@ function initGlobe(impactData) {
     //Create globe
     globe
         (document.getElementById("globeViz"))
-        .globeImageUrl("//unpkg.com/three-globe/example/img/earth-night.jpg")
-        .backgroundImageUrl(
-            "//unpkg.com/three-globe/example/img/night-sky.png"
-        )
+        .globeImageUrl("/images/earth-night.jpg")
+        .backgroundImageUrl("/images/night-sky.png")
         .showAtmosphere(true)
         .atmosphereColor("lightskyblue");
     globe
@@ -128,12 +126,12 @@ function htmlGlobe(requestedData) {
   </svg>`;
     globe
         .htmlElementsData(requestedData)
-        .htmlLat(d => d.lat+0.5)
+        .htmlLat(d => d.lat + 0.5)
         .htmlElement((d) => {
             const el = document.createElement('div');
             el.innerHTML = markerSvg;
             el.style.color = d.color;
-            el.style.width = `${d.size +30}px`;
+            el.style.width = `${d.size + 30}px`;
 
             el.style['pointer-events'] = 'auto';
             el.style.cursor = 'pointer';
@@ -148,7 +146,7 @@ function htmlGlobe(requestedData) {
                 var lng = d.lng;
                 var alt = d.alt;
                 var vel = d.vel;
-        
+
                 var dateText = "<ul style='list-style: none;'><li>Date: " + date + "</li>";
                 var timeText = "<li>Time at peak brightness: " + time + "</li>";
                 var impact_energyText = "<li>Estimated Impact Energy: " + impact_energy + " (kt)</li>";
@@ -157,14 +155,13 @@ function htmlGlobe(requestedData) {
                 var lngText = "<li>Longitude: " + lng + "</li>";
                 var altText = "<li>Altitude: " + alt + "</li>";
                 var velText = "<li>Velocity: " + vel + "</li></ul>";
-        
+
                 html = dateText + timeText + impact_energyText + energyText + latText + lngText + altText + velText;
                 $('#dataModal').find('.modal-body').html(html);
             };
             return el;
         })
         .htmlTransitionDuration(1000);
-    // globe.pointOfView({ lat: 0, lng: 0, altitude: 5 }, 2000);
 }
 function createImpactLayer(requestedData) {
     // clearLabelData();
@@ -176,9 +173,12 @@ function createImpactLayer(requestedData) {
     globe.ringsData([requestedData[0]])
         .ringColor(() => colorInterpolator)
         .ringMaxRadius(d => {
-            return d.size * 3;
+            console.log(d.impact_energy);
+            return Math.sin(d.impact_energy) * Math.log(d.impact_energy) * 5;
         })
-        .ringPropagationSpeed(3)
+        .ringPropagationSpeed(d => {
+            return 2.5;
+        })
         .ringRepeatPeriod(700);
 }
 
@@ -286,13 +286,13 @@ var createMoon = () => {
 
 function createFireball(data) {
 
-    console.log(data[0].vel);
+    console.log(data[0])
     var new_data = {
         date: data[0].date,
         time: data[0].time,
         lat: data[0].lat,
         lng: data[0].lng,
-        size: data[0].size,
+        size: Math.sin(data[0].size) * Math.log(1 + data[0].size/1.05),
         energy: data[0].energy,
         impact_energy: data[0].impact_energy,
         alt: 0.5,
@@ -304,24 +304,30 @@ function createFireball(data) {
         },
         color: data[0].color,
     };
+    if(new_data.size < 0.3) new_data.size = 0.5;
+
+    console.log(new_data);
+
     globe
         .customLayerData([new_data]);
 
-        globe.customThreeObject((d) => {
-            var geometry = new THREE.DodecahedronGeometry(d.size, 1);
-            var material = new THREE.MeshBasicMaterial({ color: 'darkgray' });
-            material.map = new THREE.TextureLoader().load('/images/asteroid.jpg');
-            material.bumpmap = new THREE.TextureLoader().load('/images/asteroid_bumpmap.jpg');
-            material.bumpScale = 0.1;
-            var mesh = new THREE.Mesh(
-                geometry,
-                material
-            )
-            return mesh;
-        }
-        );
+    globe.customThreeObject((d) => {
+        var geometry = new THREE.DodecahedronGeometry(d.size, 2);
+        var material = new THREE.MeshBasicMaterial({ color: 'darkgray' });
+        material.map = new THREE.TextureLoader().load('/images/asteroid.jpg');
+        material.bumpmap = new THREE.TextureLoader().load('/images/asteroid_bumpmap.jpg');
+        material.bumpScale = 0.1;
+        var mesh = new THREE.Mesh(
+            geometry,
+            material
+        )
+        return mesh;
+    }
+    );
+
 
     globe.customThreeObjectUpdate((obj, d) => {
+
         Object.assign(obj.position, globe.getCoords(d.lat, d.lng, d.alt));
     });
 
@@ -336,23 +342,33 @@ function createFireball(data) {
         }
     }
     var stop = false;
-        (function moveFireball() {
+    (function moveFireball() {
+
+        if (!Number.isNaN(new_data.vel)) {
+            if (new_data.alt <= 0) {
+                stop = true;
+                htmlGlobe([data[0]]);
+                createImpactLayer([new_data]);
+            } else if (new_data != null) {
+                new_data.alt -= speed * new_data.vel;
+            }
+        } else {
             if (new_data.alt < 0) {
                 stop = true;
                 htmlGlobe([data[0]]);
                 createImpactLayer([new_data]);
-            } else if(new_data != null){
-                new_data.alt -= speed * new_data.vel;
+            } else if (new_data != null) {
+                new_data.alt -= speed * 10;
             }
-
+        }
             globe.customLayerData(globe.customLayerData());
-            if(!stop){
+            if (!stop) {
                 requestAnimationFrame(moveFireball);
-            } else{
+            } else {
                 return;
             }
-        })();
-    }
+    })();
+}
 
 function search() {
     var search = {};
