@@ -1,6 +1,6 @@
 <%- include('partials/header.ejs') %>
-<script src="//unpkg.com/three"></script>
-<script src="//unpkg.com/globe.gl"></script>
+  <script src="//unpkg.com/three"></script>
+  <script src="//unpkg.com/globe.gl"></script>
   <link rel="stylesheet" href="/css/menu-icon.css">
   </head>
   <%- include('partials/svg.ejs') %>
@@ -28,17 +28,17 @@
             <form action="" method="GET" id="paramForm">
               <div class="form-group">
                 <label for="date-min">Start Date</label>
-                <input type="date" class="form-control" id="date-min" name="date-min" min="1988-04-15"
-                  max="2022-09-15" value="" />
+                <input type="date" class="form-control" id="date-min" name="date-min" min="1988-04-15" max="2022-09-15"
+                  value="" />
                 <label for="date-max">End Date</label>
-                <input type="date" class="form-control" id="date-max" name="date-max" min="1988-04-15"
-                  max="2022-09-15" value="" /><small id="date-help"></small>
+                <input type="date" class="form-control" id="date-max" name="date-max" min="1988-04-15" max="2022-09-15"
+                  value="" /><small id="date-help"></small>
               </div>
               <hr class="hr">
               <div class="form-group">
                 <label><strong><b>Energy</b></strong></label> - <i><small>Positive value in joules x
                     10<sup>10</sup> (e.g., <u>'4'</u> = 4 x 10<sup>10</sup>)</small></i>
-                    <br/>
+                <br />
                 <label for="energy-min">Min Energy</label>
                 <input type="number" class="form-control" id="energy-min" name="energy-min" min="2" max="37500"
                   value="" />
@@ -65,15 +65,63 @@
                 <small id="limit-help"></small>
               </div>
               <hr class="hr">
-              <div style="float: right; padding-bottom: 1rem;">
-                <button type="button" class="btn btn-secondary" id="reset">
-                  Reset Data Points
-                </button>
-                <button type="button" class="btn btn-primary" id="clear">
-                  Clear Inputs
-                </button>
+            </form>
+            <div class="form-group" id="radioForm">
+              <label for="hemisphere"><strong>Split Hemispheres?</strong></label><br>
+              <div class="p-2">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioYes">
+                <label class="form-check-label" for="radioYes">
+                  Yes
+                </label>
+                <br>
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioNo" checked>
+                <label class="form-check-label" for="radioNo">
+                  No
+                </label>
+              </div>
+            </div>
+            <form action="" method="GET" id="splitForm">
+              <div id="split-hemisphere">
+                <div class="d-flex justify-content-center">
+                  <hr class="hr" width="400px">
+                </div>
+                <label class="pb-3"><strong><i>Which Hemisphere?</i></strong></label><br>
+                  <div class="form-check form-check-inline form-switch">
+                    <input class="form-check-input" type="checkbox" value="north" id="checkNorth">
+                    <label class="form-check-label" for="checkNorth">
+                      Northern
+                    </label>
+                  </div>
+                  <div class="form-check form-check-inline form-switch">
+                    <input class="form-check-input" type="checkbox" value="west" id="checkWest">
+                    <label class="form-check-label" for="checkWest">
+                      Western
+                    </label>
+                  </div>
+                  <br>
+                  <div class="form-check form-check-inline form-switch">
+                    <input class="form-check-input" type="checkbox" value="south" id="checkSouth">
+                    <label class="form-check-label" for="checkSouth">
+                      Southern
+                    </label>
+                  </div>
+                  <div class="form-check form-check-inline form-switch">
+                    <input class="form-check-input" type="checkbox" value="east" id="checkEast">
+                    <label class="form-check-label" for="checkEast">
+                      Eastern
+                    </label>
+                  </div>
               </div>
             </form>
+            <hr class="hr">
+            <div style="float: right; padding-bottom: 1rem;">
+              <button type="button" class="btn btn-secondary" id="reset">
+                Reset Data Points
+              </button>
+              <button type="button" class="btn btn-primary" id="clear">
+                Clear Inputs
+              </button>
+            </div>
           </div>
         </div>
 

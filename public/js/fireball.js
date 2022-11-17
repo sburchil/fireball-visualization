@@ -2,6 +2,7 @@ let dateText = document.getElementById("date");
 let energyText = document.getElementById("energy");
 let alerts = $("#alerts");
 let impactData;
+let currentData;
 let globe = Globe({ animateln: true, waitForGlobeReady: true });
 let maxCount;
 
@@ -28,6 +29,7 @@ $(document).ready((d) => {
             $("#limit").attr("min", 1);
             $("#limit-label").val(parseInt($("#limit").val()));
             impactData = setRequestedData(jsonData);
+            currentData = impactData.slice();
             initGlobe(impactData);
         },
         error: function (error) {
@@ -61,6 +63,7 @@ $(document).ready((d) => {
     $('#dataClose').on('click', function () {
         $('#dataModal').modal('hide');
     });
+    $('#split-hemisphere').hide();
 });
 
 $("#reset").on("click", function () {
@@ -71,6 +74,7 @@ $("#reset").on("click", function () {
     clearPoints();
 
     revertPoints(impactData);
+    currentData = impactData.slice();
     createMoon();
     globe.pointOfView({ lat: 0, lng: 0, altitude: 5 }, 2000);
     globe.controls().autoRotate = true;
@@ -81,7 +85,17 @@ $("#reset").on("click", function () {
 
 });
 $("#clear").on("click", () => {
-    document.querySelectorAll("input").forEach((el) => (el.value = ""));
+    document.querySelectorAll("input").forEach((el) => {
+        if(el.type == "checkbox"){
+            el.checked = false;
+            $('#checkWest').prop('disabled', false);
+            $('#checkEast').prop('disabled', false);
+            $('#checkNorth').prop('disabled', false);
+            $('#checkSouth').prop('disabled', false);
+        } else {
+            el.value = "";
+        }
+    });
     $("#limit-label").val(parseInt($("#limit").val()));
 });
 
@@ -102,7 +116,7 @@ function initGlobe(impactData) {
     //Create globe
     globe
         (document.getElementById("globeViz"))
-        .globeImageUrl("/images/earth-night.jpg")
+        .globeImageUrl("/images/earth.jpg")
         .backgroundImageUrl("/images/night-sky.png")
         .showAtmosphere(true)
         .atmosphereColor("lightskyblue");
@@ -136,6 +150,7 @@ function htmlGlobe(requestedData) {
             el.style['pointer-events'] = 'auto';
             el.style.cursor = 'pointer';
             el.onclick = () => {
+                globe.pointOfView({ lat: d.lat, lng: d.lng, altitude: 1 }, 2000);
                 $('#dataModal').modal('show');
 
                 var date = d.date;
@@ -236,7 +251,7 @@ var createMoon = () => {
     var mData = [...Array(1).keys()].map(() => ({
         lat: 6.0,
         lng: 80.5,
-        alt: 3,
+        alt: 5,
         radius: 20.0,
         rotation: {
             x: 0,
@@ -292,7 +307,8 @@ function createFireball(data) {
         time: data[0].time,
         lat: data[0].lat,
         lng: data[0].lng,
-        size: Math.sin(data[0].size) * Math.log(1 + data[0].size/1.05),
+        // size: Math.sin(data[0].size) * Math.log(10 + data[0].size/1.05),
+        size: data[0].size,
         energy: data[0].energy,
         impact_energy: data[0].impact_energy,
         alt: 0.5,
@@ -350,7 +366,7 @@ function createFireball(data) {
                 htmlGlobe([data[0]]);
                 createImpactLayer([new_data]);
             } else if (new_data != null) {
-                new_data.alt -= speed * new_data.vel;
+                new_data.alt -= speed * 100;
             }
         } else {
             if (new_data.alt < 0) {
@@ -358,7 +374,7 @@ function createFireball(data) {
                 htmlGlobe([data[0]]);
                 createImpactLayer([new_data]);
             } else if (new_data != null) {
-                new_data.alt -= speed * 10;
+                new_data.alt -= speed * 100;
             }
         }
             globe.customLayerData(globe.customLayerData());
@@ -397,6 +413,7 @@ function search() {
             if (jsonData.count > 0) {
                 clearLabelData();
                 const requestedData = setRequestedData(jsonData);
+                currentData = requestedData.slice();
                 pointGlobe(requestedData);
                 sleep(100).then(() => {
                     showAlert({
