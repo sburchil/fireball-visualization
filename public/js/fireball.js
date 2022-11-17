@@ -5,6 +5,7 @@ let impactData;
 let currentData;
 let globe = Globe({ animateln: true, waitForGlobeReady: true });
 let maxCount;
+var speed = 0;
 
 
 $(document).ready((d) => {
@@ -39,6 +40,21 @@ $(document).ready((d) => {
             left: "-=10px"
         }, 200)
     });
+
+    $('#controls').on('show.bs.collapse', () => {
+        console.log('show')
+        
+        $('#animationControls').animate({
+            bottom: "+=170px"
+        }, 200)
+    });
+    $('#controls').on('hide.bs.collapse', () => {
+        console.log('hide')
+        
+        $('#animationControls').animate({
+            bottom: "-=170px"
+        }, 200)
+    })
     $('#offcanvasMenu').on('show.bs.offcanvas', function () {
         $('#menu-text').animate({
             left: "+=10px"
@@ -343,16 +359,7 @@ function createFireball(data) {
         Object.assign(obj.position, globe.getCoords(d.lat, d.lng, d.alt));
     });
 
-    var speed = 0;
-    window.onkeydown = (e) => {
-        if (e.keyCode === 32) {
-            speed = 0
-        } else if (e.keyCode === 39) {
-            speed += 0.00001;
-        } else if (e.keyCode === 37) {
-            speed -= 0.00001;
-        }
-    }
+    
     var stop = false;
     (function moveFireball() {
 

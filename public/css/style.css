@@ -8,6 +8,12 @@ body
     height: 100vh;
     font-family: 'Poppins';
 } */ 
+
+*{
+  color: #ffffff99
+
+}
+
 html {
   overflow: hidden;
 }
@@ -61,6 +67,13 @@ footer {
 #controls {
   position: absolute; 
   bottom: 10px;
+  left: 10px;
+  z-index: 1;
+}
+
+#animationControls{
+  position: absolute; 
+  bottom: 70px;
   left: 10px;
   z-index: 1;
 }
