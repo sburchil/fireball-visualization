@@ -27,7 +27,7 @@ $(document).ready(function () {
             left: "+=10px"
         }, 100)
         let canvas_width = $('#offcanvasMenu').width();
-        $('#graph-alerts').css('right', (canvas_width+10)+'px');
+        $('#graph-alerts').css('right', (canvas_width + 10) + 'px');
     });
 
     var date_min1 = $('#date-min').val();
@@ -215,66 +215,73 @@ function createBoxPlot() {
     console.log('create boxplot');
     //console.log(date[0].split('-')[0]);
     //console.log(date[0]);
-    
+
     //get range
-    let minDate = date[0];
-    let maxDate = date[0];
-    date.forEach((entry) => {
-        let splitDate = entry.split('-');
-        if (splitDate[0] < minDate.split('-')[0] ||(splitDate[1] < minDate.split('-')[1] && splitDate[0] <= minDate.split('-')[0])) {
-            minDate = entry;
-        }
-        if (splitDate[0] > maxDate.split('-')[0] || (splitDate[1] > maxDate.split('-')[1] && splitDate[0] >= maxDate.split('-')[0])) {
-            maxDate = entry;
-        }
-    });
+    boxplot_graph.then((e) => {
 
-    //give each entry a trace id for sorting
-    let traceIds = [];
-    date.forEach((entry) => {
-        let splitDate = entry.split('-');
-        let traceId = (12 * (splitDate[0] - minDate.split('-')[0])) + (splitDate[1] - minDate.split('-')[1]);
-        traceIds.push(traceId);
-    });
+        console.log(e);
+        let minDate = date[0];
+        let maxDate = date[0];
+        date.forEach((entry) => {
+            let splitDate = entry.split('-');
+            if (splitDate[0] < minDate.split('-')[0] || (splitDate[1] < minDate.split('-')[1] && splitDate[0] <= minDate.split('-')[0])) {
+                minDate = entry;
+            }
+            if (splitDate[0] > maxDate.split('-')[0] || (splitDate[1] > maxDate.split('-')[1] && splitDate[0] >= maxDate.split('-')[0])) {
+                maxDate = entry;
+            }
+        });
 
-    //sort into traces
-    let numTraces = (12 * (maxDate.split('-')[0] - minDate.split('-')[0])) + (maxDate.split('-')[1] - minDate.split('-')[1]);
-    let rawTraces = [];
-    for (let n = 0; n < numTraces; n++) {
-        rawTraces.push([]);
-    }
-    for (let n = 0; n < numTraces; n++) {
-        for (let i = 0; i < date.length; i++) {
-            if (traceIds[i] === n) {
-                rawTraces[n].push(impact_e[i]);
+        //give each entry a trace id for sorting
+        let traceIds = [];
+        date.forEach((entry) => {
+            let splitDate = entry.split('-');
+            let traceId = (12 * (splitDate[0] - minDate.split('-')[0])) + (splitDate[1] - minDate.split('-')[1]);
+            traceIds.push(traceId);
+        });
+
+        //sort into traces
+        let numTraces = (12 * (maxDate.split('-')[0] - minDate.split('-')[0])) + (maxDate.split('-')[1] - minDate.split('-')[1]);
+        let rawTraces = [];
+        for (let n = 0; n < numTraces; n++) {
+            rawTraces.push([]);
+        }
+        for (let n = 0; n < numTraces; n++) {
+            for (let i = 0; i < date.length; i++) {
+                if (traceIds[i] === n) {
+                    rawTraces[n].push(impact_e[i]);
+                }
             }
         }
-    }
-    let data = [];
-    rawTraces.forEach((entry) => {
-        let newTrace = {
-            y: entry,
-            type: 'box'
-        }
-        data.push(newTrace);
-    });
+        let data = [];
+        rawTraces.forEach((entry) => {
+            let newTrace = {
+                y: entry,
+                type: 'box'
+            }
+            data.push(newTrace);
+        });
 
-    console.log(data);
+        console.log(data);
 
-    //lord forgive me, i know not what i do
-    Plotly.animate(boxplot_div, {
-        data: data
-    }, {
-        transition: {
-            duration: 500,
-            easing: 'cubic-in-out'
-        },
-        frame: {
-            duration: 500,
-        }
-    });
+        /* 
+            add traces first, then update layout
+        */
+        Plotly.addTraces(boxplot_div, data);
+        //lord forgive me, i know not what i do
+        Plotly.animate(boxplot_div, {
+            data: data,
+        }, {
+            transition: {
+                duration: 500,
+                easing: 'cubic-in-out'
+            },
+            frame: {
+                duration: 500,
+            }
+        });
 
-
+    })
 }
 
 //creating scatter plot
@@ -358,11 +365,11 @@ function createScatterPlot() {
                 pts.push(data.points[i].y);
             }
             var newData = jsonData.filter((el) => {
-                if (el.date === pts[0]){
+                if (el.date === pts[0]) {
                     return el;
                 }
-            }).filter((el)=> {
-                if(parseFloat(el.impact_energy) === parseFloat(pts[1])){
+            }).filter((el) => {
+                if (parseFloat(el.impact_energy) === parseFloat(pts[1])) {
                     const returnString = `Date: ${el.date} <br> Impact Energy: ${el.impact_energy} kt <br> Latitude: ${el.lat} <br> Longitude: ${el.lng} <br> Velocity: ${el.vel} km/s <br>`;
                     $('.graph-data').html(returnString);
                 }
