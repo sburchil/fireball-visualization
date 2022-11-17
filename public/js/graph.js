@@ -104,7 +104,6 @@ function callAjax(data) {
 }
 
 function initBoxplot() {
-    console.log('init boxplot');
     var layout = {
         title: {
             text: 'Fireball Data Boxplot',
@@ -213,13 +212,11 @@ function initScatter() {
 
 function createBoxPlot() {
     console.log('create boxplot');
-    //console.log(date[0].split('-')[0]);
-    //console.log(date[0]);
 
     //get range
     boxplot_graph.then((e) => {
 
-        console.log(e);
+        //console.log(e);
         let minDate = date[0];
         let maxDate = date[0];
         date.forEach((entry) => {
@@ -232,7 +229,7 @@ function createBoxPlot() {
             }
         });
 
-        //give each entry a trace id for sorting
+        //give each entry a trace id for sorting, and assign names to traces
         let traceIds = [];
         date.forEach((entry) => {
             let splitDate = entry.split('-');
@@ -253,16 +250,21 @@ function createBoxPlot() {
                 }
             }
         }
+
+        //create traces
         let data = [];
+        let count = 1;
         rawTraces.forEach((entry) => {
             let newTrace = {
                 y: entry,
-                type: 'box'
+                type: 'box',
+                name: 'Month ' + count
             }
             data.push(newTrace);
+            count++;
         });
 
-        console.log(data);
+        //console.log(data);
 
         /* 
             add traces first, then update layout
@@ -349,8 +351,8 @@ function createScatterPlot() {
             var containerWidth = $('#scatter-graph').innerWidth();
             var containerHeight = $('#scatter-graph').innerHeight();
 
-            console.log($('#scatter-graph'));
-            console.log(containerWidth, containerHeight);
+            //console.log($('#scatter-graph'));
+            //console.log(containerWidth, containerHeight);
 
             Plotly.relayout(e, {
                 width: window.innerWidth - 30,
