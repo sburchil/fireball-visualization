@@ -6,16 +6,6 @@ let currentData;
 let globe = Globe({ animateln: true, waitForGlobeReady: true });
 let maxCount;
 
-window.onkeypress = (e) => {
-    if (e.key == "s") {
-        if (globe.controls().autoRotateSpeed == 0) {
-            globe.controls().autoRotateSpeed = 0.2;
-        } else {
-            globe.controls().autoRotateSpeed = 0;
-
-        }
-    }
-}
 
 $(document).ready((d) => {
     $.ajax({
@@ -65,6 +55,20 @@ $(document).ready((d) => {
     });
     $('#split-hemisphere').hide();
 });
+
+$('#controlForm').on('input', (e) => {
+    if(e.target.id == 'pauseRotation'){
+        if(e.target.checked) return globe.controls().autoRotate = false;
+        return globe.controls().autoRotate = true;
+    }
+    if(e.target.id == 'reverseRotation'){
+        return globe.controls().autoRotateSpeed *= -1;
+    }
+    if(e.target.id == 'rotationSpeed'){
+        if($('#reverseRotation').is(':checked')) return globe.controls().autoRotateSpeed = -e.target.value;
+        return globe.controls().autoRotateSpeed = e.target.value;
+    }
+})
 
 $("#reset").on("click", function () {
     //reset all points
@@ -181,20 +185,16 @@ function htmlGlobe(requestedData) {
 function createImpactLayer(requestedData) {
     // clearLabelData();
     clearCustomLayer();
-    console.log(requestedData[0]);
     var color = hexToRgb(requestedData[0].color);
     const colorInterpolator = t => `rgba(${color.r},${color.g},${color.b},${Math.sqrt(1 - t)})`;
 
     globe.ringsData([requestedData[0]])
         .ringColor(() => colorInterpolator)
         .ringMaxRadius(d => {
-            console.log(d.impact_energy);
-            return Math.sin(d.impact_energy) * Math.log(d.impact_energy) * 5;
+            return Math.sin(d.impact_energy) * Math.log(d.impact_energy) * 10;
         })
-        .ringPropagationSpeed(d => {
-            return 2.5;
-        })
-        .ringRepeatPeriod(700);
+        .ringPropagationSpeed(2.5)
+        .ringRepeatPeriod(1000);
 }
 
 // function labelGlobe(requestedData) {
@@ -300,8 +300,6 @@ var createMoon = () => {
 }
 
 function createFireball(data) {
-
-    console.log(data[0])
     var new_data = {
         date: data[0].date,
         time: data[0].time,
@@ -321,8 +319,6 @@ function createFireball(data) {
         color: data[0].color,
     };
     if(new_data.size < 0.3) new_data.size = 0.5;
-
-    console.log(new_data);
 
     globe
         .customLayerData([new_data]);

@@ -9,7 +9,33 @@
         <div id="alerts">
 
         </div>
-
+        <div class="card" id="controls">
+   
+          <div class="card-header">
+            <button class="btn" style="color: #ffffff99; border: none;" href="#collapseControls" data-bs-toggle="collapse">Controls</button>
+          </div>
+          <div class="card-body collapse" id="collapseControls">
+            <form action="" method="GET" id="controlForm">
+              <div class="form-check form-switch">
+                <input type="checkbox" name="pauseRotation" id="pauseRotation" class="form-check-input">
+                <label class="form-check-label" for="pauseRotation">
+                  Pause Rotation
+                </label>
+              </div>
+              <div class="form-check form-switch">
+                <input type="checkbox" name="reverseRotation" id="reverseRotation" class="form-check-input">
+                <label class="form-check-label" for="reverseRotation">
+                  Reverse Rotation
+                </label>
+              </div>
+              <hr class="hr">
+              <div class="form-group">
+                <label for="rotationSpeed">Rotation Speed</label>
+                <input type="range" class="form-range" id="rotationSpeed" name="rotationSpeed" min="0.05" max="1" step="0.05" value="0.2"/>
+              </div>
+            </form>
+          </div>
+        </div>
         <div class="card" id="canvas-form">
           <div class="d-flex justify-content-end" style="text-decoration: none;" type="button" id="menu-toggle">
             <label class="menu-text" id="menu-text" style="font-size: 15pt;">Menu</label>
