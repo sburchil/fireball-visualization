@@ -3,10 +3,28 @@ let energyText = document.getElementById("energy");
 let alerts = $("#alerts");
 let impactData;
 let currentData;
-let globe = Globe({ animateln: true, waitForGlobeReady: true });
-let maxCount;
-var speed = 0;
+var globe = Globe({ animateln: true, waitForGlobeReady: true });
 
+let maxCount;
+let speed = 0;
+
+document.onreadystatechange = function() {
+    if (document.readyState !== "complete") {
+        document.querySelector(".wrapper").style.opacity = 0;
+        document.querySelector(".index-wrapper").style.visibility = "visible";
+        sleep(1000).then();
+    } else {
+        sleep(2000).then(() => {
+            $('.index-wrapper').fadeOut(8000);
+            sleep(1000).then(() => {
+                $('.wrapper').animate({ opacity: '+=1' }, 500);
+
+            });
+
+                globe.pointOfView({ altitude: 5 }, 2000);
+        })
+    }
+};
 
 $(document).ready((d) => {
     $.ajax({
@@ -40,21 +58,6 @@ $(document).ready((d) => {
             left: "-=10px"
         }, 200)
     });
-
-    $('#controls').on('show.bs.collapse', () => {
-        console.log('show')
-        
-        $('#animationControls').animate({
-            bottom: "+=170px"
-        }, 200)
-    });
-    $('#controls').on('hide.bs.collapse', () => {
-        console.log('hide')
-        
-        $('#animationControls').animate({
-            bottom: "-=170px"
-        }, 200)
-    })
     $('#offcanvasMenu').on('show.bs.offcanvas', function () {
         $('#menu-text').animate({
             left: "+=10px"
@@ -149,7 +152,7 @@ function initGlobe(impactData) {
     globe.controls().autoRotateSpeed = 0.2;
     pointGlobe(impactData);
     createMoon();
-    globe.pointOfView({ altitude: 5 });
+    globe.pointOfView({ altitude: 100 });
 
 }
 
@@ -359,7 +362,16 @@ function createFireball(data) {
         Object.assign(obj.position, globe.getCoords(d.lat, d.lng, d.alt));
     });
 
-    
+    var speed = 0;
+    window.onkeydown = (e) => {
+        if (e.keyCode === 32) {
+            speed = 0
+        } else if (e.keyCode === 39) {
+            speed += 0.00001;
+        } else if (e.keyCode === 37) {
+            speed -= 0.00001;
+        }
+    }
     var stop = false;
     (function moveFireball() {
 

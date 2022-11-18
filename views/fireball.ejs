@@ -1,9 +1,18 @@
 <%- include('partials/header.ejs') %>
   <script src="//unpkg.com/three"></script>
   <script src="//unpkg.com/globe.gl"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.min.js"></script>
   <link rel="stylesheet" href="/css/menu-icon.css">
+  <script>
+  window.onload = () => {
+    console.log("loaded");
+  };
+</script>
   </head>
   <%- include('partials/svg.ejs') %>
+
+
+<div class="index-wrapper" id="index-wrapper"></div>
     <div class="wrapper">
       <div class="content">
         <div id="alerts">
@@ -123,7 +132,7 @@
                 <div class="d-flex justify-content-center">
                   <hr class="hr" width="400px">
                 </div>
-                <label class="pb-3"><strong><i>Which Hemisphere?</i></strong></label><br>
+                <label class="pb-3"><strong><i>Which Quandrant(s)?</i></strong></label><br>
                   <div class="form-check form-check-inline form-switch">
                     <input class="form-check-input" type="checkbox" value="north" id="checkNorth">
                     <label class="form-check-label" for="checkNorth">
@@ -185,6 +194,8 @@
         </div>
       </div>
     </div>
+
+    <script src="/js/spaceBackground.js"></script>
 
     <script src="/js/animation.js"></script>
     <script src="/js/fireball.js"></script>

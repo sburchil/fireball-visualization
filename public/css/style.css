@@ -10,8 +10,8 @@ body
 } */ 
 
 *{
-  color: #ffffff99
-
+  color: #ffffff99;
+  background-color: #000000;
 }
 
 html {
@@ -76,4 +76,8 @@ footer {
   bottom: 70px;
   left: 10px;
   z-index: 1;
+}
+#div-scroll {
+  padding: 2rem;
+
 }
