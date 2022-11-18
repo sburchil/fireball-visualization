@@ -46,3 +46,12 @@ backward_fast.mouseup(function() {
     if(speed == 0) return;
     speed = 0.00001
 });
+
+
+///animate through pages
+$('#goToGlobe').click((e) => {
+    $('#index-wrapper').fadeOut(1000);
+    $('.wrapper').animate({ opacity: '+=1' }, 1500);
+
+    globe.pointOfView({ altitude: 5 }, 2000);
+})
