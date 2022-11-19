@@ -211,8 +211,7 @@ function initScatter() {
 }
 
 function createBoxPlot() {
-    console.log('create boxplot');
-
+    //console.log('create boxplot')
     //get range
     boxplot_graph.then((e) => {
 
@@ -255,6 +254,7 @@ function createBoxPlot() {
         let data = [];
         let count = 1;
         rawTraces.forEach((entry) => {
+            console.log(entry);
             let newTrace = {
                 y: entry,
                 type: 'box',
@@ -264,15 +264,17 @@ function createBoxPlot() {
             count++;
         });
 
-        //console.log(data);
+        // console.log(data);
 
         /* 
             add traces first, then update layout
         */
         Plotly.addTraces(boxplot_div, data);
+
         //lord forgive me, i know not what i do
         Plotly.animate(boxplot_div, {
             data: data,
+            traces: [0]
         }, {
             transition: {
                 duration: 500,

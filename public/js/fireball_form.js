@@ -78,74 +78,73 @@ $('#splitForm').on('change', (e) => {
         var checkedData = [];
         for (el of form) {
             if (el.checked) {
-                if(el.id == "checkNorth" || el.id == "checkSouth" ){
-                    $('#checkWest').prop('disabled', true);
-                    $('#checkEast').prop('disabled', true);
-                } else if (el.id == "checkWest" || el.id == "checkEast") {
-                    $('#checkNorth').prop('disabled', true);
+                if (el.id == "checkNorth") {
                     $('#checkSouth').prop('disabled', true);
+                } else if (el.id == "checkSouth") {
+                    $('#checkNorth').prop('disabled', true);
+
                 }
                 checkedData.push(el.value);
             }
         }
-        if(checkedData.length == 0) {
+        if (checkedData.length == 0) {
             $('#checkWest').prop('disabled', false);
             $('#checkEast').prop('disabled', false);
             $('#checkNorth').prop('disabled', false);
             $('#checkSouth').prop('disabled', false);
             return revertPoints(currentData);
         }
-        splitData(checkedData);
+        splitData(checkedData, currentData);
 
     } else {
         return
     }
 })
 
-function splitData(checkedData) {
-var data = [];
-    for(var i = 0; i < checkedData.length; i++) {
-        switch (checkedData[i]) {
-            case "north":
-                var filtered = currentData.filter((value, index, arr) => {
-                    if(value.lat > 0) {
-                        return value;
-                    }
-                })
-                data = data.concat(filtered);
-                break;
-            case "south":
-                    var filtered = currentData.filter((value, index, arr) => {
-                        if(value.lat < 0) {
-                            return value;
-                        }
-                    })
-                    data = data.concat(filtered); 
-                
-                break;
-            case "east":
-                    var filtered = currentData.filter((value, index, arr) => {
-                        if(value.lng > 0) {
-                            return value;
-                        }
-                    })
-                    data = data.concat(filtered); 
-                
-                break;
-            case "west":
-                    var filtered = currentData.filter((value, index, arr) => {
-                        if(value.lng < 0) {
-                            return value;
-                        }
-                    })
-                    data = data.concat(filtered); 
-                
-                break;
-            default:
-                break;
-        }  
+function splitData(checkedData, data) {
+    var split_data = data;
+    for (var i = 0; i < checkedData.length; i++) {
+        if (checkedData[i] == 'north') {
+            split_data = split_data.filter(function (d) {
+                return d.lat >= 0;
+            });
+            continue;
+        } else if (checkedData[i] == 'south') {
+            split_data = split_data.filter(function (d) {
+                return d.lat <= 0;
+            });
+            continue;
+        } else if (checkedData[i] == 'west') {
+            split_data = split_data.filter(function (d) {
+                return d.lng <= 0;
+            });
+            continue;
+        } else if (checkedData[i] == 'east') {
+            split_data = split_data.filter(function (d) {
+                return d.lng >= 0;
+            });
+            continue;
+        } else {
+        }
     }
-    pointGlobe(data);
+
+    if(split_data.length == 0){
+        revertPoints(currentData);
+        sleep(100).then(() => {
+            showAlert({
+                class: "danger", 
+                message: "No data found for selected hemisphere(s)."
+            }, alerts);
+        });
+        return;
+    }
+    pointGlobe(split_data);
+    sleep(100).then(() => {
+        showAlert({
+            class: "success",
+            message: split_data.length + " results returned.",
+        }, alerts);
+    });
 }
 
 $("#limit").on("input", (e) => {

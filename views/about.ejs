@@ -1,9 +1,10 @@
 <%- include('partials/header.ejs')%>
 <style>
-  p {
-    font-size: 1.5rem;
-  }
+  html {
+  overflow: auto;
+}
 </style>
+<<<<<<< HEAD
 
 <h1 class="m-3" style="text-align: center"><%= title%></h1>
 <div class="p-2">
@@ -60,8 +61,52 @@
             ><i>here</i></a
           >.
         </p>
+=======
+<div id="div-scroll">
+  
+      <h1 class="m-3" style="text-align: center"><%= title%></h1>
+      <div class="div-2">
+          <hr class="hr m-3">
+>>>>>>> 6c916459b9435a706438e34392f0633d18527dc6
       </div>
-    </div>
-  </div>
+          <div>
+              Since 1988 there have been hundreds of fireballs detected breaking up
+              through the atmosphere. Nasa has a public data record of these fireballs
+              that records their impact location and energy inflicted. The largest
+              impact happened in Russia during the year 2013 when an astounding 440kt
+              was recorded.
+          </div>
+          <br>
+              <div>
+            Over 90% of the fireballs don't make it past 10kt. Most of
+              the fireball impacts recorded have ended up in the ocean, while others
+              occasionally collide with the land. What are meteors and fireballs?
+              Meteors are considered to be visible meteoroids that have entered the
+              Earth’s atmosphere, crashing down at a high velocity.
+            </div>
+            <br>
+            <div>
+              Fireballs and
+              bolides, on the other hand, are determined to be bright meteors that are
+              eye-catching enough to be seen throughout a large area.
+              <small><a class="" target="_blank" href="https://cneos.jpl.nasa.gov/fireballs/intro.html"><i>See more information here</i></a></small>
+            </div>
+            <br>
+          <div>
+              Our app
+              uses data from the JPL Fireballs API to create visualizations of impacts
+              by their energies, location, date of impact, and more. Note that only the
+              brightest fireballs are featured in the data. The application also
+              features detailed search parameters that can be used to filter through the
+              data and discover patterns. This app is intended a more dynamic form of
+              the current JPL Fireballs map. This app was created by a group called
+          </div>
+          <br>
+          <div>
+              Don’t Look Up(DLU), a group of students from the University of North
+              Carolina at Charlotte who developed this app to inform and show people
+              about Fireballs. The data set our app is based on can be found <a target="_blank" href="https://cneos.jpl.nasa.gov/fireballs/">here</a>.
+          </div>
+</div>
 
 <%- include('partials/footer.ejs')%>
