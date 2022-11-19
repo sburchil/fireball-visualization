@@ -72,6 +72,7 @@ document.getElementById('radioForm').addEventListener('change', (e) => {
 
 //getting which quadrant the user wants to split the globe into
 $('#splitForm').on('change', (e) => {
+    if (globe.pointsData().length == 0) return;
     if ($('#radioYes').is(':checked')) {
         var form = document.getElementById('splitForm');
         var checkedData = [];
