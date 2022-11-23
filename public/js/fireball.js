@@ -27,8 +27,12 @@ let speed = 0;
 // };
 
 $(document).ready((d) => {
+<<<<<<< HEAD
+    globe.lineHoverPrecision(1)
+=======
     $('.wrapper').css('opacity', 0);
 
+>>>>>>> 6c916459b9435a706438e34392f0633d18527dc6
     $.ajax({
         url: "/globe/init",
         type: "GET",
@@ -60,6 +64,20 @@ $(document).ready((d) => {
             left: "-=10px"
         }, 200)
     });
+<<<<<<< HEAD
+
+    $('#controls').on('show.bs.collapse', () => {
+        $('#animationControls').animate({
+            bottom: "+=170px"
+        }, 200)
+    });
+    $('#controls').on('hide.bs.collapse', () => {
+        $('#animationControls').animate({
+            bottom: "-=170px"
+        }, 200)
+    })
+=======
+>>>>>>> 6c916459b9435a706438e34392f0633d18527dc6
     $('#offcanvasMenu').on('show.bs.offcanvas', function () {
         $('#menu-text').animate({
             left: "+=10px"
@@ -70,7 +88,6 @@ $(document).ready((d) => {
         keyboard: false,
         focus: false,
     });
-
     $('#dataClose').on('click', function () {
         $('#dataModal').modal('hide');
     });
@@ -78,15 +95,15 @@ $(document).ready((d) => {
 });
 
 $('#controlForm').on('input', (e) => {
-    if(e.target.id == 'pauseRotation'){
-        if(e.target.checked) return globe.controls().autoRotate = false;
+    if (e.target.id == 'pauseRotation') {
+        if (e.target.checked) return globe.controls().autoRotate = false;
         return globe.controls().autoRotate = true;
     }
-    if(e.target.id == 'reverseRotation'){
+    if (e.target.id == 'reverseRotation') {
         return globe.controls().autoRotateSpeed *= -1;
     }
-    if(e.target.id == 'rotationSpeed'){
-        if($('#reverseRotation').is(':checked')) return globe.controls().autoRotateSpeed = -e.target.value;
+    if (e.target.id == 'rotationSpeed') {
+        if ($('#reverseRotation').is(':checked')) return globe.controls().autoRotateSpeed = -e.target.value;
         return globe.controls().autoRotateSpeed = e.target.value;
     }
 })
@@ -111,7 +128,7 @@ $("#reset").on("click", function () {
 });
 $("#clear").on("click", () => {
     document.querySelectorAll("input").forEach((el) => {
-        if(el.type == "checkbox"){
+        if (el.type == "checkbox") {
             el.checked = false;
             $('#checkWest').prop('disabled', false);
             $('#checkEast').prop('disabled', false);
@@ -131,6 +148,7 @@ $(window).resize((e) => {
 globe.onPointClick((point) => {
     clearPoints();
     // labelGlobe([point]);
+    $('#animationControls').show();
     createFireball([point]);
 
     globe.controls().autoRotate = false;
@@ -205,14 +223,16 @@ function htmlGlobe(requestedData) {
 }
 function createImpactLayer(requestedData) {
     // clearLabelData();
+    
     clearCustomLayer();
+    console.log(requestedData);
     var color = hexToRgb(requestedData[0].color);
     const colorInterpolator = t => `rgba(${color.r},${color.g},${color.b},${Math.sqrt(1 - t)})`;
 
     globe.ringsData([requestedData[0]])
         .ringColor(() => colorInterpolator)
         .ringMaxRadius(d => {
-            return Math.sin(d.impact_energy) * Math.log(d.impact_energy) * 10;
+            return Math.sin(d.impact_energy) * Math.log(d.impact_energy) * Math.PI;
         })
         .ringPropagationSpeed(2.5)
         .ringRepeatPeriod(1000);
@@ -339,7 +359,7 @@ function createFireball(data) {
         },
         color: data[0].color,
     };
-    if(new_data.size < 0.3) new_data.size = 0.5;
+    if (new_data.size < 0.3) new_data.size = 0.5;
 
     globe
         .customLayerData([new_data]);
@@ -354,7 +374,7 @@ function createFireball(data) {
             geometry,
             material
         )
-        return mesh;
+        return mesh;                           
     }
     );
 
@@ -364,6 +384,9 @@ function createFireball(data) {
         Object.assign(obj.position, globe.getCoords(d.lat, d.lng, d.alt));
     });
 
+<<<<<<< HEAD
+
+=======
     var speed = 0;
     window.onkeydown = (e) => {
         if (e.keyCode === 32) {
@@ -374,32 +397,25 @@ function createFireball(data) {
             speed -= 0.00001;
         }
     }
+>>>>>>> 6c916459b9435a706438e34392f0633d18527dc6
     var stop = false;
     (function moveFireball() {
 
-        if (!Number.isNaN(new_data.vel)) {
-            if (new_data.alt <= 0) {
-                stop = true;
-                htmlGlobe([data[0]]);
-                createImpactLayer([new_data]);
-            } else if (new_data != null) {
-                new_data.alt -= speed * 100;
-            }
-        } else {
-            if (new_data.alt < 0) {
-                stop = true;
-                htmlGlobe([data[0]]);
-                createImpactLayer([new_data]);
-            } else if (new_data != null) {
-                new_data.alt -= speed * 100;
-            }
+        if (new_data.alt <= 0) {
+            console.log('stop')
+            stop = true;
+            $('#animationControls').hide();
+            htmlGlobe([data[0]]);
+            createImpactLayer([new_data]);
+        } else if (new_data != null) {
+            new_data.alt -= speed * 100;
         }
-            globe.customLayerData(globe.customLayerData());
-            if (!stop) {
-                requestAnimationFrame(moveFireball);
-            } else {
-                return;
-            }
+        globe.customLayerData(globe.customLayerData());
+        if (!stop) {
+            requestAnimationFrame(moveFireball);
+        } else {
+            return;
+        }
     })();
 }
 
