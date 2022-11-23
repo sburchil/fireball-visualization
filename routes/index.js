@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'DLU', message: 'Fireball Visualizer' });
+  res.render('fireball', { title: 'DLU', message: 'Fireball Visualizer', showData: false });
 });
 
 router.get('/about', (req, res, next) => {
@@ -11,7 +11,7 @@ router.get('/about', (req, res, next) => {
 });
 
 router.get('/contact', (req, res, next) => {
-  res.render('contact', { title: 'Contact' });
+  res.render('contact', { title: 'Who?' });
 });
 
 

@@ -7,7 +7,7 @@ let settings = {method: "GET", headers: {'Content-Type': 'application/json'}};
 
 /* GET users listing. */
 router.get('/fireball', async (req, res, next) => {
-    res.render('fireball', { title: 'Data Globe'});
+    res.render('fireball', { title: 'DLU', message: 'Fireball Visualizer', showData: true});
 });
 
 router.get('/init', async (req, res, next) => {
