@@ -1,23 +1,20 @@
 <%- include('partials/header.ejs')%>
 <div class="p-5">
     
-    <div class="header p-5">
-        <h1>Who?</h1>
+    <h1 class="m-3" style="text-align: center"><%= title%></h1>
+    <div class="div-2">
+        <hr class="hr m-3">
     </div>
-    <div class="row p-5">
-        <div class="col-md-4">
-            <div class="tab-panel">
+    <div class="d-flex justify-content-center" style="font-size: 18pt">
                 
-                <div class="list-group list-group-flush" id="contact-list" role="tablist">
-                    <a class="list-group-item list-group-item-action active" href="#symon" role="tab">Symon Burchill</a>
-                    <a class="list-group-item list-group-item-action" href="#brad"  role="tab">Brad King</a>
-                    <a class="list-group-item list-group-item-action" href="#dixon" role="tab">Dixon O'Hair</a>
-                    <a class="list-group-item list-group-item-action" href="#joseph" role="tab">Joseph Burger</a>
-                    <a class="list-group-item list-group-item-action" href="#kyla"  role="tab">Kyla Moore</a>
-                </div>
-            </div>
+        <div class="list-group list-group-flush col-6" id="contact-list" role="tablist">
+            <a class="list-group-item list-group-item-action active" href="#symon" role="tab">Symon Burchill</a>
+            <a class="list-group-item list-group-item-action" href="#brad"  role="tab">Brad King</a>
+            <a class="list-group-item list-group-item-action" href="#dixon" role="tab">Dixon O'Hair</a>
+            <a class="list-group-item list-group-item-action" href="#joseph" role="tab">Joseph Burger</a>
+            <a class="list-group-item list-group-item-action" href="#kyla"  role="tab">Kyla Moore</a>
         </div>
-        <div class="col-md-8">
+        <div class="col-6">
             <div class="tab-content" id="contact-content">
                 <div class="tab-pane fade show active" id="symon" role="tabpanel">
                     <ul class="col-md-5" style="list-style: none;">

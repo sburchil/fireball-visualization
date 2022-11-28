@@ -1,22 +1,19 @@
 let dateText = document.getElementById("date");
 let energyText = document.getElementById("energy");
+var choice = document.getElementById('showData').value;
 let alerts = $("#alerts");
 let impactData;
-let globe = Globe({ animateln: true, waitForGlobeReady: true });
+let currentData;
+var globe = Globe({ animateln: true, waitForGlobeReady: true });
+
 let maxCount;
-
-window.onkeypress = (e) => {
-    if (e.key == "s") {
-        if (globe.controls().autoRotateSpeed == 0) {
-            globe.controls().autoRotateSpeed = 0.2;
-        } else {
-            globe.controls().autoRotateSpeed = 0;
-
-        }
-    }
-}
+let speed = 0;
 
 $(document).ready((d) => {
+    $('#animationControls').hide();
+    if(choice == "true"){
+        $('.home-page').remove()
+    }
     $.ajax({
         url: "/globe/init",
         type: "GET",
@@ -28,7 +25,12 @@ $(document).ready((d) => {
             $("#limit").attr("min", 1);
             $("#limit-label").val(parseInt($("#limit").val()));
             impactData = setRequestedData(jsonData);
+            currentData = impactData.slice();
             initGlobe(impactData);
+            if(choice == "true"){
+                // $('.home-page').html('');
+                globe.pointOfView({ altitude: 5 }, 2000)
+            }
         },
         error: function (error) {
             console.log(error);
@@ -57,11 +59,25 @@ $(document).ready((d) => {
         keyboard: false,
         focus: false,
     });
-
     $('#dataClose').on('click', function () {
         $('#dataModal').modal('hide');
     });
+    $('#split-hemisphere').hide();
 });
+
+$('#controlForm').on('input', (e) => {
+    if (e.target.id == 'pauseRotation') {
+        if (e.target.checked) return globe.controls().autoRotate = false;
+        return globe.controls().autoRotate = true;
+    }
+    if (e.target.id == 'reverseRotation') {
+        return globe.controls().autoRotateSpeed *= -1;
+    }
+    if (e.target.id == 'rotationSpeed') {
+        if ($('#reverseRotation').is(':checked')) return globe.controls().autoRotateSpeed = -e.target.value;
+        return globe.controls().autoRotateSpeed = e.target.value;
+    }
+})
 
 $("#reset").on("click", function () {
     //reset all points
@@ -71,6 +87,7 @@ $("#reset").on("click", function () {
     clearPoints();
 
     revertPoints(impactData);
+    currentData = impactData.slice();
     createMoon();
     globe.pointOfView({ lat: 0, lng: 0, altitude: 5 }, 2000);
     globe.controls().autoRotate = true;
@@ -81,7 +98,17 @@ $("#reset").on("click", function () {
 
 });
 $("#clear").on("click", () => {
-    document.querySelectorAll("input").forEach((el) => (el.value = ""));
+    document.querySelectorAll("input").forEach((el) => {
+        if (el.type == "checkbox") {
+            el.checked = false;
+            $('#checkWest').prop('disabled', false);
+            $('#checkEast').prop('disabled', false);
+            $('#checkNorth').prop('disabled', false);
+            $('#checkSouth').prop('disabled', false);
+        } else {
+            el.value = "";
+        }
+    });
     $("#limit-label").val(parseInt($("#limit").val()));
 });
 
@@ -92,6 +119,7 @@ $(window).resize((e) => {
 globe.onPointClick((point) => {
     clearPoints();
     // labelGlobe([point]);
+    $('#animationControls').show();
     createFireball([point]);
 
     globe.controls().autoRotate = false;
@@ -102,10 +130,8 @@ function initGlobe(impactData) {
     //Create globe
     globe
         (document.getElementById("globeViz"))
-        .globeImageUrl("//unpkg.com/three-globe/example/img/earth-night.jpg")
-        .backgroundImageUrl(
-            "//unpkg.com/three-globe/example/img/night-sky.png"
-        )
+        .globeImageUrl("/images/earth.jpg")
+        .backgroundImageUrl("/images/night-sky.png")
         .showAtmosphere(true)
         .atmosphereColor("lightskyblue");
     globe
@@ -117,7 +143,7 @@ function initGlobe(impactData) {
     globe.controls().autoRotateSpeed = 0.2;
     pointGlobe(impactData);
     createMoon();
-    globe.pointOfView({ altitude: 5 });
+    globe.pointOfView({ altitude: 100 });
 
 }
 
@@ -128,16 +154,17 @@ function htmlGlobe(requestedData) {
   </svg>`;
     globe
         .htmlElementsData(requestedData)
-        .htmlLat(d => d.lat+0.5)
+        .htmlLat(d => d.lat + 0.5)
         .htmlElement((d) => {
             const el = document.createElement('div');
             el.innerHTML = markerSvg;
             el.style.color = d.color;
-            el.style.width = `${d.size +30}px`;
+            el.style.width = `${d.size + 30}px`;
 
             el.style['pointer-events'] = 'auto';
             el.style.cursor = 'pointer';
             el.onclick = () => {
+                globe.pointOfView({ lat: d.lat, lng: d.lng, altitude: 1 }, 2000);
                 $('#dataModal').modal('show');
 
                 var date = d.date;
@@ -148,7 +175,7 @@ function htmlGlobe(requestedData) {
                 var lng = d.lng;
                 var alt = d.alt;
                 var vel = d.vel;
-        
+
                 var dateText = "<ul style='list-style: none;'><li>Date: " + date + "</li>";
                 var timeText = "<li>Time at peak brightness: " + time + "</li>";
                 var impact_energyText = "<li>Estimated Impact Energy: " + impact_energy + " (kt)</li>";
@@ -157,29 +184,29 @@ function htmlGlobe(requestedData) {
                 var lngText = "<li>Longitude: " + lng + "</li>";
                 var altText = "<li>Altitude: " + alt + "</li>";
                 var velText = "<li>Velocity: " + vel + "</li></ul>";
-        
+
                 html = dateText + timeText + impact_energyText + energyText + latText + lngText + altText + velText;
                 $('#dataModal').find('.modal-body').html(html);
             };
             return el;
         })
         .htmlTransitionDuration(1000);
-    // globe.pointOfView({ lat: 0, lng: 0, altitude: 5 }, 2000);
 }
 function createImpactLayer(requestedData) {
     // clearLabelData();
+    
     clearCustomLayer();
-    console.log(requestedData[0]);
+    console.log(requestedData);
     var color = hexToRgb(requestedData[0].color);
     const colorInterpolator = t => `rgba(${color.r},${color.g},${color.b},${Math.sqrt(1 - t)})`;
 
     globe.ringsData([requestedData[0]])
         .ringColor(() => colorInterpolator)
         .ringMaxRadius(d => {
-            return d.size * 3;
+            return Math.sin(d.impact_energy) * Math.log(d.impact_energy) * Math.PI;
         })
-        .ringPropagationSpeed(3)
-        .ringRepeatPeriod(700);
+        .ringPropagationSpeed(2.5)
+        .ringRepeatPeriod(1000);
 }
 
 // function labelGlobe(requestedData) {
@@ -236,7 +263,7 @@ var createMoon = () => {
     var mData = [...Array(1).keys()].map(() => ({
         lat: 6.0,
         lng: 80.5,
-        alt: 3,
+        alt: 5,
         radius: 20.0,
         rotation: {
             x: 0,
@@ -285,13 +312,12 @@ var createMoon = () => {
 }
 
 function createFireball(data) {
-
-    console.log(data[0].vel);
     var new_data = {
         date: data[0].date,
         time: data[0].time,
         lat: data[0].lat,
         lng: data[0].lng,
+        // size: Math.sin(data[0].size) * Math.log(10 + data[0].size/1.05),
         size: data[0].size,
         energy: data[0].energy,
         impact_energy: data[0].impact_energy,
@@ -304,55 +330,50 @@ function createFireball(data) {
         },
         color: data[0].color,
     };
+    if (new_data.size < 0.3) new_data.size = 0.5;
+
     globe
         .customLayerData([new_data]);
 
-        globe.customThreeObject((d) => {
-            var geometry = new THREE.DodecahedronGeometry(d.size, 1);
-            var material = new THREE.MeshBasicMaterial({ color: 'darkgray' });
-            material.map = new THREE.TextureLoader().load('/images/asteroid.jpg');
-            material.bumpmap = new THREE.TextureLoader().load('/images/asteroid_bumpmap.jpg');
-            material.bumpScale = 0.1;
-            var mesh = new THREE.Mesh(
-                geometry,
-                material
-            )
-            return mesh;
-        }
-        );
+    globe.customThreeObject((d) => {
+        var geometry = new THREE.DodecahedronGeometry(d.size, 2);
+        var material = new THREE.MeshBasicMaterial({ color: 'darkgray' });
+        material.map = new THREE.TextureLoader().load('/images/asteroid.jpg');
+        material.bumpmap = new THREE.TextureLoader().load('/images/asteroid_bumpmap.jpg');
+        material.bumpScale = 0.1;
+        var mesh = new THREE.Mesh(
+            geometry,
+            material
+        )
+        return mesh;                           
+    }
+    );
+
 
     globe.customThreeObjectUpdate((obj, d) => {
+
         Object.assign(obj.position, globe.getCoords(d.lat, d.lng, d.alt));
     });
 
-    var speed = 0;
-    window.onkeydown = (e) => {
-        if (e.keyCode === 32) {
-            speed = 0
-        } else if (e.keyCode === 39) {
-            speed += 0.00001;
-        } else if (e.keyCode === 37) {
-            speed -= 0.00001;
-        }
-    }
     var stop = false;
-        (function moveFireball() {
-            if (new_data.alt < 0) {
-                stop = true;
-                htmlGlobe([data[0]]);
-                createImpactLayer([new_data]);
-            } else if(new_data != null){
-                new_data.alt -= speed * new_data.vel;
-            }
+    (function moveFireball() {
 
-            globe.customLayerData(globe.customLayerData());
-            if(!stop){
-                requestAnimationFrame(moveFireball);
-            } else{
-                return;
-            }
-        })();
-    }
+        if (new_data.alt <= 0) {
+            stop = true;
+            $('#animationControls').hide();
+            htmlGlobe([data[0]]);
+            createImpactLayer([new_data]);
+        } else if (new_data != null) {
+            new_data.alt -= speed * 100;
+        }
+        globe.customLayerData(globe.customLayerData());
+        if (!stop) {
+            requestAnimationFrame(moveFireball);
+        } else {
+            return;
+        }
+    })();
+}
 
 function search() {
     var search = {};
@@ -381,6 +402,7 @@ function search() {
             if (jsonData.count > 0) {
                 clearLabelData();
                 const requestedData = setRequestedData(jsonData);
+                currentData = requestedData.slice();
                 pointGlobe(requestedData);
                 sleep(100).then(() => {
                     showAlert({

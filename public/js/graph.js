@@ -1,8 +1,10 @@
 var impact_e = [];
 var date = [];
-var graphDiv = document.getElementById("scatter-div");
+var boxplot_div = document.getElementById("boxplot-div");
+var boxplot_graph = initBoxplot();
+var scatter_div = document.getElementById("scatter-div");
+var scatter_graph = initScatter();
 var graph_alerts = $("#graph-alerts");
-var mainGraph = initGraph();
 var jsonData;
 $(document).ready(function () {
 
@@ -25,7 +27,7 @@ $(document).ready(function () {
             left: "+=10px"
         }, 100)
         let canvas_width = $('#offcanvasMenu').width();
-        $('#graph-alerts').css('right', (canvas_width+10)+'px');
+        $('#graph-alerts').css('right', (canvas_width + 10) + 'px');
     });
 
     var date_min1 = $('#date-min').val();
@@ -80,7 +82,8 @@ function callAjax(data) {
                     impact_e.push(parseFloat(el.impact_energy));
                     date.push(el.date);
                 });
-                createGraph();
+                createScatterPlot();
+                createBoxPlot();
                 sleep(100).then(() => {
                     showAlert({
                         class: "success",
@@ -100,10 +103,10 @@ function callAjax(data) {
     })
 }
 
-function initGraph() {
+function initBoxplot() {
     var layout = {
         title: {
-            text: 'Fireball Data',
+            text: 'Fireball Data Boxplot',
             font: {
                 family: 'Times New Roman',
                 size: 18,
@@ -150,10 +153,144 @@ function initGraph() {
         paper_bgcolor: 'rgba(0,0,0,0)',
         plot_bgcolor: 'rgba(0,0,0,0)',
     };
-    return Plotly.newPlot(graphDiv, [], layout);
+    return Plotly.newPlot(boxplot_div, [], layout);
 }
 
-function createGraph() {
+//initializing graph
+function initScatter() {
+    var layout = {
+        title: {
+            text: 'Fireball Data Scatterplot',
+            font: {
+                family: 'Times New Roman',
+                size: 18,
+                color: 'white'
+            },
+        },
+        font: {
+            family: 'Times New Roman',
+            size: 14,
+            color: 'white'
+        },
+        width: window.innerWidth - 50,
+        height: window.innerHeight / 1.5,
+        margin: {
+            pad: 20
+        },
+        xaxis: {
+            title: 'Date of Atomosphere Entry',
+            titlefont: {
+                family: 'Times New Roman',
+                size: 18,
+                color: 'white'
+            },
+            tickfont: {
+                family: 'Times New Roman',
+                size: 14,
+                color: 'white'
+            }
+        },
+        yaxis: {
+            title: 'Impact Energy (kt)',
+            titlefont: {
+                family: 'Times New Roman',
+                size: 18,
+                color: 'white'
+            },
+            tickfont: {
+                family: 'Times New Roman',
+                size: 14,
+                color: 'white'
+            }
+        },
+        showlegend: true,
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+    };
+    return Plotly.newPlot(scatter_div, [], layout);
+}
+
+function createBoxPlot() {
+    //console.log('create boxplot')
+    //get range
+    boxplot_graph.then((e) => {
+
+        //console.log(e);
+        let minDate = date[0];
+        let maxDate = date[0];
+        date.forEach((entry) => {
+            let splitDate = entry.split('-');
+            if (splitDate[0] < minDate.split('-')[0] || (splitDate[1] < minDate.split('-')[1] && splitDate[0] <= minDate.split('-')[0])) {
+                minDate = entry;
+            }
+            if (splitDate[0] > maxDate.split('-')[0] || (splitDate[1] > maxDate.split('-')[1] && splitDate[0] >= maxDate.split('-')[0])) {
+                maxDate = entry;
+            }
+        });
+
+        //give each entry a trace id for sorting, and assign names to traces
+        let traceIds = [];
+        date.forEach((entry) => {
+            let splitDate = entry.split('-');
+            let traceId = (12 * (splitDate[0] - minDate.split('-')[0])) + (splitDate[1] - minDate.split('-')[1]);
+            traceIds.push(traceId);
+        });
+
+        //sort into traces
+        let numTraces = (12 * (maxDate.split('-')[0] - minDate.split('-')[0])) + (maxDate.split('-')[1] - minDate.split('-')[1]);
+        let rawTraces = [];
+        for (let n = 0; n < numTraces; n++) {
+            rawTraces.push([]);
+        }
+        for (let n = 0; n < numTraces; n++) {
+            for (let i = 0; i < date.length; i++) {
+                if (traceIds[i] === n) {
+                    rawTraces[n].push(impact_e[i]);
+                }
+            }
+        }
+
+        //create traces
+        let data = [];
+        let count = 1;
+        rawTraces.forEach((entry) => {
+            console.log(entry);
+            let newTrace = {
+                y: entry,
+                type: 'box',
+                name: 'Month ' + count
+            }
+            data.push(newTrace);
+            count++;
+        });
+
+        // console.log(data);
+
+        /* 
+            add traces first, then update layout
+        */
+        Plotly.addTraces(boxplot_div, data);
+
+        //lord forgive me, i know not what i do
+        Plotly.animate(boxplot_div, {
+            data: data,
+            traces: [0]
+        }, {
+            transition: {
+                duration: 500,
+                easing: 'cubic-in-out'
+            },
+            frame: {
+                duration: 500,
+            }
+        });
+
+    })
+}
+
+//creating scatter plot
+function createScatterPlot() {
+
     var trace1 = {
         x: date,
         y: impact_e,
@@ -171,7 +308,7 @@ function createGraph() {
 
     var data = [trace1];
 
-    mainGraph.then((e) => {
+    scatter_graph.then((e) => {
         var range = [];
         if (e.data.length > 0) {
             var startDate = new Date($("#date-min").val());
@@ -187,7 +324,7 @@ function createGraph() {
                 range.push($("#date-min").val());
                 range.push($("#date-max").val());
             }
-            Plotly.animate(graphDiv, {
+            Plotly.animate(scatter_div, {
                 data: data,
                 traces: [0],
                 layout: {
@@ -207,35 +344,36 @@ function createGraph() {
                 frame: {
                     duration: 500,
                 }
-            })
-
+            });
         } else {
-            Plotly.addTraces(graphDiv, data);
+            Plotly.addTraces(scatter_div, data);
         }
+
         window.addEventListener("resize", () => {
             var containerWidth = $('#scatter-graph').innerWidth();
             var containerHeight = $('#scatter-graph').innerHeight();
 
-            console.log($('#scatter-graph'));
-            console.log(containerWidth, containerHeight);
+            //console.log($('#scatter-graph'));
+            //console.log(containerWidth, containerHeight);
 
             Plotly.relayout(e, {
                 width: window.innerWidth - 30,
                 height: window.innerHeight / 1.5
             });
         });
-        graphDiv.on('plotly_click', function (data) {
+
+        scatter_div.on('plotly_click', function (data) {
             var pts = [];
             for (var i = 0; i < data.points.length; i++) {
                 pts.push(data.points[i].x)
                 pts.push(data.points[i].y);
             }
             var newData = jsonData.filter((el) => {
-                if (el.date === pts[0]){
+                if (el.date === pts[0]) {
                     return el;
                 }
-            }).filter((el)=> {
-                if(parseFloat(el.impact_energy) === parseFloat(pts[1])){
+            }).filter((el) => {
+                if (parseFloat(el.impact_energy) === parseFloat(pts[1])) {
                     const returnString = `Date: ${el.date} <br> Impact Energy: ${el.impact_energy} kt <br> Latitude: ${el.lat} <br> Longitude: ${el.lng} <br> Velocity: ${el.vel} km/s <br>`;
                     $('.graph-data').html(returnString);
                 }
