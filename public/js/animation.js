@@ -52,6 +52,10 @@ backward_fast.mouseup(function() {
 $('#goToGlobe').click((e) => {
     $('#index-wrapper').fadeOut(1000);
     $('.wrapper').animate({ opacity: '+=1' }, 1500);
-
+    
     globe.pointOfView({ altitude: 5 }, 2000);
-})
+    sleep(2000).then(() => $('.home-page').remove());
+});
+$('#goToGraph').click((e) => {
+    document.location = '/graphs';
+});
