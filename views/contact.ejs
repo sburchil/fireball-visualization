@@ -1,92 +1,101 @@
 <%- include('partials/header.ejs')%>
-<div class="p-5">
+<style>
+    html {
+    overflow: auto;
+  }
+  </style>
+<div id="div-scroll">
     
-    <div class="header p-5">
-        <h1>Who?</h1>
+    <h1 class="m-3" style="text-align: center"><%= title%></h1>
+    <div class="div-2">
+        <hr class="hr m-3">
     </div>
-    <div class="row p-5">
-        <div class="col-md-4">
-            <div class="tab-panel">
-                
-                <div class="list-group list-group-flush" id="contact-list" role="tablist">
-                    <a class="list-group-item list-group-item-action active" href="#symon" role="tab">Symon Burchill</a>
-                    <a class="list-group-item list-group-item-action" href="#brad"  role="tab">Brad King</a>
-                    <a class="list-group-item list-group-item-action" href="#dixon" role="tab">Dixon O'Hair</a>
-                    <a class="list-group-item list-group-item-action" href="#joseph" role="tab">Joseph Burger</a>
-                    <a class="list-group-item list-group-item-action" href="#kyla"  role="tab">Kyla Moore</a>
+    <div class="d-flex justify-content-center" style="font-size: 18pt">
+        
+        <!-- <div class="row p-5">
+            <div class="col-lg-4"> -->
+                <div class="tab-panel" style="width: 400px">        
+                    <div class="list-group list-group-flush" id="contact-list" role="tablist">
+                        <a class="list-group-item list-group-item-action active" href="#symon" role="tab">Symon Burchill</a>
+                        <a class="list-group-item list-group-item-action" href="#brad"  role="tab">Brad King</a>
+                        <a class="list-group-item list-group-item-action" href="#dixon" role="tab">Dixon O'Hair</a>
+                        <a class="list-group-item list-group-item-action" href="#joseph" role="tab">Joseph Burger</a>
+                        <a class="list-group-item list-group-item-action" href="#kyla"  role="tab">Kyla Moore</a>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-8">
-            <div class="tab-content" id="contact-content">
-                <div class="tab-pane fade show active" id="symon" role="tabpanel">
-                    <ul class="col-md-5" style="list-style: none;">
-                        <strong>Name - </strong> 
-                        <li style="margin-left: 2rem;">Symon Burchill</li>
-                        <br>
-                        <strong>Description of Role - </strong>
-                        <li style="margin-left: 2rem;">Lead Font-End/Back-End Developer</li>
-                        <br>
-                        <strong>Email - </strong>
-                        <li style="margin-left: 2rem;">sburchil@uncc.edu</li>
-                        <br>
-                    </ul>
-                    <!-- <img class="col-auto" src="/images/moon.jpg" width="300px" height="300px" alt=""> -->
+            <!-- </div> -->
+            <!-- <div class="col-md-8"> -->
+                <div class="d-flex tab-content" style="width: 600px" id="contact-content">
+                    <div class=" tab-pane fade show active" id="symon" role="tabpanel">
+                        <ul class="" style="list-style: none;">
+                            <strong>Name - </strong>
+                            <li style="margin-left: 2rem;">Symon Burchill</li>
+                            <br>
+                            <strong>Role - </strong>
+                            <li style="margin-left: 2rem;">Lead Full-Stack Developer</li>
+                            <br>
+                            <strong>Email - </strong>
+                            <li style="margin-left: 2rem;">sburchil@uncc.edu</li>
+                            <br>
+                        </ul>
+                        <!-- <img class="col-auto" src="/images/moon.jpg" width="300px" height="300px" alt=""> -->
+                    </div>
+                    <div class= "tab-pane fade" id="brad" role="tabpanel">
+                        <ul style="list-style: none;">
+                            <strong>Name - </strong>
+                            <li style="margin-left: 2rem;">Brad King</li>
+                            <br>
+                            <strong>Role - </strong>
+                            <li style="margin-left: 2rem;">Project Manager</li>
+                            <br>
+                            <strong>Email - </strong>
+                            <li style="margin-left: 2rem;">bking54@uncc.edu</li>
+                            <br>
+                        </ul>
+                    </div>
+                    <div class="tab-pane fade" id="dixon" role="tabpanel">
+                        <ul style="list-style: none;">
+                            <strong>Name - </strong>
+                            <li style="margin-left: 2rem;">Dixon O'Hair</li>
+                            <br>
+                            <strong>Role - </strong>
+                            <li style="margin-left: 2rem;">Data Operator</li>
+                            <br>
+                            <strong>Email - </strong>
+                            <li style="margin-left: 2rem;">dohair@uncc.edu</li>
+                            <br>
+                        </ul>
+                    </div>
+                    <div class="tab-pane fade" id="joseph" role="tabpanel">
+                        <ul style="list-style: none;">
+                            <strong>Name - </strong>
+                            <li style="margin-left: 2rem;">Joseph Burger</li>
+                            <br>
+                            <strong>Role - </strong>
+                            <li style="margin-left: 2rem;">Note Taker</li>
+                            <br>
+                            <strong>Email - </strong>
+                            <li style="margin-left: 2rem;">jburger6@uncc.edu</li>
+                            <br>
+                        </ul>
+                    </div>
+                    <div class="tab-pane fade" id="kyla" role="tabpanel">
+                        <ul style="list-style: none;">
+                            <strong>Name - </strong>
+                            <li style="margin-left: 2rem;">Kyla Moore</li>
+                            <br>
+                            <strong>Role - </strong>
+                            <li style="margin-left: 2rem;">UI Designer</li>
+                            <br>
+                            <strong>Email - </strong>
+                            <li style="margin-left: 2rem;">kmoor170@uncc.edu</li>
+                            <br>
+                        </ul>
+                    </div>
+                    <img src="/images/contact images/symon.JPG" width="300" height="330" class="ps-3" alt="" srcset="">
                 </div>
-                <div class="tab-pane fade" id="brad" role="tabpanel">
-                    <ul style="list-style: none;">
-                        <strong>Name - </strong> 
-                        <li style="margin-left: 2rem;">Brad King</li>
-                        <br>
-                        <strong>Description of Role - </strong>
-                        <li style="margin-left: 2rem;">Project Manager</li>
-                        <br>
-                        <strong>Email - </strong>
-                        <li style="margin-left: 2rem;">bking54@uncc.edu</li>
-                        <br>
-                    </ul>
-                </div>
-                <div class="tab-pane fade" id="dixon" role="tabpanel">
-                    <ul style="list-style: none;">
-                        <strong>Name - </strong> 
-                        <li style="margin-left: 2rem;">Dixon O'Hair</li>
-                        <br>
-                        <strong>Description of Role - </strong>
-                        <li style="margin-left: 2rem;">Data Operator</li>
-                        <br>
-                        <strong>Email - </strong>
-                        <li style="margin-left: 2rem;">dohair@uncc.edu</li>
-                        <br>
-                    </ul>
-                </div>
-                <div class="tab-pane fade" id="joseph" role="tabpanel">
-                    <ul style="list-style: none;">
-                        <strong>Name - </strong> 
-                        <li style="margin-left: 2rem;">Joseph Burger</li>
-                        <br>
-                        <strong>Description of Role - </strong>
-                        <li style="margin-left: 2rem;">Note Taker</li>
-                        <br>
-                        <strong>Email - </strong>
-                        <li style="margin-left: 2rem;">jburger6@uncc.edu</li>
-                        <br>
-                    </ul>
-                </div>
-                <div class="tab-pane fade" id="kyla" role="tabpanel">
-                    <ul style="list-style: none;">
-                        <strong>Name - </strong> 
-                        <li style="margin-left: 2rem;">Kyla Moore</li>
-                        <br>
-                        <strong>Description of Role - </strong>
-                        <li style="margin-left: 2rem;">UI Designer</li>
-                        <br>
-                        <strong>Email - </strong>
-                        <li style="margin-left: 2rem;">kmoor170@uncc.edu</li>
-                        <br>
-                    </ul>
-                </div>
-            </div>
-        </div>
+            <!-- </div>
+        </div> -->
     </div>
 </div>
 

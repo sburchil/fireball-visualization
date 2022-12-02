@@ -6,8 +6,10 @@ let url = "https://ssd-api.jpl.nasa.gov/fireball.api";
 let settings = {method: "GET", headers: {'Content-Type': 'application/json'}};
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('graphs', { title: 'DLU'});
+router.get('/', async function(req, res, next) {
+  const json = await fetch(url, settings)
+    .then(res => res.json());
+  res.render('graphs', {fields: json.fields, title: 'Graphs' });
 });
 
 router.get('/request', async (req, res, next) => {
@@ -19,4 +21,11 @@ router.get('/request', async (req, res, next) => {
     res.json(jsonData);
 });
 
+router.get('/filltable', async (req, res, next) => {
+  let params = new URLSearchParams(req.query);
+    params.delete('_');
+    const json = await fetch(url+"?"+params, settings)
+    .then(res => res.json());
+    res.json({data: json.data});
+});
 module.exports = router;

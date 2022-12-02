@@ -1,5 +1,6 @@
 let dateText = document.getElementById("date");
 let energyText = document.getElementById("energy");
+var choice = document.getElementById('showData').value;
 let alerts = $("#alerts");
 let impactData;
 let currentData;
@@ -8,27 +9,11 @@ var globe = Globe({ animateln: true, waitForGlobeReady: true });
 let maxCount;
 let speed = 0;
 
-// document.onreadystatechange = function() {
-//     if (document.readyState !== "complete") {
-//         document.querySelector(".wrapper").style.opacity = 0;
-//         document.querySelector(".index-wrapper").style.visibility = "visible";
-//         sleep(1000).then();
-//     } else {
-//         sleep(2000).then(() => {
-//             $('.index-wrapper').fadeOut(3000);
-//             sleep(200).then(() => {
-//                 $('.wrapper').animate({ opacity: '+=1' }, 1500);
-
-//             });
-
-//                 globe.pointOfView({ altitude: 5 }, 2000);
-//         })
-//     }
-// };
-
 $(document).ready((d) => {
-    $('.wrapper').css('opacity', 0);
-
+    $('#animationControls').hide();
+    if(choice == "true"){
+        $('.home-page').remove()
+    }
     $.ajax({
         url: "/globe/init",
         type: "GET",
@@ -42,6 +27,12 @@ $(document).ready((d) => {
             impactData = setRequestedData(jsonData);
             currentData = impactData.slice();
             initGlobe(impactData);
+            if(choice == "true"){
+                // $('.home-page').html('');
+                globe.pointOfView({ altitude: 5 }, 2000)
+            } else {
+                globe.pointOfView({ altitude: 100 });
+            }
         },
         error: function (error) {
             console.log(error);
@@ -70,7 +61,6 @@ $(document).ready((d) => {
         keyboard: false,
         focus: false,
     });
-
     $('#dataClose').on('click', function () {
         $('#dataModal').modal('hide');
     });
@@ -78,31 +68,47 @@ $(document).ready((d) => {
 });
 
 $('#controlForm').on('input', (e) => {
-    if(e.target.id == 'pauseRotation'){
-        if(e.target.checked) return globe.controls().autoRotate = false;
+    if (e.target.id == 'pauseRotation') {
+        if (e.target.checked) return globe.controls().autoRotate = false;
         return globe.controls().autoRotate = true;
     }
-    if(e.target.id == 'reverseRotation'){
+    if (e.target.id == 'reverseRotation') {
         return globe.controls().autoRotateSpeed *= -1;
     }
-    if(e.target.id == 'rotationSpeed'){
-        if($('#reverseRotation').is(':checked')) return globe.controls().autoRotateSpeed = -e.target.value;
+    if (e.target.id == 'rotationSpeed') {
+        if ($('#reverseRotation').is(':checked')) return globe.controls().autoRotateSpeed = -e.target.value;
         return globe.controls().autoRotateSpeed = e.target.value;
     }
 })
 
 $("#reset").on("click", function () {
+    var play = $("#pause-play");
+    console.log($("#pause-play").children().attr("class"));
+    $("#pause-play").children().attr("class", "fa-solid fa-play");
+    speed = 0;
     //reset all points
-    clearCustomLayer();
-    clearRingData();
-    clearHtmlLayer()
-    clearPoints();
+    if(globe.customLayerData() != []){
+        clearCustomLayer();
+    }
+    if(globe.ringsData() != []){
+        clearRingData();
+    }
+    if(globe.htmlElementsData() != []){
+        clearHtmlLayer();
+    }
+    if(globe.pointsData() != []){
+        clearPoints();
+    }
 
     revertPoints(impactData);
     currentData = impactData.slice();
     createMoon();
     globe.pointOfView({ lat: 0, lng: 0, altitude: 5 }, 2000);
-    globe.controls().autoRotate = true;
+    if($('#pauseRotation').is(':checked')){
+        globe.autoRotate = false;
+    } else {
+        globe.autoRotate = true;
+    }
     showAlert({
         class: "success",
         message: "Globe reset",
@@ -111,7 +117,7 @@ $("#reset").on("click", function () {
 });
 $("#clear").on("click", () => {
     document.querySelectorAll("input").forEach((el) => {
-        if(el.type == "checkbox"){
+        if (el.type == "checkbox") {
             el.checked = false;
             $('#checkWest').prop('disabled', false);
             $('#checkEast').prop('disabled', false);
@@ -128,15 +134,23 @@ $(window).resize((e) => {
     globe.width(window.innerWidth).height(window.innerHeight);
 });
 
-globe.onPointClick((point) => {
-    clearPoints();
-    // labelGlobe([point]);
-    createFireball([point]);
+function refreshGlobe() {
+    globe
+        (document.getElementById("globeViz"))
+        .globeImageUrl("/images/earth.jpg")
+        .backgroundImageUrl("/images/night-sky.png")
+        .showAtmosphere(true)
+        .atmosphereColor("lightskyblue");
+    globe
+        .width(window.innerWidth)
+        .height(window.innerHeight)
+        .enablePointerInteraction(true);
+        globe.controls().autoRotate = true;
+    globe.controls().autoRotateSpeed = 0.2;
+    pointGlobe(impactData);
+    createMoon();
 
-    globe.controls().autoRotate = false;
-    globe.pointOfView({ lat: point.lat, lng: point.lng, altitude: 1 }, 2000);
-});
-
+}
 function initGlobe(impactData) {
     //Create globe
     globe
@@ -154,7 +168,6 @@ function initGlobe(impactData) {
     globe.controls().autoRotateSpeed = 0.2;
     pointGlobe(impactData);
     createMoon();
-    globe.pointOfView({ altitude: 100 });
 
 }
 
@@ -205,14 +218,16 @@ function htmlGlobe(requestedData) {
 }
 function createImpactLayer(requestedData) {
     // clearLabelData();
+    
     clearCustomLayer();
+    console.log(requestedData);
     var color = hexToRgb(requestedData[0].color);
     const colorInterpolator = t => `rgba(${color.r},${color.g},${color.b},${Math.sqrt(1 - t)})`;
 
     globe.ringsData([requestedData[0]])
         .ringColor(() => colorInterpolator)
         .ringMaxRadius(d => {
-            return Math.sin(d.impact_energy) * Math.log(d.impact_energy) * 10;
+            return Math.sin(d.impact_energy) * Math.log(d.impact_energy) * Math.PI;
         })
         .ringPropagationSpeed(2.5)
         .ringRepeatPeriod(1000);
@@ -266,6 +281,16 @@ function pointGlobe(requestedData) {
         .pointColor("color");
     globe.controls().autoRotate = true;
     globe.controls().autoRotateSpeed = 0.1;
+
+    globe.onPointClick((point) => {
+        clearPoints();
+        // labelGlobe([point]);
+        $('#animationControls').show();
+        createFireball([point]);
+    
+        globe.controls().autoRotate = false;
+        globe.pointOfView({ lat: point.lat, lng: point.lng, altitude: 1 }, 2000);
+    });
 }
 
 var createMoon = () => {
@@ -339,7 +364,7 @@ function createFireball(data) {
         },
         color: data[0].color,
     };
-    if(new_data.size < 0.3) new_data.size = 0.5;
+    if (new_data.size < 0.3) new_data.size = 0.5;
 
     globe
         .customLayerData([new_data]);
@@ -354,7 +379,7 @@ function createFireball(data) {
             geometry,
             material
         )
-        return mesh;
+        return mesh;                           
     }
     );
 
@@ -364,42 +389,25 @@ function createFireball(data) {
         Object.assign(obj.position, globe.getCoords(d.lat, d.lng, d.alt));
     });
 
-    var speed = 0;
-    window.onkeydown = (e) => {
-        if (e.keyCode === 32) {
-            speed = 0
-        } else if (e.keyCode === 39) {
-            speed += 0.00001;
-        } else if (e.keyCode === 37) {
-            speed -= 0.00001;
-        }
-    }
     var stop = false;
     (function moveFireball() {
 
-        if (!Number.isNaN(new_data.vel)) {
-            if (new_data.alt <= 0) {
-                stop = true;
-                htmlGlobe([data[0]]);
-                createImpactLayer([new_data]);
-            } else if (new_data != null) {
-                new_data.alt -= speed * 100;
-            }
-        } else {
-            if (new_data.alt < 0) {
-                stop = true;
-                htmlGlobe([data[0]]);
-                createImpactLayer([new_data]);
-            } else if (new_data != null) {
-                new_data.alt -= speed * 100;
-            }
+        if (new_data.alt <= 0.0) {
+            stop = true;
+            console.log(new_data.alt)
+            $('#animationControls').hide();
+            htmlGlobe([data[0]]);
+            createImpactLayer([new_data]);
+        } else if (new_data.alt > 0){
+            new_data.alt -= speed * 100;
         }
-            globe.customLayerData(globe.customLayerData());
-            if (!stop) {
-                requestAnimationFrame(moveFireball);
-            } else {
-                return;
-            }
+        globe.customLayerData(globe.customLayerData());
+        if (!stop) {
+            requestAnimationFrame(moveFireball);
+        } else {
+            clearCustomLayer();
+            return;
+        }
     })();
 }
 

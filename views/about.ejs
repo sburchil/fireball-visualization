@@ -10,44 +10,84 @@
       <div class="div-2">
           <hr class="hr m-3">
       </div>
-          <div>
-              Since 1988 there have been hundreds of fireballs detected breaking up
-              through the atmosphere. Nasa has a public data record of these fireballs
-              that records their impact location and energy inflicted. The largest
-              impact happened in Russia during the year 2013 when an astounding 440kt
-              was recorded.
-          </div>
-          <br>
-              <div>
-            Over 90% of the fireballs don't make it past 10kt. Most of
-              the fireball impacts recorded have ended up in the ocean, while others
-              occasionally collide with the land. What are meteors and fireballs?
-              Meteors are considered to be visible meteoroids that have entered the
-              Earth’s atmosphere, crashing down at a high velocity.
+      <div id="carouselExampleCaptions" class="carousel slide" style="width: 600px; height: 450px; float: right;" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+                  <img src="/images/about images/image1.jpg" width="600" height="450" class="d-block w-100" alt="...">
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5>First slide label</h5>
+                    <p>Some representative placeholder content for the first slide.</p>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <img src="/images/about images/image2.jpg" width="600" height="450" class="d-block w-100" alt="...">
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5>Second slide label</h5>
+                    <p>Some representative placeholder content for the second slide.</p>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <img src="/images/about images/image3.jpg" width="600" height="450" class="d-block w-100" alt="...">
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5>Third slide label</h5>
+                    <p>Some representative placeholder content for the third slide.</p>
+                  </div>
+                </div>
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+            <div>
+                Since 1988 there have been hundreds of fireballs detected breaking up
+                through the atmosphere. Nasa has a public data record of these fireballs
+                that records their impact location and energy inflicted. The largest
+                impact happened in Russia during the year 2013 when an astounding 440kt
+                was recorded.
             </div>
             <br>
+                <div>
+              Over 90% of the fireballs don't make it past 10kt. Most of
+                the fireball impacts recorded have ended up in the ocean, while others
+                occasionally collide with the land. What are meteors and fireballs?
+                Meteors are considered to be visible meteoroids that have entered the
+                Earth’s atmosphere, crashing down at a high velocity.
+              </div>
+              <br>
             <div>
               Fireballs and
               bolides, on the other hand, are determined to be bright meteors that are
               eye-catching enough to be seen throughout a large area.
-              <small><a class="" target="_blank" href="https://cneos.jpl.nasa.gov/fireballs/intro.html"><i>See more information here</i></a></small>
+              <a target="_blank" href="https://cneos.jpl.nasa.gov/fireballs/intro.html"><i>See more information here</i></a>
             </div>
             <br>
-          <div>
+            <div>
               Our app
               uses data from the JPL Fireballs API to create visualizations of impacts
               by their energies, location, date of impact, and more. Note that only the
               brightest fireballs are featured in the data. The application also
               features detailed search parameters that can be used to filter through the
               data and discover patterns. This app is intended a more dynamic form of
-              the current JPL Fireballs map. This app was created by a group called
+              the current JPL Fireballs map.
           </div>
           <br>
           <div>
-              Don’t Look Up(DLU), a group of students from the University of North
+              This app was created by a group called Don’t Look Up(DLU), a group of students from the University of North
               Carolina at Charlotte who developed this app to inform and show people
-              about Fireballs. The data set our app is based on can be found <a target="_blank" href="https://cneos.jpl.nasa.gov/fireballs/">here</a>.
+              about Fireballs. The data set our app is based on can be found <a target="_blank" href="https://cneos.jpl.nasa.gov/fireballs/"><i>here</i></a>.
           </div>
+
+          <br>
 </div>
 
 <%- include('partials/footer.ejs')%>

@@ -1,38 +1,40 @@
 <%- include('partials/header.ejs') %>
-  <script src="//unpkg.com/three"></script>
-  <script src="//unpkg.com/globe.gl"></script>
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.min.js"></script>
+<script src="//unpkg.com/three"></script>
+<script src="//unpkg.com/globe.gl"></script>
+<script src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.min.js"></script>
+<script src="/js/spaceBackground.js"></script>
   <link rel="stylesheet" href="/css/menu-icon.css">
- 
+  <input type="hidden" id="showData" value="<%= showData%>">
   </head>
   <%- include('partials/svg.ejs') %>
 
-    
-  <div id="index-wrapper">
-
-    <div class="text-center" id="btnSelect">
-      <a type="button" id="goToGlobe" class="btn btn-dark mr-1">Go to Data Globe</a>
-      <a type="button" id="goToGraph" class="btn btn-dark ml-1" href="/graphs">Go to Graphs</a>
+  <div class="home-page" id="index-wrapper">
+    <div class="d-flex justify-content-center">
+      <h1><%= title%> - <%= message%></h1>
     </div>
+    <div class="text-center">
+        <a type="button" id="goToGlobe" class="btn btn-dark mr-1" >Go to Data Globe</a>
+        <a type="button" id="goToGraph" class="btn btn-dark ml-1">Go to Graphs</a>
+      </div>
   </div>
-      <div class="wrapper">
-        <div class="content">
-          <div id="alerts">
-          </div>
-          <div class="card" id="animationControls">
-            <div class="card-header">
-              <p class="text-center">Animation Controls</p>
-              <div class="d-inline-flex">
-                <button class="btn" id="backward-fast"><i class="fa-solid fa-backward-fast"></i></button>
-                <button class="btn" id="backward"><i class="fa-solid fa-backward"></i></button>
-                <button class="btn" id="pause-play"><i class="fa-solid fa-play"></i></button>
-                <button class="btn" id="forward"><i class="fa-solid fa-forward"></i></button>
-                <button class="btn" id="forward-fast"><i class="fa-solid fa-forward-fast"></i></button>
-              </div>
+    <div class="wrapper">
+      <div class="content">
+        <div id="alerts">
+
+        </div>
+        <div class="card" id="animationControls">
+          <div class="card-header">
+            <p class="text-center">Animation Controls</p>
+            <div class="d-inline-flex">
+              <button class="btn" id="backward-fast"><i class="fa-solid fa-backward-fast"></i></button>
+              <button class="btn" id="backward"><i class="fa-solid fa-backward"></i></button>
+              <button class="btn " id="pause-play"><i class="fa-solid fa-play"></i></button>
+              <button class="btn" id="forward"><i class="fa-solid fa-forward"></i></button>
+              <button class="btn" id="forward-fast"><i class="fa-solid fa-forward-fast"></i></button>
             </div>
           </div>
+        </div>
           <div class="card" id="controls">
-    
             <div class="card-header">
               <button class="btn" style="color: #ffffff99; border: none;" href="#collapseControls" data-bs-toggle="collapse">Controls</button>
             </div>
@@ -172,6 +174,7 @@
               </div>
             </div>
           </div>
+        </div>
           <!-- main content -->
           <div id="globeViz" class="col"></div>
           <div class="modal fade" id="dataModal">
@@ -191,9 +194,7 @@
             </div>
           </div>
         </div>
-      </div>
 
-    <script src="/js/spaceBackground.js"></script>
 
     <script src="/js/animation.js"></script>
     <script src="/js/fireball.js"></script>
