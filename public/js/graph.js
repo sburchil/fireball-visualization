@@ -6,6 +6,8 @@ var scatter_div = document.getElementById("scatter-div");
 var scatter_graph = initScatter();
 var graph_alerts = $("#graph-alerts");
 var jsonData;
+
+
 $(document).ready(function () {
 
     $('#offcanvasMenu').offcanvas({
@@ -32,6 +34,7 @@ $(document).ready(function () {
 
     var date_min1 = $('#date-min').val();
     var date_max1 = $('#date-max').val();
+
     callAjax({ "date-min": date_min1, "date-max": date_max1 });
 
     $("#paramForm").on("submit", (e) => {
@@ -254,7 +257,6 @@ function createBoxPlot() {
         let data = [];
         let count = 1;
         rawTraces.forEach((entry) => {
-            console.log(entry);
             let newTrace = {
                 y: entry,
                 type: 'box',

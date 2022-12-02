@@ -1,6 +1,10 @@
 <%- include('partials/header.ejs') %>
     <script src="https://cdn.plot.ly/plotly-2.14.0.min.js"></script>
     <link rel="stylesheet" href="/css/menu-icon.css">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+
     </head>
     <%- include('partials/svg.ejs') %>
 
@@ -22,7 +26,7 @@
               <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
             </div>
             <div class="offcanvas-body">
-              <form action="" method="GET" id="paramForm">
+              <form action="" method="GET" id="paramForm" style="display:none;">
                 <div class="form-group">
                   <label for="date-min">Start Date</label>
                   <input type="date" class="form-control" id="date-min" name="date-min" min="1988-04-15"
@@ -38,37 +42,93 @@
                   </button>
                 </div>
               </form>
+              <form action="" method="GET" id="dataTable_form" style="">
+                <div class="form-group">
+                  <label for="date-min">Start Date</label>
+                  <input type="date" class="form-control" id="date-min" name="date-min" min="1988-04-15" max="2022-09-15"
+                    value="" />
+                  <label for="date-max">End Date</label>
+                  <input type="date" class="form-control" id="date-max" name="date-max" min="1988-04-15" max="2022-09-15"
+                    value="" /><small id="date-help"></small>
+                </div>
+                <hr class="hr">
+                <div class="form-group">
+                  <label><strong><b>Energy</b></strong></label> - <i><small>Positive value in joules x
+                      10<sup>10</sup> (e.g., <u>'4'</u> = 4 x 10<sup>10</sup>)</small></i>
+                  <br />
+                  <label for="energy-min">Min Energy</label>
+                  <input type="number" class="form-control" id="energy-min" name="energy-min" min="2" max="37500"
+                    value="" />
+                  <label for="energy-max">Max Energy</label>
+                  <input type="number" class="form-control" id="energy-max" name="energy-max" min="2" max="37500"
+                    value="" /><small id="e-help"></small>
+                </div>
+                <hr class="hr">
+                <div class="form-group">
+                  <label><strong><b>Impact Energy</b></strong></label> - <i><small>Estimated impact energy in
+                      positive values of kilotons (kt) (e.g., <u>0.08</u> kt)</small></i><br>
+                  <label for="impact-e-min">Min Impact Energy</label>
+                  <input type="number" class="form-control" id="impact-e-min" name="impact-e-min" min="0" max="440"
+                    value="" />
+                  <label for="impact-e-max">Max Impact Energy</label>
+                  <input type="number" class="form-control" id="impact-e-max" name="impact-e-max" min="0" max="440"
+                    value="" /><small id="impact-e-help"></small>
+                </div>
+                <hr class="hr">
+                <div class="form-group">
+                  <label for="limit"><strong>Limit</strong></label> - <i><small>Number of results to return (e.g.,
+                      <u>100</u>)</small></i><input type="number" id="limit-label"></input><br>
+                  <input type="range" class="form-range" id="limit" name="limit" step="1" />
+                  <small id="limit-help"></small>
+                </div>
+                <hr class="hr">
+              </form>
             </div>
           </div>
+          <div class="div-scroll">
             <div class="m-3">
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                      <button class="nav-link active" id="dataTable-tab" data-bs-toggle="pill"
+                          data-bs-target="#data-table" type="button" role="tab" aria-controls="pills-contact"
+                          aria-selected="true">Data Table</button>
+                  </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill"
+                        <button class="nav-link" id="scatterPlot-tab" data-bs-toggle="pill"
                             data-bs-target="#scatter-graph" type="button" role="tab" aria-controls="pills-home"
-                            aria-selected="true">Scatter Plot</button>
+                            aria-selected="false">Scatter Plot</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
+                        <button class="nav-link" id="boxPlot-tab" data-bs-toggle="pill"
                             data-bs-target="#boxplot-graph" type="button" role="tab" aria-controls="pills-profile"
                             aria-selected="false">Box Plot</button>
                     </li>
-                    <!-- <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill"
-                            data-bs-target="#line-graph" type="button" role="tab" aria-controls="pills-contact"
-                            aria-selected="false">Line Graph</button>
-                    </li> -->
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="scatter-graph" role="tabpanel" aria-labelledby="pills-home-tab">
+                  <div class="tab-pane fade show active" id="data-table" role="tabpanel" aria-labelledby="pills-contact-tab">
+                    <table id="fireball_data" class="display" style="width:100%; padding:2rem;">
+                      <thead>
+                        <tr>
+                          <% for(var i=0; i < fields.length; i++) { %>
+                              <th><%= fields[i] %></th>
+                         <% } %>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <% for(var i=0; i < fields.length; i++) { %>
+                            <th><%= fields[i] %></th>
+                       <% } %>
+                      </tr>
+                    </tfoot>
+                    </table>
+                  </div>
+                    <div class="tab-pane fade" id="scatter-graph" role="tabpanel" aria-labelledby="pills-home-tab">
                         <div id="scatter-div">
                         </div>
                     </div>
                     <div class="tab-pane fade" id="boxplot-graph" role="tabpanel" aria-labelledby="pills-profile-tab">
                         <div id="boxplot-div">
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="bar-graph" role="tabpanel" aria-labelledby="pills-contact-tab">
-                        <div id="bar-div">
                         </div>
                     </div>
                 </div>
@@ -77,4 +137,6 @@
 
         <script src="/js/graph.js"></script>
         <script src="/js/utility.js"></script>
+        <script src="/js/data_table.js"></script>
+
         <%- include('partials/footer.ejs') %>
