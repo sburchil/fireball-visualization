@@ -8,25 +8,27 @@ var globe = Globe({ animateln: true, waitForGlobeReady: true });
 let maxCount;
 let speed = 0;
 
-document.onreadystatechange = function() {
-    if (document.readyState !== "complete") {
-        document.querySelector(".wrapper").style.opacity = 0;
-        document.querySelector(".index-wrapper").style.visibility = "visible";
-        sleep(1000).then();
-    } else {
-        sleep(2000).then(() => {
-            $('.index-wrapper').fadeOut(8000);
-            sleep(1000).then(() => {
-                $('.wrapper').animate({ opacity: '+=1' }, 500);
+// document.onreadystatechange = function() {
+//     if (document.readyState !== "complete") {
+//         document.querySelector(".wrapper").style.opacity = 0;
+//         document.querySelector(".index-wrapper").style.visibility = "visible";
+//         sleep(1000).then();
+//     } else {
+//         sleep(2000).then(() => {
+//             $('.index-wrapper').fadeOut(3000);
+//             sleep(200).then(() => {
+//                 $('.wrapper').animate({ opacity: '+=1' }, 1500);
 
-            });
+//             });
 
-                globe.pointOfView({ altitude: 5 }, 2000);
-        })
-    }
-};
+//                 globe.pointOfView({ altitude: 5 }, 2000);
+//         })
+//     }
+// };
 
 $(document).ready((d) => {
+    $('.wrapper').css('opacity', 0);
+
     $.ajax({
         url: "/globe/init",
         type: "GET",
