@@ -5,12 +5,19 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
 
+<style>
+  body {
+    overflow-y: auto;
+  }
+</style>
+
     </head>
     <%- include('partials/svg.ejs') %>
 
         <div id="graph-alerts">
 
         </div>
+
         <div class="card" id="canvas-form">
             <div class="d-flex justify-content-end" style="text-decoration: none;" type="button" id="menu-toggle">
               <label class="menu-text" id="menu-text" style="font-size: 15pt;">Menu</label>
@@ -82,11 +89,43 @@
                   <small id="limit-help"></small>
                 </div>
                 <hr class="hr">
+                <div class="form-group">
+                  <label for="requirements"><strong>Require...</strong></label> - <i><small>Require specific data sections</small></i>
+                  <br>
+                  <div class="form-check form-check-inline form-switch">
+                    <input class="form-check-input" type="checkbox" id="req-alt">
+                    <label class="form-check-label" for="req-alt">
+                      Altitude
+                    </label>
+                  </div>
+                  <div class="form-check form-check-inline form-switch" style="margin-left: 51px">
+                    <input class="form-check-input" type="checkbox" id="req-vel">
+                    <label class="form-check-label" for="req-vel">
+                      Velocity
+                    </label>
+                  </div>
+                  <br>
+                  <div class="form-check form-check-inline form-switch">
+                    <input class="form-check-input" type="checkbox" id="req-loc">
+                    <label class="form-check-label" for="req-loc">
+                      Location <small><i>(lng, lat)</i></small>
+                    </label>
+                  </div>
+                  <div class="form-check form-check-inline form-switch">
+                    <input class="form-check-input" type="checkbox" id="req-vel-comp">
+                    <label class="form-check-label" for="req-vel-comp">
+                      Velocity Components <small><i>(x, y, z)</i></small>
+                    </label>
+                  </div>
+                </div>
+                <hr class="hr">
+                <div class="form-group">
+                  <button class="btn btn-secondary" style="float: right;" type="button" id="reset">Reset Table</button>
+                </div>
               </form>
             </div>
           </div>
-          <div class="div-scroll">
-            <div class="m-3">
+          <div id="div-scroll">
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                   <li class="nav-item" role="presentation">
                       <button class="nav-link active" id="dataTable-tab" data-bs-toggle="pill"
@@ -121,7 +160,7 @@
                        <% } %>
                       </tr>
                     </tfoot>
-                    </table>
+                    </table> 
                   </div>
                     <div class="tab-pane fade" id="scatter-graph" role="tabpanel" aria-labelledby="pills-home-tab">
                         <div id="scatter-div">
@@ -133,8 +172,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-
+            
         <script src="/js/graph.js"></script>
         <script src="/js/utility.js"></script>
         <script src="/js/data_table.js"></script>

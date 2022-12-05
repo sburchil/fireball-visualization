@@ -21,9 +21,19 @@ router.get('/request', async (req, res, next) => {
     res.json(jsonData);
 });
 
+router.get('/inittable', async (req, res, next) => {
+  const json = await fetch(url, settings)
+    .then(res => res.json());
+    res.json({data: json.data, count: json.count});
+});
+
 router.get('/filltable', async (req, res, next) => {
   let params = new URLSearchParams(req.query);
-    params.delete('_');
+    params.forEach((value, key) => {
+      if(key === '_') params.delete(key);
+      if(value.length === 0) params.delete(key);
+      console.log({key, value});
+    });
     const json = await fetch(url+"?"+params, settings)
     .then(res => res.json());
     res.json({data: json.data});

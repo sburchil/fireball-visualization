@@ -13,6 +13,8 @@ $(document).ready((d) => {
     $('#animationControls').hide();
     if(choice == "true"){
         $('.home-page').remove()
+    } else if (choice == "false"){
+        $('.wrapper').css('opacity', '0');
     }
     $.ajax({
         url: "/globe/init",
@@ -82,8 +84,6 @@ $('#controlForm').on('input', (e) => {
 })
 
 $("#reset").on("click", function () {
-    var play = $("#pause-play");
-    console.log($("#pause-play").children().attr("class"));
     $("#pause-play").children().attr("class", "fa-solid fa-play");
     speed = 0;
     //reset all points
@@ -104,10 +104,10 @@ $("#reset").on("click", function () {
     currentData = impactData.slice();
     createMoon();
     globe.pointOfView({ lat: 0, lng: 0, altitude: 5 }, 2000);
-    if($('#pauseRotation').is(':checked')){
-        globe.autoRotate = false;
+    if($('#pauseRotation')[0].checked){
+        globe.controls().autoRotate = false;
     } else {
-        globe.autoRotate = true;
+        globe.controls().autoRotate = true;
     }
     showAlert({
         class: "success",
@@ -134,23 +134,6 @@ $(window).resize((e) => {
     globe.width(window.innerWidth).height(window.innerHeight);
 });
 
-function refreshGlobe() {
-    globe
-        (document.getElementById("globeViz"))
-        .globeImageUrl("/images/earth.jpg")
-        .backgroundImageUrl("/images/night-sky.png")
-        .showAtmosphere(true)
-        .atmosphereColor("lightskyblue");
-    globe
-        .width(window.innerWidth)
-        .height(window.innerHeight)
-        .enablePointerInteraction(true);
-        globe.controls().autoRotate = true;
-    globe.controls().autoRotateSpeed = 0.2;
-    pointGlobe(impactData);
-    createMoon();
-
-}
 function initGlobe(impactData) {
     //Create globe
     globe
@@ -232,47 +215,6 @@ function createImpactLayer(requestedData) {
         .ringPropagationSpeed(2.5)
         .ringRepeatPeriod(1000);
 }
-
-// function labelGlobe(requestedData) {
-//     globe
-//         .labelsData([requestedData[0]])
-//         .labelLabel((el) => {
-//             return (
-//                 "<strong> Click for Data on specific point </strong>"
-//             );
-//         })
-//         .labelText(d => {
-//             return "Lat: " + d.lat + ", Lng: " + d.lng;
-//         })
-//         .labelSize("size")
-//         .labelColor("color")
-//         .labelDotRadius("size")
-//         .labelResolution(2);
-//     globe.onLabelClick((label) => {
-//         $('#dataModal').modal('show');
-
-//         var date = label.date;
-//         var time = label.time;
-//         var impact_energy = label.impact_energy;
-//         var energy = label.energy;
-//         var lat = label.lat;
-//         var lng = label.lng;
-//         var alt = label.alt;
-//         var vel = label.vel;
-
-//         var dateText = "<ul style='list-style: none;'><li>Date: " + date + "</li>";
-//         var timeText = "<li>Time at peak brightness: " + time + "</li>";
-//         var impact_energyText = "<li>Estimated Impact Energy: " + impact_energy + " (kt)</li>";
-//         var energyText = "<li>Energy: " + energy + " x 10<sup>10</sup joules></li>";
-//         var latText = "<li>Latitude: " + lat + "</li>";
-//         var lngText = "<li>Longitude: " + lng + "</li>";
-//         var altText = "<li>Altitude: " + alt + "</li>";
-//         var velText = "<li>Velocity: " + vel + "</li></ul>";
-
-//         html = dateText + timeText + impact_energyText + energyText + latText + lngText + altText + velText;
-//         $('#dataModal').find('.modal-body').html(html);
-//     })
-// }
 
 function pointGlobe(requestedData) {
     globe
@@ -396,8 +338,6 @@ function createFireball(data) {
             stop = true;
             console.log(new_data.alt)
             $('#animationControls').hide();
-            htmlGlobe([data[0]]);
-            createImpactLayer([new_data]);
         } else if (new_data.alt > 0){
             new_data.alt -= speed * 100;
         }
@@ -405,8 +345,8 @@ function createFireball(data) {
         if (!stop) {
             requestAnimationFrame(moveFireball);
         } else {
-            clearCustomLayer();
-            return;
+            htmlGlobe([data[0]]);
+            createImpactLayer([new_data]);
         }
     })();
 }

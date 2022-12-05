@@ -32,7 +32,7 @@ $('#paramForm').on('change', (e) => {
             $("#date-help").attr("class", "text-danger");
             $("#date-help").text("Start date must be before End date");
             return removeAlert();
-        }
+        } 
     } else if (e.target.id == "limit-label") {
         if (e.target.value > upperLimit || e.target.value < lowerLimit) {
             $("#limit-help").attr("class", "text-danger");

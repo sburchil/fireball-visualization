@@ -3,9 +3,17 @@
 <script src="//unpkg.com/globe.gl"></script>
 <script src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.min.js"></script>
 <script src="/js/spaceBackground.js"></script>
+
+
   <link rel="stylesheet" href="/css/menu-icon.css">
   <input type="hidden" id="showData" value="<%= showData%>">
-  </head>
+
+<style>
+  body {
+    overflow: hidden;
+  }
+</style>
+</head>
   <%- include('partials/svg.ejs') %>
 
   <div class="home-page" id="index-wrapper">

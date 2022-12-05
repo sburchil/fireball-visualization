@@ -238,6 +238,7 @@ function createBoxPlot() {
             let traceId = (12 * (splitDate[0] - minDate.split('-')[0])) + (splitDate[1] - minDate.split('-')[1]);
             traceIds.push(traceId);
         });
+        console.log(traceIds);
 
         //sort into traces
         let numTraces = (12 * (maxDate.split('-')[0] - minDate.split('-')[0])) + (maxDate.split('-')[1] - minDate.split('-')[1]);
@@ -266,7 +267,7 @@ function createBoxPlot() {
             count++;
         });
 
-        // console.log(data);
+        console.log(data);
 
         /* 
             add traces first, then update layout

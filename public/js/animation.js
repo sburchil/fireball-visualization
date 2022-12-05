@@ -59,3 +59,15 @@ $('#goToGlobe').click((e) => {
 $('#goToGraph').click((e) => {
     document.location = '/graphs';
 });
+
+$('#controls').on('show.bs.collapse', () => {
+    $('#animationControls').animate({
+        bottom: '+=170px'
+    }, 200)
+})
+
+$('#controls').on('hide.bs.collapse', () => {
+    $('#animationControls').animate({
+        bottom: '-=170px'
+    }, 200)
+})
