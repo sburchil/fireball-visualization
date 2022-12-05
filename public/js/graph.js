@@ -288,21 +288,6 @@ function createBoxPlot() {
            
            if(e.data.length > 0){
            Plotly.newPlot(boxplot_div, data, e.layout);
-        //    Plotly.animate(boxplot_div, {
-        //        data: data,
-        //        traces: [0],
-        //        autorange: true,
-        //        layout: e.layout
-        //     }, {
-        //             transition: {
-        //                 duration: 500,
-        //                 easing: 'cubic-in-out'
-        //             },
-        //             frame: {
-        //                 duration: 500,
-        //             }
-        //         });
-
             } else {
                 Plotly.addTraces(boxplot_div, data);
             }
