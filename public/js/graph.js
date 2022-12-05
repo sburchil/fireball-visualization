@@ -46,6 +46,12 @@ $(document).ready(function () {
 
         var date_min = new Date(e.target[0].value);
         var date_max = new Date(e.target[1].value);
+        var diff_time = Math.abs(date_max - date_min);
+        var diff_month = (diff_time / (1000 * 3600 * 24 * 30)).toFixed(1);
+
+        console.log(diff_month);
+        
+        console.log(date_min);
         if ((date_min > date_max)) {
             $('#date-min').addClass('is-invalid');
             $("#date-help").attr("class", "text-danger");
@@ -60,6 +66,12 @@ $(document).ready(function () {
         } else if ((date_min > new Date()) || (date_max > new Date())) {
             $("#date-help").attr("class", "text-success");
             $('#date-help').text("Dates are invalid. They cannot be in the future.");
+            return removeAlert();
+        } else if (diff_month >= 7) {
+            $('#date-min').addClass('is-invalid');
+            $('#date-max').addClass('is-invalid');
+            $("#date-help").attr("class", "text-danger");
+            $('#date-help').text("The date range cannot be greater than 6 months.");
             return removeAlert();
         }
         var data = {
@@ -216,44 +228,43 @@ function initScatter() {
 function createBoxPlot() {
     //console.log('create boxplot')
     //get range
-    boxplot_graph.then((e) => {
-
-        //console.log(e);
-        let minDate = date[0];
-        let maxDate = date[0];
-        date.forEach((entry) => {
-            let splitDate = entry.split('-');
-            if (splitDate[0] < minDate.split('-')[0] || (splitDate[1] < minDate.split('-')[1] && splitDate[0] <= minDate.split('-')[0])) {
-                minDate = entry;
-            }
-            if (splitDate[0] > maxDate.split('-')[0] || (splitDate[1] > maxDate.split('-')[1] && splitDate[0] >= maxDate.split('-')[0])) {
-                maxDate = entry;
-            }
-        });
-
-        //give each entry a trace id for sorting, and assign names to traces
-        let traceIds = [];
-        date.forEach((entry) => {
-            let splitDate = entry.split('-');
-            let traceId = (12 * (splitDate[0] - minDate.split('-')[0])) + (splitDate[1] - minDate.split('-')[1]);
-            traceIds.push(traceId);
-        });
-        console.log(traceIds);
-
-        //sort into traces
-        let numTraces = (12 * (maxDate.split('-')[0] - minDate.split('-')[0])) + (maxDate.split('-')[1] - minDate.split('-')[1]);
+    
+    //console.log(e);
+    let minDate = date[0];
+    let maxDate = date[0];
+    date.forEach((entry) => {
+        let splitDate = entry.split('-');
+        if (splitDate[0] < minDate.split('-')[0] || (splitDate[1] < minDate.split('-')[1] && splitDate[0] <= minDate.split('-')[0])) {
+            minDate = entry;
+        }
+        if (splitDate[0] > maxDate.split('-')[0] || (splitDate[1] > maxDate.split('-')[1] && splitDate[0] >= maxDate.split('-')[0])) {
+            maxDate = entry;
+        }
+    });
+    
+    //give each entry a trace id for sorting, and assign names to traces
+    let traceIds = [];
+    date.forEach((entry) => {
+        let splitDate = entry.split('-');
+        let traceId = (12 * (splitDate[0] - minDate.split('-')[0])) + (splitDate[1] - minDate.split('-')[1]);
+        traceIds.push(traceId);
+    });
+    console.log(traceIds);
+    
+    //sort into traces
+        let numTraces = 6;
         let rawTraces = [];
         for (let n = 0; n < numTraces; n++) {
             rawTraces.push([]);
         }
         for (let n = 0; n < numTraces; n++) {
             for (let i = 0; i < date.length; i++) {
-                if (traceIds[i] === n) {
+                if (traceIds[i] >= n && traceIds[i] <= n + 1) {
                     rawTraces[n].push(impact_e[i]);
                 }
             }
         }
-
+        
         //create traces
         let data = [];
         let count = 1;
@@ -266,27 +277,37 @@ function createBoxPlot() {
             data.push(newTrace);
             count++;
         });
+        
+        /* 
+        add traces first, then update layout
+        */
 
         console.log(data);
+       boxplot_graph.then((e) => {
+       
+           
+           if(e.data.length > 0){
+           Plotly.newPlot(boxplot_div, data, e.layout);
+        //    Plotly.animate(boxplot_div, {
+        //        data: data,
+        //        traces: [0],
+        //        autorange: true,
+        //        layout: e.layout
+        //     }, {
+        //             transition: {
+        //                 duration: 500,
+        //                 easing: 'cubic-in-out'
+        //             },
+        //             frame: {
+        //                 duration: 500,
+        //             }
+        //         });
 
-        /* 
-            add traces first, then update layout
-        */
-        Plotly.addTraces(boxplot_div, data);
+            } else {
+                Plotly.addTraces(boxplot_div, data);
+            }
 
         //lord forgive me, i know not what i do
-        Plotly.animate(boxplot_div, {
-            data: data,
-            traces: [0]
-        }, {
-            transition: {
-                duration: 500,
-                easing: 'cubic-in-out'
-            },
-            frame: {
-                duration: 500,
-            }
-        });
 
     })
 }
