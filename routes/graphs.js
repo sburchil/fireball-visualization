@@ -32,7 +32,6 @@ router.get('/filltable', async (req, res, next) => {
     params.forEach((value, key) => {
       if(key === '_') params.delete(key);
       if(value.length === 0) params.delete(key);
-      console.log({key, value});
     });
     const json = await fetch(url+"?"+params, settings)
     .then(res => res.json());

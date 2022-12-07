@@ -266,6 +266,25 @@ var createMoon = () => {
             Object.assign(obj.position, globe.getCoords(d.lat, d.lng, d.alt));
         });
 
+        var clicks = 0;
+        globe.onCustomLayerClick((e) => {
+            clicks++;
+            console.log(e.__threeObj.material.color)
+                e.__threeObj.material.color.setRGB(255, 0, 0);
+                sleep(200).then(() => {
+                    e.__threeObj.material.color.setRGB(0, 255, 0);
+                })
+                sleep(400).then(() => {
+                    e.__threeObj.material.color.setRGB(0, 0, 255);
+                });
+                sleep(600).then(() => {
+                    e.__threeObj.material.color.setRGB(0.6627450980392157,0.6627450980392157, 0.6627450980392157);
+                })
+                if (clicks == 5) {
+                    clicks = 0;
+                    document.location = "https://youtu.be/dQw4w9WgXcQ";
+                }
+        })
 
     var reverse = false;
     (function moveSpheres() {

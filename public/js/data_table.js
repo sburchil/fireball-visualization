@@ -23,6 +23,7 @@ function inittable() {
     },
   });
 }
+$("#limit").val(maxCount/2);
 
 $("#limit").on("input", (e) => {
   $("#limit-label").val(e.target.value);
@@ -129,6 +130,7 @@ var updateTable = (e) => {
       params.append(key, search[key]);
     }
   }
+  console.log(params.toString());
   try {
     $("#fireball_data")
       .DataTable()

@@ -6,6 +6,14 @@ triggerTabList.forEach(function (triggerEl) {
     triggerEl.addEventListener('click', function (event) {
         event.preventDefault()
         tabTrigger.show()
-        // tabContent.show()
+        console.log(triggerEl.getAttribute('href'));
+
+        if(triggerEl.getAttribute('href') == '#symon') {
+            $('#photo').attr('src', '/images/contact images/symon.JPG')
+        } else if(triggerEl.getAttribute('href') == '#riley') {
+            $('#photo').attr('src', '/images/contact images/riley2.JPG')
+        } else if(triggerEl.getAttribute('href') == '#kyla') {
+            $('#photo').attr('src', '/images/contact images/kyla2.JPG')
+        }
     })
 })
