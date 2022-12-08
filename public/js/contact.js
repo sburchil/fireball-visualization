@@ -6,7 +6,7 @@ triggerTabList.forEach(function (triggerEl) {
     triggerEl.addEventListener('click', function (event) {
         event.preventDefault()
         tabTrigger.show()
-        console.log(triggerEl.getAttribute('href'));
+        // console.log(triggerEl.getAttribute('href'));
 
         if(triggerEl.getAttribute('href') == '#symon') {
             $('#photo').attr('src', '/images/contact images/symon.JPG')

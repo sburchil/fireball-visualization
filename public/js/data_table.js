@@ -130,7 +130,7 @@ var updateTable = (e) => {
       params.append(key, search[key]);
     }
   }
-  console.log(params.toString());
+  // console.log(params.toString());
   try {
     $("#fireball_data")
       .DataTable()

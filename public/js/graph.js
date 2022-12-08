@@ -49,9 +49,6 @@ $(document).ready(function () {
         var diff_time = Math.abs(date_max - date_min);
         var diff_month = (diff_time / (1000 * 3600 * 24 * 30)).toFixed(1);
 
-        console.log(diff_month);
-        
-        console.log(date_min);
         if ((date_min > date_max)) {
             $('#date-min').addClass('is-invalid');
             $("#date-help").attr("class", "text-danger");
@@ -249,7 +246,6 @@ function createBoxPlot() {
         let traceId = (12 * (splitDate[0] - minDate.split('-')[0])) + (splitDate[1] - minDate.split('-')[1]);
         traceIds.push(traceId);
     });
-    console.log(traceIds);
     
     //sort into traces
         let numTraces = 6;
@@ -264,7 +260,8 @@ function createBoxPlot() {
                 }
             }
         }
-        
+
+        console.log(rawTraces);
         //create traces
         let data = [];
         let count = 1;
@@ -272,7 +269,7 @@ function createBoxPlot() {
             let newTrace = {
                 y: entry,
                 type: 'box',
-                name: 'Month ' + count
+                name: 'Month ' + traceIds[count],
             }
             data.push(newTrace);
             count++;

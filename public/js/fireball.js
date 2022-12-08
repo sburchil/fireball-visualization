@@ -203,7 +203,7 @@ function createImpactLayer(requestedData) {
     // clearLabelData();
     
     clearCustomLayer();
-    console.log(requestedData);
+    // console.log(requestedData);
     var color = hexToRgb(requestedData[0].color);
     const colorInterpolator = t => `rgba(${color.r},${color.g},${color.b},${Math.sqrt(1 - t)})`;
 
@@ -269,7 +269,7 @@ var createMoon = () => {
         var clicks = 0;
         globe.onCustomLayerClick((e) => {
             clicks++;
-            console.log(e.__threeObj.material.color)
+            // console.log(e.__threeObj.material.color)
                 e.__threeObj.material.color.setRGB(255, 0, 0);
                 sleep(200).then(() => {
                     e.__threeObj.material.color.setRGB(0, 255, 0);
@@ -355,7 +355,6 @@ function createFireball(data) {
 
         if (new_data.alt <= 0.0) {
             stop = true;
-            console.log(new_data.alt)
             $('#animationControls').hide();
         } else if (new_data.alt > 0){
             new_data.alt -= speed * 100;
