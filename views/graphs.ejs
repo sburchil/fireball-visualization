@@ -14,10 +14,12 @@
     </head>
     <%- include('partials/svg.ejs') %>
 
+    <!-- used for populating alerts through javascript -->
         <div id="graph-alerts">
 
         </div>
 
+        <!-- creates the menu icon in the upper right -->
         <div class="card" id="canvas-form">
             <div class="d-flex justify-content-end" style="text-decoration: none;" type="button" id="menu-toggle">
               <label class="menu-text" id="menu-text" style="font-size: 15pt;">Menu</label>
@@ -33,6 +35,8 @@
               <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
             </div>
             <div class="offcanvas-body">
+
+              <!-- form dedicated to the graphs -->
               <form action="" method="GET" id="paramForm" style="display:none;">
                 <div class="form-group">
                   <label for="date-min">Start Date</label>
@@ -49,6 +53,8 @@
                   </button>
                 </div>
               </form>
+
+              <!-- form dedicated to the data table for jquery -->
               <form action="" method="GET" id="dataTable_form" style="">
                 <div class="form-group">
                   <label for="date-min">Start Date</label>
@@ -125,7 +131,10 @@
               </form>
             </div>
           </div>
+
+          
           <div id="div-scroll">
+            <!-- tab headers -->
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                   <li class="nav-item" role="presentation">
                       <button class="nav-link active" id="dataTable-tab" data-bs-toggle="pill"
@@ -134,17 +143,24 @@
                   </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="scatterPlot-tab" data-bs-toggle="pill"
-                            data-bs-target="#scatter-graph" type="button" role="tab" aria-controls="pills-home"
+                            data-bs-target="#scatter-graph" type="button" role="tab"
                             aria-selected="false">Scatter Plot</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="boxPlot-tab" data-bs-toggle="pill"
-                            data-bs-target="#boxplot-graph" type="button" role="tab" aria-controls="pills-profile"
+                            data-bs-target="#boxplot-graph" type="button" role="tab"
                             aria-selected="false">Box Plot</button>
                     </li>
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link" id="lineGraph-tab" data-bs-toggle="pill"
+                          data-bs-target="#line-graph" type="button" role="tab"
+                          aria-selected="false">Line Graph</button>
+                  </li>
                 </ul>
+                <!-- tab contents (i.e. graphs and tables) -->
                 <div class="tab-content" id="pills-tabContent">
-                  <div class="tab-pane fade show active" id="data-table" role="tabpanel" aria-labelledby="pills-contact-tab">
+                  <div class="tab-pane fade show active" id="data-table" role="tabpanel">
+                    <!-- initializing the table for jquery data table -->
                     <table id="fireball_data" class="display" style="width:100%; padding:2rem;">
                       <thead>
                         <tr>
@@ -162,14 +178,18 @@
                     </tfoot>
                     </table> 
                   </div>
-                    <div class="tab-pane fade" id="scatter-graph" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <div class="tab-pane fade" id="scatter-graph" role="tabpanel">
                         <div id="scatter-div">
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="boxplot-graph" role="tabpanel" aria-labelledby="pills-profile-tab">
+                    <div class="tab-pane fade" id="boxplot-graph" role="tabpanel">
                         <div id="boxplot-div">
                         </div>
                     </div>
+                    <div class="tab-pane fade" id="line-graph" role="tabpanel">
+                      <div id="linegraph-div">
+                      </div>
+                  </div>
                 </div>
             </div>
 

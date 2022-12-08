@@ -10,6 +10,7 @@ router.get('/fireball', async (req, res, next) => {
     res.render('fireball', { title: 'DLU', message: 'Fireball Visualizer', showData: true});
 });
 
+/* initizalizing the globe */
 router.get('/init', async (req, res, next) => {
     const json = await fetch(url+"?vel-comp=true&req-loc=true", settings)
     .then(res => res.json());
@@ -18,6 +19,7 @@ router.get('/init', async (req, res, next) => {
 
 });
 
+/* get data for the globe upon request */
 router.get('/request', async (req, res, next) => {
     const searchParams = new URLSearchParams(req.query);
     const json = await fetch(url + '?req-loc=true&' + searchParams.toString(), settings)

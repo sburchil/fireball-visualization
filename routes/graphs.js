@@ -14,11 +14,17 @@ router.get('/', async function(req, res, next) {
 
 router.get('/request', async (req, res, next) => {
     let params = new URLSearchParams(req.query);
-    params.append('sort', 'impact-e');
-    const json = await fetch(url+"?"+params, settings)
-    .then(res => res.json());
-    const jsonData = JSON.stringify(json);
-    res.json(jsonData);
+    let jsonData;
+    if(params.has('sort') && params.get('sort') === 'date') {
+      const json = await fetch(url+"?"+params, settings)
+      .then(res => res.json());
+      jsonData = JSON.stringify(json);
+    } else if (params.has('sort') && params.get('sort') === 'impact-e') {
+      const json = await fetch(url+"?"+params, settings)
+      .then(res => res.json());
+      jsonData = JSON.stringify(json);
+    }
+    res.json({jsonData});
 });
 
 router.get('/inittable', async (req, res, next) => {
