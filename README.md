@@ -1,5 +1,13 @@
 # fireball-visualization
 
+#Contributers
+Symon Burchill
+Brad King
+Joseph Burger
+Dixon O'Hair
+Kyla Moore
+
+
 #SETUP
 Latest version of Git
 Latest version of Node.js
