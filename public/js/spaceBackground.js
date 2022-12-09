@@ -1,4 +1,7 @@
 
+
+//file used for the background of the index page
+// creates the stars and the movement of the stars to make it look like traveling through space
 const numStars = 300;
 let stars = [];
 let size = {
