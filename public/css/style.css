@@ -14,11 +14,6 @@ body
 
 }
 
-html {
-  overflow: hidden;
-}
-
-
 .webgl
 {
     position: fixed;
@@ -38,9 +33,10 @@ footer {
   }
 
   #alerts {
+
     position: absolute;
     z-index: 1;
-    left: 10px;
+    left: 45vw;
     top: 80px;
     opacity: 0.8;
   }
@@ -99,4 +95,15 @@ footer {
   left: 0px;
   width: 100%;
   z-index: 1;
+}
+
+#info-legend {
+  position: absolute; 
+  top: 80px;
+  left: 10px;
+  z-index: 1;
+}
+
+#datepicker > option{
+  color: black;
 }

@@ -1,0 +1,30 @@
+#gradient-bar {
+	height: 200px;
+	width: 15px;
+	border-radius: 10px;
+	background: linear-gradient(#da4545, #ff7e0f, #ffe218, #e0e4e8, #4591da);
+}
+
+#legend {
+	position: relative;
+    width: 200px;
+}
+
+.indicator {
+	position: absolute;
+	top: 0;
+	left: 30px;
+}
+
+.indicator::before {
+	content: "";
+	position: absolute;
+	bottom: 0.6em;
+	left: -20px;
+	right: 0px;
+	width: 1em;
+	border-top: 1.5px solid white;
+}
+.scale {
+	position: relative;
+}
