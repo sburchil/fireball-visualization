@@ -1,7 +1,7 @@
 # fireball-visualization
 
 #Contributers
-Symon Burchill
+- Symon Burchill
 Brad King
 Joseph Burger
 Dixon O'Hair
