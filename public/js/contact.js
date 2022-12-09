@@ -11,13 +11,13 @@ triggerTabList.forEach(function (triggerEl) {
         if(triggerEl.getAttribute('href') == '#symon') {
             $('#photo').attr('src', '/images/contact images/symon.JPG')
         } else if(triggerEl.getAttribute('href') == '#riley') {
-            $('#photo').attr('src', '/images/contact images/riley2.JPG')
+            $('#photo').attr('src', '/images/contact images/riley.JPG')
         } else if(triggerEl.getAttribute('href') == '#kyla') {
-            $('#photo').attr('src', '/images/contact images/kyla2.JPG')
+            $('#photo').attr('src', '/images/contact images/kyla.JPG')
         } else if(triggerEl.getAttribute('href') == '#dixon') {
-            $('#photo').attr('src', '/images/contact images/dixon2.JPG')
+            $('#photo').attr('src', '/images/contact images/dixon.JPG')
         } else if(triggerEl.getAttribute('href') == '#brad') {
-            $('#photo').attr('src', '/images/contact images/brad2.JPG')
+            $('#photo').attr('src', '/images/contact images/brad.JPG')
         } 
     })
 })
