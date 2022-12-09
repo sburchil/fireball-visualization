@@ -333,7 +333,10 @@ var createMoon = () => {
                 );
             });
             clicks = 0;
-            window.open("https://youtu.be/dQw4w9WgXcQ");
+
+            sleep(1000).then(() => {
+                window.open("https://youtu.be/dQw4w9WgXcQ");
+            })
         }
     });
 

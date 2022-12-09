@@ -1,13 +1,14 @@
 var triggerTabList = [].slice.call(document.querySelectorAll('#contact-list a'));
 var triggerTabContent = [].slice.call(document.querySelectorAll('#contact-content .tab-pane'));
+
+//creates bootstrap tabs for each contact
 triggerTabList.forEach(function (triggerEl) {
     var tabTrigger = bootstrap.Tab.getOrCreateInstance(triggerEl);
-    // var tabContent = bootstrap.Tab.getInstance(document.querySelector('#contact-content .tab-pane' + triggerEl.getAttribute('href')));
     triggerEl.addEventListener('click', function (event) {
         event.preventDefault()
         tabTrigger.show()
-        // console.log(triggerEl.getAttribute('href'));
 
+        //checks which tab is clicked and changes the image accordingly
         if(triggerEl.getAttribute('href') == '#symon') {
             $('#photo').attr('src', '/images/contact images/symon.JPG')
         } else if(triggerEl.getAttribute('href') == '#riley') {

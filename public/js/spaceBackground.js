@@ -1,7 +1,7 @@
 
+/*file used for the background of the index page
+creates the stars and the movement of the stars to make it look like traveling through space */
 
-//file used for the background of the index page
-// creates the stars and the movement of the stars to make it look like traveling through space
 const numStars = 300;
 let stars = [];
 let size = {
@@ -78,6 +78,3 @@ function windowResized() {
     resizeCanvas(size.x, size.y);
 
 }
-// function windowResized() {
-//     resizeCanvas(window.innerWidth, window.innerHeight);
-// }

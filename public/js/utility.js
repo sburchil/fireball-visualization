@@ -1,3 +1,5 @@
+
+//main function to parse the data recieved from the server request
 function setRequestedData(jsonData) {
     let impactData = [];
     let requestedData = jsonData.data;
@@ -75,6 +77,8 @@ function setRequestedData(jsonData) {
     }
     return impactData;
 }
+
+//main function to show diferent types of alerts
 function showAlert(obj, parent) {
     var script = `
     <script>
@@ -107,10 +111,13 @@ function showAlert(obj, parent) {
 
     parent.append(html + script);
 }
+
+//function to sleep the thread
 const sleep = (milliseconds) => {
     return new Promise((resolve) => setTimeout(resolve, milliseconds));
 };
 
+//function to remove all alerts
 const removeAlert = () => {
     var alertNode = document.querySelectorAll(".alert");
     if (alertNode.length > 0) {
@@ -126,10 +133,7 @@ const removeAlert = () => {
     }
 };
 
-function goToPoint(lat, lng) {
-    globe.pointOfView({ lat: lat, lng: lng, altitude: 1 }, 2000);
-}
-
+//function used to translate the hex color to rgb for interpolation
 function hexToRgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? {
@@ -139,6 +143,11 @@ function hexToRgb(hex) {
     } : null;
 
 }
+
+//function used to interpolate the color of the ring fading animation
+const colorInterpolator = (t) => {
+    return `rgba(${color.r},${color.g},${color.b},${Math.sqrt(1 - t)})`
+};
 // clearing globe layers
 function clearArcs() {
     globe.arcsData([]);
@@ -163,7 +172,3 @@ function clearHtmlLayer() {
 function revertPoints(impactData) {
     globe.pointsData(impactData);
 }
-
-const colorInterpolator = (t) => {
-    return `rgba(${color.r},${color.g},${color.b},${Math.sqrt(1 - t)})`
-};

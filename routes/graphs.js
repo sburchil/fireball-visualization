@@ -5,13 +5,14 @@ var fetch = require('node-fetch');
 let url = "https://ssd-api.jpl.nasa.gov/fireball.api";
 let settings = {method: "GET", headers: {'Content-Type': 'application/json'}};
 
-/* GET home page. */
+/* initialize the page with data*/
 router.get('/', async function(req, res, next) {
   const json = await fetch(url, settings)
     .then(res => res.json());
   res.render('graphs', {fields: json.fields, title: 'Graphs' });
 });
 
+//returns requested data from the api to the selected graph
 router.get('/request', async (req, res, next) => {
     let params = new URLSearchParams(req.query);
     let jsonData;
@@ -27,12 +28,14 @@ router.get('/request', async (req, res, next) => {
     res.json({jsonData});
 });
 
+//initalizes the data table
 router.get('/inittable', async (req, res, next) => {
   const json = await fetch(url, settings)
     .then(res => res.json());
     res.json({data: json.data, count: json.count});
 });
 
+//fills the data table with requested data
 router.get('/filltable', async (req, res, next) => {
   let params = new URLSearchParams(req.query);
     params.forEach((value, key) => {
