@@ -12,11 +12,24 @@ var graph_alerts = $('#graph-alerts')
 var jsonData;
 var filteredData;
 
+var $ = jQuery.noConflict();
+
 $(document).ready(function () {
   $('#offcanvasMenu').offcanvas({
     scroll: true,
     backdrop: false
   })
+  let dateDropdown = document.getElementById('datepicker'); 
+       
+  let currentYear = 2022;    
+  let earliestYear = 1988;     
+  while (currentYear >= earliestYear) {      
+    let date = document.createElement('option');          
+    date.text = currentYear;      
+    date.value = currentYear;        
+    dateDropdown.add(date);      
+    currentYear -= 1;    
+  }
   $('#menu-toggle').click(function () {
     $('#offcanvasMenu').offcanvas('toggle')
     document.getElementById('toggle-icon').classList.toggle('rotate-icon')
@@ -45,7 +58,7 @@ $(document).ready(function () {
   var date_max1 = $('#date-max').val()
 
   callAjax({ 'date-min': date_min1, 'date-max': date_max1, 'sort': 'impact-e' }, )
-  callAjaxForLineGraph({ 'date-min': date_min1, 'date-max': date_max1, 'sort': 'date' }, )
+  callAjaxForDateSorting({ 'date-min': date_min1, 'date-max': date_max1, 'sort': 'date' }, )
 })
 
 $('#paramForm').on('submit', e => {
@@ -91,13 +104,7 @@ $('#paramForm').on('submit', e => {
         /*if the difference between the start and end dates is greater than 6 months,
         the form is not submitted and an error message is displayed
         only if the box plot tab is active*/
-    } else if ($('#boxPlot-tab').hasClass('active') && diff_month >= 7) {
-      $('#date-min').addClass('is-invalid')
-      $('#date-max').addClass('is-invalid')
-      $('#date-help').attr('class', 'text-danger')
-      $('#date-help').text('The date range cannot be greater than 6 months.')
-      return removeAlert()
-    }
+    } 
 
     //if the line graph tab is active, the line graph is updated
     if($('#lineGraph-tab').hasClass('active')) {
@@ -106,9 +113,24 @@ $('#paramForm').on('submit', e => {
             'date-max': date_max.toISOString().split('T')[0],
             'sort': 'date'
           }
-        callAjaxForLineGraph(data)
+        callAjaxForDateSorting(data)
 
         //if the line graph tab is not, the other active graphs are updated
+    } else if($('#boxPlot-tab').hasClass('active')){
+          if($('#datepicker').val() == null) {
+            $('#date-help').attr('class', 'text-danger')
+            $('#date-help').text('Please select a year.')
+            return removeAlert()
+          } else {
+            let date_min = new Date($('#datepicker').val(), 0, 1)
+            let date_max = new Date($('#datepicker').val(), 11, 31)
+            var data = {
+              'date-min': date_min.toISOString().split('T')[0],
+              'date-max': date_max.toISOString().split('T')[0],
+              'sort': 'date'
+            }
+            return callAjaxForDateSorting(data);
+          }
     } else {
         var data = {
             'date-min': date_min.toISOString().split('T')[0],
@@ -140,8 +162,6 @@ function callAjax (data) {
         })
         //the arrays are sorted in ascending order by impact energy
         createScatterPlot();
-        createBoxPlot();
-
         //the alert is removed and a new one is created
         sleep(100).then(() => {
             showAlert(
@@ -169,7 +189,7 @@ function callAjax (data) {
 }
 
 //function used to populate line graph
-function callAjaxForLineGraph (data) {
+function callAjaxForDateSorting (data) {
     //emptying the arrays to prevent duplicate data
     filtered_impact_e = []
     filtered_date = []
@@ -189,32 +209,15 @@ function callAjaxForLineGraph (data) {
             })
             //the arrays are sorted in ascending order by date
             createLineGraph();
+            createBoxPlot2();
 
-            //the alert is removed and a new one is created
-            sleep(100).then(() => {
-                showAlert(
-                    {
-                        class: 'success',
-                        message: parsedData.count + ' results returned.'
-                    },
-                    graph_alerts
-                    )
-                })
-            } else {
-                showAlert(
-                    {
-                        class: 'danger',
-                        message: 'No results returned. Try different search parameters.'
-                    },
-                    graph_alerts
-                    )
-                }
-      },
+          } 
       error: (xhr, status, error) => {
         console.log(error)
       }
-    })
-  }
+    }
+  })
+}
 
   //function used to initialize the graphs upon page load for faster loading
 function initGraph (graph) {
@@ -293,14 +296,69 @@ function initGraph (graph) {
 }
 
 //function used to create the box plot
+function createBoxPlot2 () {
+
+  let traces = [[], [], [], [], [], [], [], [], [], [], [], []];
+
+  //creates the traces for each month
+  for (let i = 0; i < filtered_date.length; i++) {
+    let splitDate = filtered_date[i].split('-');
+    let month = parseInt(splitDate[1]);
+    traces[month - 1].push(filtered_impact_e[i]);
+  }
+
+  console.log(traces);
+
+var data =[];
+var count = 0;
+traces.forEach( el => {
+
+  var date = new Date(1111, count, 1);
+  var month = date.toLocaleString('default', { month: 'long' });
+
+  console.log(month)
+
+    data.push({
+        y: el,
+        type: 'box',
+        name: month
+    })
+    count++;
+})
+
+boxplot_graph.then(e => {
+    console.log(e.data.length);
+    if (e.data.length > 0) {
+      Plotly.animate(boxplot_div, {
+        data: data,
+        traces: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+        layout: {}
+      })
+    } else {
+      Plotly.addTraces(boxplot_div, data)
+    }
+
+    window.addEventListener('resize', () => {
+
+        Plotly.relayout(e, {
+          width: window.innerWidth - 30,
+          height: window.innerHeight / 1.5
+        })
+      })
+    //lord forgive me, i know not what i do
+  })
+
+
+}
+
 function createBoxPlot () {
   //get range
-  let minDate = date[0]
-  let maxDate = date[0]
+  let minDate = filtered_date[0]
+  let maxDate = filtered_date[0]
 
 
   //find min and max date
-  date.forEach(entry => {
+  filtered_date.forEach(entry => {
       let splitDate = entry.split('-')
     if (
       splitDate[0] < minDate.split('-')[0] ||
@@ -320,7 +378,7 @@ function createBoxPlot () {
 
   //give each entry a trace id for sorting, and assign names to traces
   let traceIds = []
-  date.forEach(entry => {
+  filtered_date.forEach(entry => {
     let splitDate = entry.split('-')
     let traceId =
       12 * (splitDate[0] - minDate.split('-')[0]) +
@@ -329,7 +387,7 @@ function createBoxPlot () {
   })
 
   //sort into traces
-  let numTraces = 6
+  let numTraces = 8
   let rawTraces = []
   for (let n = 0; n < numTraces; n++) {
     rawTraces.push([])
@@ -346,10 +404,11 @@ function createBoxPlot () {
   let data = []
   let count = 1
   rawTraces.forEach(entry => {
+
     let newTrace = {
       y: entry,
       type: 'box',
-      name: 'Month ' + traceIds[count]
+      name: 'Month  ' + count,
     }
     data.push(newTrace)
     count++
@@ -360,11 +419,17 @@ function createBoxPlot () {
         */
 
   boxplot_graph.then(e => {
+    console.log(e.data.length);
     if (e.data.length > 0) {
-      Plotly.newPlot(boxplot_div, data, e.layout)
+      Plotly.animate(boxplot_div, {
+        data: data,
+        traces: [0],
+        layout: {}
+      })
     } else {
       Plotly.addTraces(boxplot_div, data)
     }
+
     window.addEventListener('resize', () => {
 
         Plotly.relayout(e, {
@@ -487,9 +552,10 @@ function createLineGraph () {
     max_x.setMonth(max_x.getMonth() + 2);
     var rangeX = [min_x.toISOString().split('T')[0], max_x.toISOString().split('T')[0]];
 
+
     var trace = {
         x: filtered_date,
-        y: filtered_impact_e,
+        y: filtered_impact_e.length,
         mode: 'lines+markers'
     }
 

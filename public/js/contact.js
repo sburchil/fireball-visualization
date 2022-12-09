@@ -14,6 +14,10 @@ triggerTabList.forEach(function (triggerEl) {
             $('#photo').attr('src', '/images/contact images/riley2.JPG')
         } else if(triggerEl.getAttribute('href') == '#kyla') {
             $('#photo').attr('src', '/images/contact images/kyla2.JPG')
-        }
+        } else if(triggerEl.getAttribute('href') == '#dixon') {
+            $('#photo').attr('src', '/images/contact images/dixon2.JPG')
+        } else if(triggerEl.getAttribute('href') == '#brad') {
+            $('#photo').attr('src', '/images/contact images/brad2.JPG')
+        } 
     })
 })

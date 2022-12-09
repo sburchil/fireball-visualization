@@ -1,32 +1,34 @@
 <%- include('partials/header.ejs') %>
-<script src="//unpkg.com/three"></script>
-<script src="//unpkg.com/globe.gl"></script>
-<script src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.min.js"></script>
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="/js/spaceBackground.js"></script>
+  <script src="//unpkg.com/three"></script>
+  <script src="//unpkg.com/globe.gl"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="/js/spaceBackground.js"></script>
 
 
   <link rel="stylesheet" href="/css/menu-icon.css">
   <link rel="stylesheet" href="/css/legend.css">
   <input type="hidden" id="showData" value="<%= showData%>">
 
-<style>
-  body {
-    overflow: hidden;
-  }
-</style>
-</head>
+  <style>
+    body {
+      overflow: hidden;
+    }
+  </style>
+  </head>
   <%- include('partials/svg.ejs') %>
 
-  <div class="home-page" id="index-wrapper">
-    <div class="d-flex justify-content-center">
-      <h1><%= title%> - <%= message%></h1>
-    </div>
-    <div class="text-center">
-        <a type="button" id="goToGlobe" class="btn btn-dark mr-1" >Go to Globe</a>
+    <div class="home-page" id="index-wrapper">
+      <div class="d-flex justify-content-center">
+        <h1>
+          <%= title%> - <%= message%>
+        </h1>
+      </div>
+      <div class="text-center">
+        <a type="button" id="goToGlobe" class="btn btn-dark mr-1">Go to Globe</a>
         <a type="button" id="goToGraph" class="btn btn-dark ml-1">Go to Graphs</a>
       </div>
-  </div>
+    </div>
     <div class="wrapper">
       <div class="content">
         <div id="alerts">
@@ -40,14 +42,14 @@
             <div id="legend">
               <label for="">Size of impact energy (kt)</label>
               <hr class="hr">
-            <div class="scale">
-              <div id="gradient-bar"></div>
-              <div class="indicator">~ 440 (kt)</div>
-              <div class="indicator">~ 4.6 (kt)</div>
-              <div class="indicator">~ 1.8 (kt)</div>
-              <div class="indicator">~ 0.36 (kt)</div>
-              <div class="indicator">~ 0.076 (kt)</div>
-            </div>
+              <div class="scale">
+                <div id="gradient-bar"></div>
+                <div class="indicator">~ 440 (kt)</div>
+                <div class="indicator">~ 4.6 (kt)</div>
+                <div class="indicator">~ 1.8 (kt)</div>
+                <div class="indicator">~ 0.36 (kt)</div>
+                <div class="indicator">~ 0.076 (kt)</div>
+              </div>
             </div>
           </div>
         </div>
@@ -65,171 +67,173 @@
           </div>
         </div>
         <!-- creates controls to change animation of the globe -->
-          <div class="card" id="controls">
-            <div class="card-header">
-              <button class="btn" style="color: #ffffff99; border: none;" href="#collapseControls" data-bs-toggle="collapse">Controls</button>
-            </div>
-            <div class="card-body collapse" id="collapseControls">
-              <form action="" method="GET" id="controlForm">
-                <div class="form-check form-switch">
-                  <input type="checkbox" name="pauseRotation" id="pauseRotation" class="form-check-input">
-                  <label class="form-check-label" for="pauseRotation">
-                    Pause Rotation
-                  </label>
-                </div>
-                <div class="form-check form-switch">
-                  <input type="checkbox" name="reverseRotation" id="reverseRotation" class="form-check-input">
-                  <label class="form-check-label" for="reverseRotation">
-                    Reverse Rotation
-                  </label>
-                </div>
-                <hr class="hr">
-                <div class="form-group">
-                  <label for="rotationSpeed">Rotation Speed</label>
-                  <input type="range" class="form-range" id="rotationSpeed" name="rotationSpeed" min="0.05" max="1" step="0.05" value="0.2"/>
-                </div>
-              </form>
-            </div>
+        <div class="card" id="controls">
+          <div class="card-header">
+            <button class="btn" style="color: #ffffff99; border: none;" href="#collapseControls"
+              data-bs-toggle="collapse">Controls</button>
           </div>
-
-          <!-- creates menu icon -->
-          <div class="card" id="canvas-form">
-            <div class="d-flex justify-content-end" style="text-decoration: none;" type="button" id="menu-toggle">
-              <label class="menu-text" id="menu-text" style="font-size: 15pt;">Menu</label>
-              <div id="toggle-icon">
-                <div class="bar1"></div>
-                <div class="bar2"></div>
-                <div class="bar3"></div>
+          <div class="card-body collapse" id="collapseControls">
+            <form action="" method="GET" id="controlForm">
+              <div class="form-check form-switch">
+                <input type="checkbox" name="pauseRotation" id="pauseRotation" class="form-check-input">
+                <label class="form-check-label" for="pauseRotation">
+                  Pause Rotation
+                </label>
               </div>
-            </div>
-          </div>
-          <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMenu">
-            <div class="offcanvas-header">
-              <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
-            </div>
-            <!-- creates off canvas menu -->
-            <div class="offcanvas-body">
-              <form action="" method="GET" id="paramForm">
-                <div class="form-group">
-                  <label for="date-min">Start Date</label>
-                  <input type="date" class="form-control" id="date-min" name="date-min" min="1988-04-15" max="2022-09-15"
-                    value="" />
-                  <label for="date-max">End Date</label>
-                  <input type="date" class="form-control" id="date-max" name="date-max" min="1988-04-15" max="2022-09-15"
-                    value="" /><small id="date-help"></small>
-                </div>
-                <hr class="hr">
-                <div class="form-group">
-                  <label><strong><b>Energy</b></strong></label> - <i><small>Positive value in joules x
-                      10<sup>10</sup> (e.g., <u>'4'</u> = 4 x 10<sup>10</sup>)</small></i>
-                  <br />
-                  <label for="energy-min">Min Energy</label>
-                  <input type="number" class="form-control" id="energy-min" name="energy-min" min="2" max="37500"
-                    value="" />
-                  <label for="energy-max">Max Energy</label>
-                  <input type="number" class="form-control" id="energy-max" name="energy-max" min="2" max="37500"
-                    value="" /><small id="e-help"></small>
-                </div>
-                <hr class="hr">
-                <div class="form-group">
-                  <label><strong><b>Impact Energy</b></strong></label> - <i><small>Estimated impact energy in
-                      positive values of kilotons (kt) (e.g., <u>0.08</u> kt)</small></i><br>
-                  <label for="impact-e-min">Min Impact Energy</label>
-                  <input type="number" class="form-control" id="impact-e-min" name="impact-e-min" min="0" max="440"
-                    value="" />
-                  <label for="impact-e-max">Max Impact Energy</label>
-                  <input type="number" class="form-control" id="impact-e-max" name="impact-e-max" min="0" max="440"
-                    value="" /><small id="impact-e-help"></small>
-                </div>
-                <hr class="hr">
-                <div class="form-group">
-                  <label for="limit"><strong>Limit</strong></label> - <i><small>Number of results to return (e.g.,
-                      <u>100</u>)</small></i><input type="number" id="limit-label"></input><br>
-                  <input type="range" class="form-range" id="limit" name="limit" step="1" />
-                  <small id="limit-help"></small>
-                </div>
-                <hr class="hr">
-              </form>
-              <div class="form-group" id="radioForm">
-                <label for="hemisphere"><strong>Split Hemispheres?</strong></label><br>
-                <div class="p-2">
-                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioYes">
-                  <label class="form-check-label" for="radioYes">
-                    Yes
-                  </label>
-                  <br>
-                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioNo" checked>
-                  <label class="form-check-label" for="radioNo">
-                    No
-                  </label>
-                </div>
+              <div class="form-check form-switch">
+                <input type="checkbox" name="reverseRotation" id="reverseRotation" class="form-check-input">
+                <label class="form-check-label" for="reverseRotation">
+                  Reverse Rotation
+                </label>
               </div>
-              <form action="" method="GET" id="splitForm">
-                <div id="split-hemisphere">
-                  <div class="d-flex justify-content-center">
-                    <hr class="hr" width="400px">
-                  </div>
-                  <label class="pb-3"><strong><i>Which Quandrant(s)?</i></strong></label><br>
-                    <div class="form-check form-check-inline form-switch">
-                      <input class="form-check-input" type="checkbox" value="north" id="checkNorth">
-                      <label class="form-check-label" for="checkNorth">
-                        Northern
-                      </label>
-                    </div>
-                    <div class="form-check form-check-inline form-switch">
-                      <input class="form-check-input" type="checkbox" value="west" id="checkWest">
-                      <label class="form-check-label" for="checkWest">
-                        Western
-                      </label>
-                    </div>
-                    <br>
-                    <div class="form-check form-check-inline form-switch">
-                      <input class="form-check-input" type="checkbox" value="south" id="checkSouth">
-                      <label class="form-check-label" for="checkSouth">
-                        Southern
-                      </label>
-                    </div>
-                    <div class="form-check form-check-inline form-switch">
-                      <input class="form-check-input" type="checkbox" value="east" id="checkEast">
-                      <label class="form-check-label" for="checkEast">
-                        Eastern
-                      </label>
-                    </div>
-                </div>
-              </form>
               <hr class="hr">
-              <div style="float: right; padding-bottom: 1rem;">
-                <button type="button" class="btn btn-secondary" id="reset">
-                  Reset Data Points
-                </button>
-                <button type="button" class="btn btn-primary" id="clear">
-                  Clear Inputs
-                </button>
+              <div class="form-group">
+                <label for="rotationSpeed">Rotation Speed</label>
+                <input type="range" class="form-range" id="rotationSpeed" name="rotationSpeed" min="0.05" max="1"
+                  step="0.05" value="0.2" />
               </div>
-            </div>
+            </form>
           </div>
         </div>
-          <!-- main content -->
-          <div id="globeViz" class="col"></div>
 
-          <!-- modal for displaying data of each point when clicked -->
-          <div class="modal fade" id="dataModal">
-            <div class="modal-dialog modal-dialog-scrollable">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Fireball Data</h5>
-                </div>
-                <div class="modal-body">
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-primary" id="dataClose">
-                    Close
-                  </button>
-                </div>
-              </div>
+        <!-- creates menu icon -->
+        <div class="card" id="canvas-form">
+          <div class="d-flex justify-content-end" style="text-decoration: none;" type="button" id="menu-toggle">
+            <label class="menu-text" id="menu-text" style="font-size: 15pt;">Menu</label>
+            <div id="toggle-icon">
+              <div class="bar1"></div>
+              <div class="bar2"></div>
+              <div class="bar3"></div>
             </div>
           </div>
         </div>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMenu">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
+          </div>
+          <!-- creates off canvas menu -->
+          <div class="offcanvas-body">
+            <form action="" method="GET" id="paramForm">
+              <div class="form-group">
+                <label for="date-min">Start Date</label>
+                <input type="date" class="form-control" id="date-min" name="date-min" min="1988-04-15" max="2022-09-15"
+                  value="" />
+                <label for="date-max">End Date</label>
+                <input type="date" class="form-control" id="date-max" name="date-max" min="1988-04-15" max="2022-09-15"
+                  value="" /><small id="date-help"></small>
+              </div>
+              <hr class="hr">
+              <div class="form-group">
+                <label><strong><b>Energy</b></strong></label> - <i><small>Positive value in joules x
+                    10<sup>10</sup> (e.g., <u>'4'</u> = 4 x 10<sup>10</sup>)</small></i>
+                <br />
+                <label for="energy-min">Min Energy</label>
+                <input type="number" class="form-control" id="energy-min" name="energy-min" min="2" max="37500"
+                  value="" />
+                <label for="energy-max">Max Energy</label>
+                <input type="number" class="form-control" id="energy-max" name="energy-max" min="2" max="37500"
+                  value="" /><small id="e-help"></small>
+              </div>
+              <hr class="hr">
+              <div class="form-group">
+                <label><strong><b>Impact Energy</b></strong></label> - <i><small>Estimated impact energy in
+                    positive values of kilotons (kt) (e.g., <u>0.08</u> kt)</small></i><br>
+                <label for="impact-e-min">Min Impact Energy</label>
+                <input type="number" class="form-control" id="impact-e-min" name="impact-e-min" min="0" max="440"
+                  value="" />
+                <label for="impact-e-max">Max Impact Energy</label>
+                <input type="number" class="form-control" id="impact-e-max" name="impact-e-max" min="0" max="440"
+                  value="" /><small id="impact-e-help"></small>
+              </div>
+              <hr class="hr">
+              <div class="form-group">
+                <label for="limit"><strong>Limit</strong></label> - <i><small>Number of results to return (e.g.,
+                    <u>100</u>)</small></i><input type="number" id="limit-label"></input><br>
+                <input type="range" class="form-range" id="limit" name="limit" step="1" />
+                <small id="limit-help"></small>
+              </div>
+              <hr class="hr">
+            </form>
+            <div class="form-group" id="radioForm">
+              <label for="hemisphere"><strong>Split Hemispheres?</strong></label><br>
+              <div class="p-2">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioYes">
+                <label class="form-check-label" for="radioYes">
+                  Yes
+                </label>
+                <br>
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioNo" checked>
+                <label class="form-check-label" for="radioNo">
+                  No
+                </label>
+              </div>
+            </div>
+            <form action="" method="GET" id="splitForm">
+              <div id="split-hemisphere">
+                <div class="d-flex justify-content-center">
+                  <hr class="hr" width="400px">
+                </div>
+                <label class="pb-3"><strong><i>Which Quandrant(s)?</i></strong></label><br>
+                <div class="form-check form-check-inline form-switch">
+                  <input class="form-check-input" type="checkbox" value="north" id="checkNorth">
+                  <label class="form-check-label" for="checkNorth">
+                    Northern
+                  </label>
+                </div>
+                <div class="form-check form-check-inline form-switch">
+                  <input class="form-check-input" type="checkbox" value="west" id="checkWest">
+                  <label class="form-check-label" for="checkWest">
+                    Western
+                  </label>
+                </div>
+                <br>
+                <div class="form-check form-check-inline form-switch">
+                  <input class="form-check-input" type="checkbox" value="south" id="checkSouth">
+                  <label class="form-check-label" for="checkSouth">
+                    Southern
+                  </label>
+                </div>
+                <div class="form-check form-check-inline form-switch">
+                  <input class="form-check-input" type="checkbox" value="east" id="checkEast">
+                  <label class="form-check-label" for="checkEast">
+                    Eastern
+                  </label>
+                </div>
+              </div>
+            </form>
+            <hr class="hr">
+            <div style="float: right; padding-bottom: 1rem;">
+              <button type="button" class="btn btn-secondary" id="reset">
+                Reset Data Points
+              </button>
+              <button type="button" class="btn btn-primary" id="clear">
+                Clear Inputs
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- main content -->
+      <div id="globeViz" class="col"></div>
+
+      <!-- modal for displaying data of each point when clicked -->
+      <div class="modal fade" id="dataModal">
+        <div class="modal-dialog modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Fireball Data</h5>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="dataClose">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
     <script src="/js/animation.js"></script>

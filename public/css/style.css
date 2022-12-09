@@ -103,3 +103,7 @@ footer {
   left: 10px;
   z-index: 1;
 }
+
+#datepicker > option{
+  color: black;
+}

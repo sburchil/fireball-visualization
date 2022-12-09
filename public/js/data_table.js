@@ -145,8 +145,15 @@ $("#pills-tab").on("click", "button", (e) => {
   if (e.target.id == "dataTable-tab") {
     $("#paramForm").hide();
     $("#dataTable_form").show();
-  } else {
-    $("#paramForm").show();
+  } else if(e.target.id == "boxPlot-tab"){
     $("#dataTable_form").hide();
-  }
+    $("#linegraph-menu").hide();
+    $("#boxplot-menu").show();
+    $("#paramForm").show();
+  } else if(e.target.id == "lineGraph-tab" || e.target.id == "scatterPlot-tab"){
+    $("#dataTable_form").hide();
+    $("#boxplot-menu").hide();
+    $("#linegraph-menu").show();
+    $("#paramForm").show();
+  } 
 });
