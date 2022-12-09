@@ -2,10 +2,10 @@
 
 #Contributers
 - Symon Burchill
-Brad King
-Joseph Burger
-Dixon O'Hair
-Kyla Moore
+- Brad King
+- Joseph Burger
+- Dixon O'Hair
+- Kyla Moore
 
 
 #SETUP
